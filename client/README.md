@@ -1,8 +1,22 @@
 # React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Environment Setup
 
-Currently, two official plugins are available:
+To ensure the frontend functions correctly, you need to set up the environment variables properly. Define the following in your environment:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- `VITE_REACT_APP_SERVER`: This should match the port selected for the backend server.
+- `VITE_REACT_APP_CLIENT`: This should match the port on which the frontend is running.
+
+By default, the Vite server runs on port 3000.
+
+## Getting Started
+
+1. Clone the repository.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```

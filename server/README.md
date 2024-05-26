@@ -1,36 +1,53 @@
-## Blog Post
-
-This repository accompanies [this blog post](https://zachgoll.github.io/blog/2019/choosing-authentication-strategy/) that explains all the code in it.
-
 ## Setup
 
-The Express application requires a `.env` file and a public/private keypair.  In the root of the project, create a `.env` file and put the following into it:
+### Dependencies
 
+This Express application requires the following:
+
+- A `.env` file for environment variables.
+- A public/private key pair for secure operations.
+
+### Environment Variables
+
+In the root of the project, create a `.env` file with the following content:
+
+```plaintext
+DB_STRING=<your MongoDB connection string>
+PORT=<Your server's port>
+FRONT_END=<your front end URL>
+STRIPE_PRIVATE_KEY=<Stripe private key>
+WEBHOOK_SECRET=<Stripe's webhook secret>
 ```
-NODE_ENV=development
-DB_STRING=<your db string>
-DB_STRING_PROD=<your db string>
-```
 
-You will also need to start the Mongo DB database using the `mongod` process.  I run this process persistently in the background, but you could also just type `mongod` in your terminal (assuming you have Mongo DB installed).
+### MongoDB Setup
 
-Next, you will need to generate a public/private keypair.  The `.gitignore` automatically ignores the private key.
+You will need a running MongoDB instance. You can use MongoDB Atlas on a free tier or set up a local database server.
 
-```
+### Generate Keypair
+
+Generate a public/private key pair using the provided script. Ensure your NodeJS version is 10.x or higher.
+
+```bash
 node generateKeypair.js
 ```
 
-Note that to run the script, you will need a NodeJS version greater than v10.x.
+The private key is automatically excluded from version control by `.gitignore`.
 
 ## Quickstart
 
-To start the app, you will need to run both an Express server and the Angular server, and then visit `http://localhost:4200` in the browser.
+### Running the Application
 
-```
-# Start the Express server (http://localhost:3000)
-node app.js
+1. Start the MongoDB database if using a local instance:
+   ```bash
+   mongod
+   ```
+2. Start the Express server:
+   ```bash
+   node app.js
+   # Server runs on http://localhost:3000 by default
+   ```
+3. Import the JSON file containing product data from 'server/products_example' into your MongoDB database if necessary.
 
-# Start the angular server (http://localhost:4200)
-cd angular/
-ng serve
-```
+## Support
+
+Should you face any issues, please contact me via email at `minehamza97@gmail.com`.
