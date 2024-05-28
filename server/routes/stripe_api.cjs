@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 const connectionProduct = require("../models/products");
 const Product = connectionProduct.models.Product;
 const connectionOrder = require("../models/orders");
 const Order = connectionOrder.models.Order;
+const User = require("mongoose").model("User");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 
@@ -45,7 +45,7 @@ router.post(
             quantity: quantity,
           };
         }),
-        success_url: `${process.env.FRONT_END}`,
+        success_url: `${process.env.FRONT_END}/successful-payment/${metadata.userId}`,
         cancel_url: `${process.env.FRONT_END}`,
         metadata: metadata,
       });
@@ -70,6 +70,13 @@ const getCartItems = async (metadata) => {
     })
   );
   return cart;
+};
+
+const deletCart = async (userId) => {
+  const newUser = await User.findById(userId);
+  newUser.cart = [];
+  const user = new User(newUser);
+  await user.save();
 };
 
 router.post(
@@ -115,6 +122,8 @@ router.post(
         paymentDate: new Date(),
         orderConfirmationNumber: session.id,
       };
+
+      deletCart(session.metadata.userId);
 
       try {
         const order = new Order(newOrder);

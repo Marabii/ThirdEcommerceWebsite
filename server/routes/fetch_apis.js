@@ -5,17 +5,8 @@ const connection = require("../models/products");
 const Product = connection.models.Product;
 const passport = require("passport");
 const User = require("mongoose").model("User");
-
-// router.get('/api/getLandingPageSlider', (req, res) => {
-//     fs.readdir(path.join(__dirname, '../assets/products'), (err, data) => {
-//         if (err) {
-//             console.log('Error reading files', err);
-//             res.status(404).send('Files not found');
-//         } else {
-//             res.status(200).json(data);
-//         }
-//     });
-// });
+const connectionOrder = require("../models/orders");
+const Order = connectionOrder.models.Order;
 
 router.get("/api/getProducts", async (req, res) => {
   const limit = Number(req.query.limit) || 10; // Default limit to 10 if not provided
@@ -263,5 +254,25 @@ router.delete(
     }
   }
 );
+
+router.get("/api/getOrder/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Find the most recent order by this user and sort by 'createdAt' in descending order
+    const recentOrder = await Order.findOne({ userId: id })
+      .sort({ createdAt: -1 })
+      .select("createdAt");
+
+    // Check if an order was found
+    if (recentOrder) {
+      res.status(200).json(recentOrder);
+    } else {
+      res.status(404).send("No orders found for this user");
+    }
+  } catch (e) {
+    // Handle potential errors in querying the database
+    res.status(500).send("Error fetching order");
+  }
+});
 
 module.exports = router;

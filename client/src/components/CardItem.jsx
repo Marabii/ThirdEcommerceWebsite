@@ -49,14 +49,11 @@ const CardItem = (props) => {
 
   return (
     <>
-      <div
-        key={data._id}
-        onMouseEnter={() => setShowAddToCart(true)}
-        onMouseLeave={() => setShowAddToCart(false)}
-        className="mb-5 w-fit cursor-pointer shadow-xl"
-      >
+      <div key={data._id} className="mb-5 w-fit cursor-pointer shadow-xl">
         <div
           style={{ backgroundImage: 'url(/loading.gif)' }}
+          onMouseEnter={() => setShowAddToCart(true)}
+          onMouseLeave={() => setShowAddToCart(false)}
           className="relative aspect-square w-full max-w-[400px] bg-cover bg-center"
         >
           <a href={`${clientURL}/product-page/${data._id}`}>
@@ -70,10 +67,9 @@ const CardItem = (props) => {
           <AnimatePresence>
             {showAddToCart && display && (
               <motion.div
-                initial={{ x: '-50%', y: 20 }}
+                initial={{ x: '-50%', y: -20 }}
                 animate={{ x: '-50%', y: 0 }}
-                exit={{ opacity: 0, y: 20, x: '-50%' }}
-                transition={{ duration: 0.3 }}
+                exit={{ opacity: 0, y: -20, x: '-50%' }}
                 onClick={handleAddToCart}
                 className=" absolute bottom-6 left-1/2 -translate-x-1/2 bg-gray-100 px-4 py-2 font-semibold text-gray-500"
               >
