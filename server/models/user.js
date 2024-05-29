@@ -18,6 +18,20 @@ const CartItemSchema = new Schema(
   { _id: false }
 );
 
+// Define a sub-schema for email verification code
+const EmailVerificationCodeSchema = new Schema(
+  {
+    code: {
+      type: String,
+    },
+    dateCreated: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  { _id: false }
+); // Setting _id: false to avoid generating a separate ID for the sub-document
+
 // Main User schema
 const UserSchema = new Schema({
   username: {
@@ -48,7 +62,12 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  cart: [CartItemSchema], // Use the CartItemSchema defined above
+  cart: [CartItemSchema],
+  isEmailVerified: {
+    type: Boolean,
+    default: false,
+  },
+  emailVerificationCode: EmailVerificationCodeSchema, // Use the defined sub-schema
 });
 
 // Create the model from the schema

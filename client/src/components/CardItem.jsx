@@ -64,6 +64,7 @@ const CardItem = (props) => {
               loading="lazy"
             />
           </a>
+          +
           <AnimatePresence>
             {showAddToCart && display && (
               <motion.div

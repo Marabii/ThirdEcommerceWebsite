@@ -3,7 +3,6 @@ import axios from 'axios'
 import { useParams, useNavigate } from 'react-router-dom'
 
 const SuccessfulPayment = () => {
-  const [orderDetails, setOrderDetails] = useState(null)
   const [timeCheck, setTimeCheck] = useState(false)
   const serverUrl = import.meta.env.VITE_REACT_APP_SERVER
   const userId = useParams().id
@@ -15,7 +14,6 @@ const SuccessfulPayment = () => {
         const response = await axios.get(`${serverUrl}/api/getOrder/${userId}`)
         const order = response.data
         if (order) {
-          setOrderDetails(order)
           const orderTime = new Date(order.createdAt).getTime()
           const currentTime = Date.now()
           const period = 5000 // 2 minutes in milliseconds

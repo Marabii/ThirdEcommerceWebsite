@@ -12,6 +12,7 @@ const CheckoutPage = lazy(() => import('./pages/CheckoutPage/CheckoutPage'))
 const SuccessfulPayment = lazy(
   () => import('./pages/PaymentStatus/SuccessfulPayment')
 )
+const Profile = lazy(() => import('./pages/Profile/Profile'))
 
 export const globalContext = createContext({
   isLoggedIn: false,
@@ -97,6 +98,14 @@ const App = () => {
             element={
               <Suspense fallback={<div>Loading...</div>}>
                 <SuccessfulPayment />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/profile/:id"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <Profile />
               </Suspense>
             }
           />

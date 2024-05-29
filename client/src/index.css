@@ -13,14 +13,24 @@
   .clamp-font-size-small {
     font-size: clamp(0.75rem, 1.5vw, 1.5rem); /* Small Text */
   }
+
   .clamp-font-size-med {
     font-size: clamp(1rem, 2vw, 2rem); /* Medium Text */
   }
+
   .clamp-font-size-big {
     font-size: clamp(1.25rem, 3vw, 2.5rem); /* Large Text */
   }
 
   .min-width-custom {
     width: min(420px, 100%);
+  }
+
+  .modern-gradient {
+    background-image: radial-gradient(
+      farthest-corner circle at top right in oklab,
+      oklch(80% 0.4 222) 0%,
+      oklch(35% 0.5 313) 100%
+    );
   }
 }

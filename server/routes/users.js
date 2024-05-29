@@ -4,6 +4,7 @@ const User = mongoose.model("User");
 const passport = require("passport");
 const utils = require("../lib/utils");
 const isAdmin = require("../lib/authMiddleware.cjs");
+const sendEmail = require("../lib/email").sendEmail;
 
 router.get(
   "/api/verifyAdmin",
@@ -19,8 +20,6 @@ router.get(
 
 // Validate an existing user and issue a JWT
 router.post("/api/login", function (req, res, next) {
-  console.log(req.body);
-  console.log("log in ai ran");
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
@@ -57,7 +56,6 @@ router.post("/api/login", function (req, res, next) {
 
 // Register a new user
 router.post("/api/register", function (req, res, next) {
-  console.log(req.body);
   const saltHash = utils.genPassword(req.body.password);
 
   const salt = saltHash.salt;

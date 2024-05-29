@@ -11,6 +11,7 @@ import logo from '/farnic.png'
 import SideBarHeader from './SideBarHeader'
 import CartContainer from './CartContainer'
 import { globalContext } from '../App'
+import { jwtDecode } from 'jwt-decode'
 
 const navbarElements = [
   { name: 'Home', link: '/' },
@@ -22,7 +23,10 @@ const navbarElements = [
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
-  const { cartItems } = useContext(globalContext)
+  const { cartItems, isLoggedIn } = useContext(globalContext)
+  const jwtTokenUnDecoded = localStorage.getItem('jwtToken')
+  const jwtToken = jwtTokenUnDecoded && jwtDecode(jwtTokenUnDecoded)
+  const userId = jwtToken?.sub
 
   useEffect(() => {
     if (isCartOpen) {
@@ -59,9 +63,15 @@ const Header = () => {
           />
           <Search size={20} />
         </div>
-        <Link to={'/login'}>
-          <CircleUserRound size={30} className="mr-5" />
-        </Link>
+        {isLoggedIn ? (
+          <Link to={`/profile/${userId}`}>
+            <CircleUserRound userId={userId} size={30} className="mr-5" />
+          </Link>
+        ) : (
+          <Link to={'/login'}>
+            <CircleUserRound size={30} className="mr-5" />
+          </Link>
+        )}
         <div className="relative">
           <ShoppingBag
             onClick={() => setIsCartOpen(!isCartOpen)}

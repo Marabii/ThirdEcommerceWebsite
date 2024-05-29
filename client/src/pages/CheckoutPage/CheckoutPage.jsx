@@ -9,7 +9,11 @@ const CheckoutPage = () => {
   const { cartItems } = useContext(globalContext)
   const [cardsData, setCardsData] = useState([])
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
-  const jwtToken = jwtDecode(localStorage.getItem('jwtToken'))
+  const clientURL = import.meta.env.VITE_REACT_APP_CLIENT
+  const jwtTokenUnDecoded = localStorage.getItem('jwtToken')
+  const jwtToken = jwtTokenUnDecoded
+    ? jwtDecode(jwtTokenUnDecoded)
+    : (window.location.href = clientURL)
   const items = cartItems.map((item) => {
     return { id: item.productId, quantity: item.quantity }
   })

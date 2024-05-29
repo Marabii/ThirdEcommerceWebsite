@@ -11,7 +11,7 @@ const useAdminAccess = () => {
   useEffect(() => {
     const checkTokenAndFetchData = async () => {
       const expirationTime = localStorage.getItem('tokenExpiration')
-      const oneDay = 24 * 60 * 60 * 1000
+      const oneHour = 60 * 60 * 1000
       if (
         !expirationTime ||
         Date.now() - parseInt(expirationTime, 10) > oneDay
