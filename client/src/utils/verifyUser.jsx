@@ -1,9 +1,28 @@
 import React, { useEffect } from 'react'
 import axiosInstance from './verifyJWT'
+import { jwtDecode } from 'jwt-decode'
 
 const UseAuthCheck = (props) => {
-  const { interval, setIsLoggedIn, setCartItems } = props
+  const { interval, setIsLoggedIn, setCartItems, setUserData } = props
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
+  const jwtTokenUnDecoded = localStorage.getItem('jwtToken')
+  const jwtToken = jwtTokenUnDecoded && jwtDecode(jwtTokenUnDecoded)
+  const userId = jwtToken?.sub
+
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const response = await axiosInstance(
+          `${serverURL}/api/getUserData/${userId}`
+        )
+        const data = response.data
+        setUserData(data[0])
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    if (userId) getUserData()
+  }, [])
 
   useEffect(() => {
     const verifyUser = async () => {
@@ -18,13 +37,13 @@ const UseAuthCheck = (props) => {
       }
     }
 
-    verifyUser() // Verify immediately on mount
+    verifyUser()
     const intervalId = setInterval(verifyUser, interval)
 
-    return () => clearInterval(intervalId) // Clean up on unmount
+    return () => clearInterval(intervalId)
   }, [])
 
-  return null // This hook does not render anything
+  return null
 }
 
 export default UseAuthCheck

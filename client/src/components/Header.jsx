@@ -65,7 +65,7 @@ const Header = () => {
         </div>
         {isLoggedIn ? (
           <Link to={`/profile/${userId}`}>
-            <CircleUserRound userId={userId} size={30} className="mr-5" />
+            <CircleUserRound size={30} className="mr-5" />
           </Link>
         ) : (
           <Link to={'/login'}>

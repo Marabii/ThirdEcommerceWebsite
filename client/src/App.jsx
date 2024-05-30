@@ -9,31 +9,43 @@ const Register = lazy(() => import('./pages/Register/Register'))
 const Admin = lazy(() => import('./pages/Admin/Admin'))
 const ProductPage = lazy(() => import('./pages/Product/ProductPage'))
 const CheckoutPage = lazy(() => import('./pages/CheckoutPage/CheckoutPage'))
+const Profile = lazy(() => import('./pages/Profile/Profile'))
+const CheckOrder = lazy(() => import('./pages/Profile/CheckOrder'))
 const SuccessfulPayment = lazy(
   () => import('./pages/PaymentStatus/SuccessfulPayment')
 )
-const Profile = lazy(() => import('./pages/Profile/Profile'))
 
 export const globalContext = createContext({
   isLoggedIn: false,
   setIsLoggedIn: () => {},
   cartItems: [],
-  setCartItems: () => {}
+  setCartItems: () => {},
+  userData: {},
+  setUserData: () => {}
 })
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [cartItems, setCartItems] = useState([])
+  const [userData, setUserData] = useState({})
 
   UseAuthCheck({
     interval: (1 / 2) * 60 * 60 * 1000,
     setIsLoggedIn: setIsLoggedIn,
-    setCartItems: setCartItems
+    setCartItems: setCartItems,
+    setUserData: setUserData
   })
 
   return (
     <globalContext.Provider
-      value={{ isLoggedIn, setIsLoggedIn, cartItems, setCartItems }}
+      value={{
+        isLoggedIn,
+        setIsLoggedIn,
+        cartItems,
+        setCartItems,
+        userData,
+        setUserData
+      }}
     >
       <BrowserRouter>
         <Routes>
@@ -106,6 +118,14 @@ const App = () => {
             element={
               <Suspense fallback={<div>Loading...</div>}>
                 <Profile />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/check-order/:id"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <CheckOrder />
               </Suspense>
             }
           />

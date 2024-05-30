@@ -28,9 +28,9 @@
 
   .modern-gradient {
     background-image: radial-gradient(
-      farthest-corner circle at top right in oklab,
-      oklch(80% 0.4 222) 0%,
-      oklch(35% 0.5 313) 100%
+      farthest-corner circle at 0% 0% in oklab,
+      oklch(53% 0.4 222) 0%,
+      oklch(13% 0.5 313) 100%
     );
   }
 }

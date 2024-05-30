@@ -12,6 +12,7 @@ const CardItem = (props) => {
   const [showAddToCart, setShowAddToCart] = useState(false)
   const { isLoggedIn, setCartItems } = useContext(globalContext)
   const navigate = useNavigate()
+  const [imageLoaded, setImageLoaded] = useState(false) // State to track image loading
 
   const handleAddToCart = async () => {
     if (!isLoggedIn) {
@@ -21,13 +22,11 @@ const CardItem = (props) => {
     }
 
     setCartItems((prev) => {
-      // Check if the item is already in the cart
       const itemExists = prev.find((item) => item.productId === data._id)
       if (itemExists) {
         alert('Item already exists in your cart')
         return prev
       } else {
-        // If it does not exist, add the new item
         return [...prev, { productId: data._id, quantity: 1 }]
       }
     })
@@ -51,10 +50,9 @@ const CardItem = (props) => {
     <>
       <div key={data._id} className="mb-5 w-fit cursor-pointer shadow-xl">
         <div
-          style={{ backgroundImage: 'url(/loading.gif)' }}
           onMouseEnter={() => setShowAddToCart(true)}
           onMouseLeave={() => setShowAddToCart(false)}
-          className="relative aspect-square w-full max-w-[400px] bg-cover bg-center"
+          className={`relative aspect-square w-full max-w-[400px] ${!imageLoaded && 'h-[420px] animate-pulse rounded-md'} bg-gray-400`}
         >
           <a href={`${clientURL}/product-page/${data._id}`}>
             <img
@@ -62,9 +60,9 @@ const CardItem = (props) => {
               src={`${serverURL}/products/${data._id}.png`}
               alt="card-img"
               loading="lazy"
+              onLoad={() => setImageLoaded(true)} // Set the imageLoaded state to true when the image is loaded
             />
           </a>
-          +
           <AnimatePresence>
             {showAddToCart && display && (
               <motion.div
@@ -72,7 +70,7 @@ const CardItem = (props) => {
                 animate={{ x: '-50%', y: 0 }}
                 exit={{ opacity: 0, y: -20, x: '-50%' }}
                 onClick={handleAddToCart}
-                className=" absolute bottom-6 left-1/2 -translate-x-1/2 bg-gray-100 px-4 py-2 font-semibold text-gray-500"
+                className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-gray-100 px-4 py-2 font-semibold text-gray-500"
               >
                 Add To Cart
               </motion.div>

@@ -1,33 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { MenuSquareIcon } from 'lucide-react'
-import axiosInstance from '../../utils/verifyJWT'
+import React, { useState, useContext } from 'react'
+import TopSection from '../../components/TopSection.jsx'
 import { useParams } from 'react-router-dom'
 import VerifyEmailPanel from './sections/VerifyEmailPanel.jsx'
+import { globalContext } from '../../App'
+import Header from '../../components/Header.jsx'
+import ChangePersonalDetails from './sections/ChangePersonalDetails.jsx'
+import CheckOrders from './sections/CheckOrders.jsx'
 
 const Profile = () => {
   const userId = useParams().id
-  const [userData, setUserData] = useState()
-  const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const [showVerifyEmail, setShowVerifyEmail] = useState(false)
-
-  useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const response = await axiosInstance(
-          `${serverURL}/api/getUserData/${userId}`
-        )
-        const data = response.data
-        setUserData(data[0])
-      } catch (e) {
-        console.error(e)
-      }
-    }
-    if (userId) getUserData()
-  }, [])
-
-  const verifyEmail = async () => {
-    return
-  }
+  const { userData } = useContext(globalContext)
+  const [currPage, setCurrPage] = useState(0)
 
   if (!userData) {
     return <div>Loading ....</div>
@@ -48,101 +32,60 @@ const Profile = () => {
           />
         </>
       )}
-      <header className="mb-10 flex w-full items-center justify-between p-5 md:hidden">
-        <div className="flex items-center gap-5 rounded-lg border border-gray-800 p-2 shadow-md">
-          <img width={100} src="/farnic.png" alt="farnic logo" />
-          <h1 className="text-xl font-semibold text-gray-800">Your Profile</h1>
-        </div>
-        <MenuSquareIcon size={35} />
-      </header>
-      <div className="relative mb-24 aspect-[2/0.7] w-full md:aspect-[2/0.4]">
-        <div className="modern-gradient absolute inset-0 opacity-40"></div>
-        <img
-          className="absolute top-[100%] aspect-square max-w-[150px] -translate-y-1/2 translate-x-3 rounded-full border-4 border-white shadow-lg"
-          src="/user.png"
-          alt="profile image"
+      <Header />
+      <div className="relative mb-10 aspect-[2/0.7] w-full md:aspect-[2/0.4]">
+        <TopSection
+          data={{
+            title: 'Profile',
+            description:
+              'You can change all your personal information from here as well as check your orders'
+          }}
         />
       </div>
       <div className="space-y-7 px-4">
+        <ul className="text-normal flex items-center justify-center gap-10 font-semibold md:text-xl">
+          <li>
+            <button
+              onClick={() => setCurrPage(0)}
+              className={`rounded-md border-2 border-slate-500 px-4 py-3 transition-all duration-300 hover:bg-slate-500 hover:text-white ${currPage === 0 && 'bg-slate-500 font-bold text-white'}`}
+            >
+              Change personal details
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={() => setCurrPage(1)}
+              className={`rounded-md border-2 border-slate-500 px-4 py-3 ${currPage === 1 && 'bg-slate-500 font-bold text-white'} transition-all duration-300 hover:bg-slate-500 hover:text-white`}
+            >
+              Check orders
+            </button>
+          </li>
+        </ul>
         <div>
           <h2 className="text-2xl font-semibold text-slate-800">
             {userData.username}
           </h2>
           <h3 className="text-sm font-semibold text-slate-500">
-            {userData.email}
+            {userData.email}{' '}
+            <span>
+              {userData.isEmailVerified ? (
+                <div className="text-green-500">Your email is verified</div>
+              ) : (
+                <button
+                  className="block border-b border-red-500 text-red-500"
+                  onClick={() => setShowVerifyEmail(true)}
+                >
+                  Verify Email
+                </button>
+              )}
+            </span>
           </h3>
         </div>
-        <div>
-          {userData.isEmailVerified ? (
-            <p className="rounded-md bg-green-500 p-2 text-white">
-              Your email is verified
-            </p>
-          ) : (
-            <div>
-              <p className="rounded-md bg-red-500 p-2 text-white">
-                Your Email Is Not Verified
-              </p>
-              <button
-                onClick={() => setShowVerifyEmail(true)}
-                className="mt-4 cursor-pointer rounded-md bg-red-400 px-4 py-3 font-semibold text-white transition-all duration-300 hover:bg-red-600"
-              >
-                Verify Email
-              </button>
-            </div>
-          )}
-        </div>
-        <div className="justify-between md:flex">
-          <div className="mb-10 md:w-1/4">
-            <h2 className="text-lg font-semibold text-slate-800">
-              Personal Info
-            </h2>
-            <p className="w-full text-sm font-semibold text-slate-500">
-              Update your photo and personal details
-            </p>
-          </div>
-          <div className="w-full max-w-[700px] rounded-md border border-slate-400">
-            <div className="space-y-5">
-              <div className="space-y-2 p-4">
-                <label
-                  htmlFor="input:text"
-                  className="block text-lg font-semibold text-slate-800"
-                >
-                  Full name
-                </label>
-                <input
-                  className="w-full rounded-lg border border-slate-500 px-4 py-5"
-                  type="text"
-                  name="full_name"
-                  id="full_name"
-                  placeholder="Full name"
-                />
-              </div>
-              <div className="px-4">
-                <label
-                  className="block text-lg font-semibold text-slate-800"
-                  htmlFor="input:text"
-                >
-                  Email
-                </label>
-                <input
-                  className="w-full rounded-lg border border-slate-500 px-4 py-5"
-                  type="text"
-                  name="email"
-                  id="email"
-                  placeholder="email"
-                />
-              </div>
-            </div>
-            <div className="mt-10 flex w-full justify-end space-x-2 border-t border-slate-400 p-2">
-              <button className="rounded-lg border border-slate-500 px-5 py-2">
-                Cancel
-              </button>
-              <button className="rounded-lg bg-purple-500 px-5 py-2 text-white transition-all duration-300 hover:bg-purple-600">
-                Save changes
-              </button>
-            </div>
-          </div>
-        </div>
+        {currPage === 0 ? (
+          <ChangePersonalDetails />
+        ) : (
+          <CheckOrders userId={userId} />
+        )}
       </div>
     </div>
   )

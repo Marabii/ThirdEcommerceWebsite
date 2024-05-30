@@ -3,10 +3,9 @@ import { globalContext } from '../App.jsx'
 import { X } from 'lucide-react'
 import CartItem from './CartItem.jsx'
 import { useNavigate } from 'react-router-dom'
-import axiosInstance from '../utils/verifyJWT.jsx'
 
 const CartContainer = (props) => {
-  const { isLoggedIn, cartItems } = useContext(globalContext)
+  const { isLoggedIn, cartItems, userData } = useContext(globalContext)
   const { isCartOpen, setIsCartOpen } = props
   const navigate = useNavigate()
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
@@ -27,7 +26,12 @@ const CartContainer = (props) => {
   }
 
   const checkoutFunc = () => {
-    navigate('/checkout')
+    if (userData.isEmailVerified) {
+      navigate('/checkout')
+    } else {
+      alert('Your email is not verified. Please verify it to continue')
+      navigate(`/profile/${userData._id}`)
+    }
   }
 
   const updateItemDetails = (productId, details) => {

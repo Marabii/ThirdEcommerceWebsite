@@ -256,25 +256,29 @@ router.delete(
   }
 );
 
-router.get("/api/getOrder/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    // Find the most recent order by this user and sort by 'createdAt' in descending order
-    const recentOrder = await Order.findOne({ userId: id })
-      .sort({ createdAt: -1 })
-      .select("createdAt");
+router.get(
+  "/api/getRecentOrder/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const { id } = req.params;
+    try {
+      // Find the most recent order by this user and sort by 'createdAt' in descending order
+      const recentOrder = await Order.findOne({ userId: id })
+        .sort({ createdAt: -1 })
+        .select("createdAt");
 
-    // Check if an order was found
-    if (recentOrder) {
-      res.status(200).json(recentOrder);
-    } else {
-      res.status(404).send("No orders found for this user");
+      // Check if an order was found
+      if (recentOrder) {
+        res.status(200).json(recentOrder);
+      } else {
+        res.status(404).send("No orders found for this user");
+      }
+    } catch (e) {
+      // Handle potential errors in querying the database
+      res.status(500).send("Error fetching order");
     }
-  } catch (e) {
-    // Handle potential errors in querying the database
-    res.status(500).send("Error fetching order");
   }
-});
+);
 
 router.get(
   "/api/getUserData/:id",
@@ -382,5 +386,43 @@ router.get("/api/verifyEmailCode", async (req, res) => {
     return res.status(500).send("Internal server error");
   }
 });
+
+router.get(
+  "/api/getOrdersData/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const userId = req.params.id;
+    try {
+      const order = await Order.find({ userId });
+      if (order) {
+        res.status(200).json(order);
+      } else {
+        res.status(404).send("No orders found");
+      }
+    } catch (e) {
+      console.error("getOrdersData error: ", e);
+      res.status(500).send("Internal server error");
+    }
+  }
+);
+
+router.get(
+  "/api/getOrder/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const orderConfirmationNumber = req.params.id;
+    try {
+      const order = await Order.findOne({ orderConfirmationNumber });
+      if (order) {
+        res.status(200).json(order);
+      } else {
+        res.status(404).json(order);
+      }
+    } catch (e) {
+      console.error("getOrder error: ", e);
+      res.status(500).send("Internal server error");
+    }
+  }
+);
 
 module.exports = router;

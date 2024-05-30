@@ -11,7 +11,9 @@ const SuccessfulPayment = () => {
   useEffect(() => {
     const getShowPage = async () => {
       try {
-        const response = await axios.get(`${serverUrl}/api/getOrder/${userId}`)
+        const response = await axios.get(
+          `${serverUrl}/api/getRecentOrder/${userId}`
+        )
         const order = response.data
         if (order) {
           const orderTime = new Date(order.createdAt).getTime()
