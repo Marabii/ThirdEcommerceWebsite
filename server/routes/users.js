@@ -24,7 +24,7 @@ router.post("/api/login", function (req, res, next) {
     .then((user) => {
       if (!user) {
         return res
-          .status(401)
+          .status(404)
           .json({ success: false, msg: "could not find user" });
       }
 

@@ -30,7 +30,7 @@ const App = () => {
   const [userData, setUserData] = useState({})
 
   UseAuthCheck({
-    interval: (1 / 2) * 60 * 60 * 1000,
+    interval: 10 * 60 * 1000,
     setIsLoggedIn: setIsLoggedIn,
     setCartItems: setCartItems,
     setUserData: setUserData

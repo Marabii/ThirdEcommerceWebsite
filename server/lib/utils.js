@@ -58,7 +58,7 @@ function issueJWT(user) {
 
   const payload = {
     sub: _id,
-    iat: Date.now(),
+    iat: Math.floor(Date.now() / 1000),
   };
 
   const signedToken = jsonwebtoken.sign(payload, PRIV_KEY, {

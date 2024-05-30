@@ -33,7 +33,6 @@ const UseAuthCheck = (props) => {
       } catch (error) {
         console.error('Failed to verify user:', error)
         setIsLoggedIn(false)
-        alert('Error Verifying The User')
       }
     }
 
