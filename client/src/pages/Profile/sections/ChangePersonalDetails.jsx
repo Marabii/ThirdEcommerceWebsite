@@ -6,7 +6,7 @@ const ChangePersonalDetails = () => {
       <div className="mb-10 md:w-1/4">
         <h2 className="text-lg font-semibold text-slate-800">Personal Info</h2>
         <p className="w-full text-sm font-semibold text-slate-500">
-          Update your photo and personal details
+          Update your personal details
         </p>
       </div>
       <div className="w-full max-w-[700px] rounded-md border border-slate-400">

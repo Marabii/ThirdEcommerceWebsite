@@ -48,8 +48,9 @@ const CardItem = (props) => {
 
   return (
     <div
+      style={{ width: width ? `${width}px` : 'fit-content' }}
       key={data._id}
-      className={`mb-5 ${width ? `w-[${width}px]` : 'w-fit'} cursor-pointer shadow-xl`}
+      className={`mb-5 cursor-pointer shadow-xl`}
     >
       <div
         onMouseEnter={() => setShowAddToCart(true)}

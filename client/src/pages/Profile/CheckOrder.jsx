@@ -21,7 +21,6 @@ const CheckOrders = () => {
         )
         setOrderData(response.data)
       } catch (e) {
-        navigate('/')
         console.error(e)
       }
     }

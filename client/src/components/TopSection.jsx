@@ -4,7 +4,7 @@ const TopSection = (props) => {
   const { data } = props
 
   return (
-    <div className="relative flex flex-col items-center justify-center space-x-0 px-5 py-20 sm:px-10 md:flex-row md:space-x-10 lg:px-20 ">
+    <div className="relative mt-20 flex flex-col items-center justify-center space-x-0 px-5 py-20 sm:px-10 md:flex-row md:space-x-10 lg:px-20 ">
       <div className="absolute -top-[200px] bottom-0 left-0 -z-10 max-h-[1000px] w-full bg-[#eff1f5]"></div>
       <div className="flex w-fit flex-col items-start font-playfair md:w-1/3">
         <h1 className="relative -top-14 w-full whitespace-nowrap text-center text-4xl font-bold sm:w-auto sm:text-6xl">

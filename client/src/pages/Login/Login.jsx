@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import Header from '../../components/Header'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import { globalContext } from '../../App'
 import { jwtDecode } from 'jwt-decode'
@@ -9,10 +9,19 @@ import 'react-toastify/dist/ReactToastify.css'
 
 const Login = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const clientURL = import.meta.env.VITE_REACT_APP_CLIENT
   const [formData, setFormData] = useState({ password: '', email: '' })
   const { setIsLoggedIn } = useContext(globalContext)
+  const queryParams = new URLSearchParams(location.search)
+  const redirect = queryParams.get('redirect') || '/'
+
+  useEffect(() => {
+    if (redirect !== '/') {
+      toast.warning('Your session is expired, please relogin')
+    }
+  }, [redirect])
 
   const storeToken = (token) => {
     const decodedToken = jwtDecode(token)
@@ -30,7 +39,7 @@ const Login = () => {
         storeToken(token)
         setIsLoggedIn(true)
         toast.success('Logged In Successfully')
-        window.location.href = clientURL
+        window.location.href = `${clientURL}${redirect}`
       } else {
         throw new Error("Can't log in")
       }
@@ -57,7 +66,7 @@ const Login = () => {
   return (
     <>
       <ToastContainer />
-      <div className="pb-36">
+      <div className="mt-20 pb-36">
         <Header />
         <div className="relative flex flex-col items-center justify-center space-x-0 px-5 py-20 sm:px-10 md:flex-row md:space-x-10 lg:px-20 ">
           <div className="absolute -top-[200px] bottom-0 left-0 -z-10 max-h-[1000px] w-full bg-[#eff1f5]"></div>

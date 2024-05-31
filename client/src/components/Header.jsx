@@ -5,7 +5,8 @@ import {
   Menu,
   CircleUserRound,
   ShoppingBag,
-  ArrowDown
+  ArrowDown,
+  Key
 } from 'lucide-react'
 import logo from '/farnic.png'
 import SideBarHeader from './SideBarHeader'
@@ -33,6 +34,22 @@ const Header = () => {
   const jwtToken = jwtTokenUnDecoded && jwtDecode(jwtTokenUnDecoded)
   const userId = jwtToken?.sub
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 0
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [scrolled])
 
   useEffect(() => {
     if (isCartOpen) {
@@ -65,9 +82,13 @@ const Header = () => {
   }
 
   return (
-    <header className="relative z-30 flex items-center justify-between p-6 font-playfair">
+    <header
+      className={`fixed left-0 right-0 top-0 z-30 flex items-center justify-between p-2 font-playfair transition-all duration-500 sm:p-6 ${scrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}
+    >
+      {query.length !== 0 && (
+        <SearchResults hits={results} setQuery={setQuery} />
+      )}
       <img src={logo} alt="logo" />
-      {query.length !== 0 && <SearchResults hits={results} />}
       <nav className="hidden xl:block">
         <ul className="flex space-x-20">
           {navbarElements.map((element) => (
@@ -83,32 +104,44 @@ const Header = () => {
         </ul>
       </nav>
       <div className="flex items-center">
-        <div className="relative top-1 mr-10 hidden items-center border-b-2 border-black md:flex">
+        <div className="mr-10 hidden items-center border-b border-gray-500 xl:flex">
           <input
             onChange={handleInputChange}
             type="text"
             placeholder="Search"
             name="search"
-            className="h-10 w-40 bg-transparent indent-4 text-lg focus:outline-0"
+            className="h-10 w-40 bg-transparent indent-1 text-lg focus:outline-0"
           />
-          <Search size={20} />
+          <Search color="rgb(107 114 128)" size={20} />
         </div>
         {isLoggedIn ? (
           <Link to={`/profile/${userId}`}>
-            <CircleUserRound size={30} className="mr-5" />
+            <div className="mr-3 flex items-center justify-between gap-2 rounded-md border border-gray-500 p-1">
+              <CircleUserRound
+                color="rgb(107 114 128)"
+                strokeWidth={1}
+                size={30}
+                className="mr-5"
+              />
+              <p>Profile</p>
+            </div>
           </Link>
         ) : (
           <Link to={'/login'}>
-            <CircleUserRound size={30} className="mr-5" />
+            <div className="mr-3 flex items-center justify-between gap-2 rounded-md border border-gray-500 p-1">
+              <Key color="rgb(107 114 128)" size={30} strokeWidth={1} />
+              <p>Log In</p>
+            </div>
           </Link>
         )}
-        <div className="relative">
+        <div className="relative" onClick={() => setIsCartOpen(!isCartOpen)}>
           <ShoppingBag
-            onClick={() => setIsCartOpen(!isCartOpen)}
             className="cursor-pointer"
             size={30}
+            stroke="rgb(107 114 128)"
+            strokeWidth={1}
           />
-          <div className="text-jost absolute -right-1 -top-1 grid h-5 w-5 content-end rounded-full bg-black text-center text-white">
+          <div className="text-jost absolute -right-1 -top-1 grid h-5 w-5 content-end rounded-full bg-gray-700 text-center text-white">
             {cartItems.length}
           </div>
         </div>
@@ -122,6 +155,10 @@ const Header = () => {
           setIsMenuOpen={setIsMenuOpen}
           isMenuOpen={isMenuOpen}
           navbarElements={navbarElements}
+          SearchResults={SearchResults}
+          hits={results}
+          handleSearch={handleSearch}
+          handleInputChange={handleInputChange}
         />
       )}
       {isCartOpen && (

@@ -18,7 +18,6 @@ const CheckOrders = (props) => {
         const data = response.data
         setOrdersData(data)
       } catch (e) {
-        navigate('/')
         console.error(e)
       }
     }
