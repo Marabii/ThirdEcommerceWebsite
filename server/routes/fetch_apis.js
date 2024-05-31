@@ -8,10 +8,11 @@ const User = require("mongoose").model("User");
 const connectionOrder = require("../models/orders");
 const Order = connectionOrder.models.Order;
 const sendEmail = require("../lib/email").sendEmail;
+const { searchProductsWithAlgolia } = require("../lib/algoliaSearch");
 
 router.get("/api/getProducts", async (req, res) => {
-  const limit = Number(req.query.limit) || 10; // Default limit to 10 if not provided
-  const skip = Number(req.query.skip) || 0; // Default skip to 0 if not provided
+  const limit = Number(req.query.limit) || 10;
+  const skip = Number(req.query.skip) || 0;
   const categoryFilter = String(req.query.filter);
   const isCard = req.query.isCard === "true";
   const projection = { _id: 1, name: 1, price: 1, promo: 1 };
@@ -303,89 +304,97 @@ router.get(
   }
 );
 
-router.get("/api/verifyEmail", async (req, res) => {
-  const { email, userId } = req.query;
+router.get(
+  "/api/verifyEmail",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const { email, userId } = req.query;
 
-  if (!email || !userId) {
-    return res.status(400).send("Missing email or user ID");
-  }
-
-  try {
-    // Generate a random verification code
-    const randomString = (Math.random() + 1).toString(36).substring(5);
-
-    // Find user by ID and update the email verification code
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).send("User not found");
+    if (!email || !userId) {
+      return res.status(400).send("Missing email or user ID");
     }
 
-    // Set the new email verification code and the creation date
-    user.emailVerificationCode = {
-      code: randomString,
-      dateCreated: new Date(), // Sets the current date and time
-    };
+    try {
+      // Generate a random verification code
+      const randomString = (Math.random() + 1).toString(36).substring(5);
 
-    await user.save();
+      // Find user by ID and update the email verification code
+      const user = await User.findById(userId);
 
-    // Uncomment and configure the sendEmail call as necessary
-    sendEmail(
-      "Email Verification",
-      "Your verification code is: " + randomString,
-      "emailVerification",
-      [],
-      email
-    );
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
 
-    res.status(200).send("Verification code sent.");
-  } catch (error) {
-    console.error("Error in verifying email:", error);
-    res.status(500).send("Internal server error");
-  }
-});
+      // Set the new email verification code and the creation date
+      user.emailVerificationCode = {
+        code: randomString,
+        dateCreated: new Date(), // Sets the current date and time
+      };
 
-router.get("/api/verifyEmailCode", async (req, res) => {
-  const { code: codeFromUser, userId } = req.query;
-
-  if (!codeFromUser || !userId) {
-    return res.status(400).send("Missing code or user ID");
-  }
-
-  try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).send("User not found");
-    }
-
-    const { code: storedCode, dateCreated } = user.emailVerificationCode;
-    if (!storedCode || !dateCreated) {
-      return res.status(404).send("No verification code found");
-    }
-
-    const now = new Date();
-    const timeDiff = now - new Date(dateCreated); // Convert dateCreated to Date object if not already
-
-    if (timeDiff > 5 * 60 * 1000) {
-      // 5 minutes in milliseconds
-      user.emailVerificationCode = {}; // Clear the verification code object
       await user.save();
-      return res.status(400).send("Verification code has expired");
-    }
 
-    if (storedCode !== codeFromUser) {
-      return res.status(401).send("Incorrect verification code");
-    }
+      // Uncomment and configure the sendEmail call as necessary
+      sendEmail(
+        "Email Verification",
+        "Your verification code is: " + randomString,
+        "emailVerification",
+        [],
+        email
+      );
 
-    user.isEmailVerified = true;
-    user.emailVerificationCode = {}; // Optionally clear the code after successful verification
-    await user.save();
-    return res.status(200).send("Email verified successfully");
-  } catch (error) {
-    console.error("Error verifying email code:", error);
-    return res.status(500).send("Internal server error");
+      res.status(200).send("Verification code sent.");
+    } catch (error) {
+      console.error("Error in verifying email:", error);
+      res.status(500).send("Internal server error");
+    }
   }
-});
+);
+
+router.get(
+  "/api/verifyEmailCode",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const { code: codeFromUser, userId } = req.query;
+
+    if (!codeFromUser || !userId) {
+      return res.status(400).send("Missing code or user ID");
+    }
+
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+
+      const { code: storedCode, dateCreated } = user.emailVerificationCode;
+      if (!storedCode || !dateCreated) {
+        return res.status(404).send("No verification code found");
+      }
+
+      const now = new Date();
+      const timeDiff = now - new Date(dateCreated); // Convert dateCreated to Date object if not already
+
+      if (timeDiff > 5 * 60 * 1000) {
+        // 5 minutes in milliseconds
+        user.emailVerificationCode = {}; // Clear the verification code object
+        await user.save();
+        return res.status(400).send("Verification code has expired");
+      }
+
+      if (storedCode !== codeFromUser) {
+        return res.status(401).send("Incorrect verification code");
+      }
+
+      user.isEmailVerified = true;
+      user.emailVerificationCode = {}; // Optionally clear the code after successful verification
+      await user.save();
+      return res.status(200).send("Email verified successfully");
+    } catch (error) {
+      console.error("Error verifying email code:", error);
+      return res.status(500).send("Internal server error");
+    }
+  }
+);
 
 router.get(
   "/api/getOrdersData/:id",
@@ -424,5 +433,17 @@ router.get(
     }
   }
 );
+
+router.get("/api/search", async (req, res) => {
+  const query = req.query.query;
+  try {
+    const results = await searchProductsWithAlgolia(query);
+    res.json(results);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error searching for products", error: error });
+  }
+});
 
 module.exports = router;

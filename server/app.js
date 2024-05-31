@@ -55,6 +55,9 @@ app.use(express.static(path.join(__dirname, "assets")));
 // Imports all of the routes from ./routes/index.js
 app.use(require("./routes/index"));
 
+//watch collections
+require("./lib/algoliaSearch").watchProductCollection();
+
 /**
  * -------------- SERVER ----------------
  */

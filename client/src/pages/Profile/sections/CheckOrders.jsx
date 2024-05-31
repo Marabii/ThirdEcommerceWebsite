@@ -16,7 +16,6 @@ const CheckOrders = (props) => {
           `${serverURL}/api/getOrdersData/${userId}`
         )
         const data = response.data
-        console.log(data)
         setOrdersData(data)
       } catch (e) {
         navigate('/')
@@ -102,7 +101,7 @@ const CheckOrders = (props) => {
                   onClick={() =>
                     navigate(`/check-order/${order.orderConfirmationNumber}`)
                   }
-                  class="rounded bg-slate-500 px-4 py-2 font-bold text-white transition-all duration-300 ease-in-out hover:bg-slate-600 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                  className="rounded bg-slate-500 px-4 py-2 font-bold text-white transition-all duration-300 ease-in-out hover:bg-slate-600 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                 >
                   Check Order
                 </button>

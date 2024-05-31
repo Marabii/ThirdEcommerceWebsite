@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import axiosInstance from '../utils/verifyJWT'
 
 const CardItem = (props) => {
-  const { data, display } = props
+  const { data, display, width } = props
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const clientURL = import.meta.env.VITE_REACT_APP_CLIENT
   const oldPrice = Number(data.price) * 1.2
@@ -47,47 +47,48 @@ const CardItem = (props) => {
   }
 
   return (
-    <>
-      <div key={data._id} className="mb-5 w-fit cursor-pointer shadow-xl">
-        <div
-          onMouseEnter={() => setShowAddToCart(true)}
-          onMouseLeave={() => setShowAddToCart(false)}
-          className={`relative aspect-square w-full max-w-[400px] ${!imageLoaded && 'h-[420px] animate-pulse rounded-md'} bg-gray-400`}
-        >
-          <a href={`${clientURL}/product-page/${data._id}`}>
-            <img
-              className="aspect-square w-full max-w-[400px]"
-              src={`${serverURL}/products/${data._id}.png`}
-              alt="card-img"
-              loading="lazy"
-              onLoad={() => setImageLoaded(true)} // Set the imageLoaded state to true when the image is loaded
-            />
-          </a>
-          <AnimatePresence>
-            {showAddToCart && display && (
-              <motion.div
-                initial={{ x: '-50%', y: -20 }}
-                animate={{ x: '-50%', y: 0 }}
-                exit={{ opacity: 0, y: -20, x: '-50%' }}
-                onClick={handleAddToCart}
-                className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-gray-100 px-4 py-2 font-semibold text-gray-500"
-              >
-                Add To Cart
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-        <h2 className="mb-4 w-fit p-2 font-playfair text-2xl font-semibold">
-          {data.name}
-        </h2>
-        <h3 className="w-fit p-2 text-lg font-semibold">
-          $ {data.price} USD{' '}
-          <span className="font-normal text-slate-400 line-through">
-            ${oldPrice.toFixed()} USD
-          </span>
-        </h3>
+    <div
+      key={data._id}
+      className={`mb-5 ${width ? `w-[${width}px]` : 'w-fit'} cursor-pointer shadow-xl`}
+    >
+      <div
+        onMouseEnter={() => setShowAddToCart(true)}
+        onMouseLeave={() => setShowAddToCart(false)}
+        className={`relative aspect-square w-full max-w-[400px] ${!imageLoaded && 'h-[420px] animate-pulse rounded-md'} bg-gray-400`}
+      >
+        <a href={`${clientURL}/product-page/${data._id}`}>
+          <img
+            className="aspect-square w-full max-w-[400px]"
+            src={`${serverURL}/products/${data._id}.png`}
+            alt="card-img"
+            loading="lazy"
+            onLoad={() => setImageLoaded(true)} // Set the imageLoaded state to true when the image is loaded
+          />
+        </a>
+        <AnimatePresence>
+          {showAddToCart && display && (
+            <motion.div
+              initial={{ x: '-50%', y: -20 }}
+              animate={{ x: '-50%', y: 0 }}
+              exit={{ opacity: 0, y: -20, x: '-50%' }}
+              onClick={handleAddToCart}
+              className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-gray-100 px-4 py-2 font-semibold text-gray-500"
+            >
+              Add To Cart
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </>
+      <h2 className="mb-4 w-fit p-2 font-playfair text-2xl font-semibold">
+        {data.name}
+      </h2>
+      <h3 className="w-fit p-2 text-lg font-semibold">
+        $ {data.price} USD{' '}
+        <span className="font-normal text-slate-400 line-through">
+          ${oldPrice.toFixed()} USD
+        </span>
+      </h3>
+    </div>
   )
 }
 

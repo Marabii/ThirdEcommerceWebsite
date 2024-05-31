@@ -26,7 +26,7 @@ const CheckOrders = () => {
       }
     }
     getOrderData()
-  }, [])
+  }, [orderConfirmationNumber])
 
   useEffect(() => {
     if (orderData?.cart) {
