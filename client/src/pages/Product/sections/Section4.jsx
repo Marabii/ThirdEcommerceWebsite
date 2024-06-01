@@ -26,19 +26,6 @@ const Section4 = () => {
 
   return (
     <div className="space-y-5 2xl:col-start-3 2xl:col-end-4 2xl:row-start-1 2xl:row-end-3">
-      <p className="font-playfair text-2xl">Search</p>
-      <div className="flex h-11 w-full items-center">
-        <input
-          type="text"
-          name="search"
-          id="search"
-          placeholder="Keywords here"
-          className="w-full max-w-[568px] border-2 border-black px-3 py-2"
-        />
-        <div className="grid aspect-square h-full cursor-pointer place-items-center bg-black">
-          <Search stroke="white" />
-        </div>
-      </div>
       <div>
         <p className="font-playfair text-2xl">Categories</p>
         <div className="mt-5 flex flex-col gap-5">

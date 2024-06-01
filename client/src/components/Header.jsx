@@ -59,26 +59,33 @@ const Header = () => {
     }
   }, [isCartOpen])
 
-  const handleSearch = async () => {
+  const handleInputChange = (e) => {
+    const value = e.target.value
+    setQuery(value) // Update the query state immediately
+
+    // Clear any existing timeout to ensure no overlapping searches
+    if (timeoutId) clearTimeout(timeoutId)
+
+    // Set a new timeout to trigger the search
+    const newTimeoutId = setTimeout(() => {
+      // Directly use 'value' here instead of relying on the possibly outdated state
+      handleSearch(value)
+    }, 400)
+
+    setTimeoutId(newTimeoutId)
+  }
+
+  const handleSearch = async (searchValue) => {
     try {
-      const response = await axios.get(`${serverURL}/api/search?query=${query}`)
+      // Use the search value directly
+      const response = await axios.get(
+        `${serverURL}/api/search?query=${encodeURIComponent(searchValue)}`
+      )
       const data = response.data
       setResults(data.hits)
     } catch (error) {
       console.error('Failed to fetch:', error)
     }
-  }
-
-  const handleInputChange = (e) => {
-    const value = e.target.value
-    setQuery(value)
-    if (timeoutId) clearTimeout(timeoutId)
-
-    const newTimeoutId = setTimeout(() => {
-      handleSearch()
-    }, 400)
-
-    setTimeoutId(newTimeoutId)
   }
 
   return (
@@ -109,6 +116,7 @@ const Header = () => {
             onChange={handleInputChange}
             type="text"
             placeholder="Search"
+            value={query}
             name="search"
             className="h-10 w-40 bg-transparent indent-1 text-lg focus:outline-0"
           />

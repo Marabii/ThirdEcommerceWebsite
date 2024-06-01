@@ -1,34 +1,11 @@
-import axios from 'axios'
-import CardItem from './CardItem'
+import CardItemId from './CardItemId'
 import { useEffect, useState, useRef } from 'react'
 import { X, LoaderCircle } from 'lucide-react'
 
 const SearchResults = ({ hits, setQuery }) => {
-  const [searchData, setSearchData] = useState()
-  const [loading, setLoading] = useState(true)
-  const serverURL = import.meta.env.VITE_REACT_APP_SERVER
+  const [loaded, setLoaded] = useState(true)
   const ref = useRef()
 
-  // Fetch detailed product data
-  useEffect(() => {
-    const getData = async () => {
-      setLoading(true)
-      const promises = hits.map((hit) =>
-        axios.get(`${serverURL}/api/getProduct/${hit.objectID}`)
-      )
-      const data = await Promise.all(promises)
-      setSearchData(data.map((item) => item.data))
-      setTimeout(() => setLoading(false), 2000) // Delay setting loading to false
-    }
-    if (hits.length > 0) {
-      getData()
-    } else {
-      setSearchData([])
-      setTimeout(() => setLoading(false), 5000)
-    }
-  }, [hits])
-
-  // Click outside handler
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (ref.current && !ref.current.contains(event.target)) {
@@ -40,10 +17,10 @@ const SearchResults = ({ hits, setQuery }) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [setQuery])
+  }, [])
 
-  if (!searchData) {
-    return <div>Loading ...</div>
+  const closeSearch = () => {
+    setQuery('')
   }
 
   return (
@@ -53,12 +30,12 @@ const SearchResults = ({ hits, setQuery }) => {
     >
       <X
         className="absolute right-5 top-5 cursor-pointer"
-        onClick={() => setQuery('')}
+        onClick={closeSearch}
       />
       <h2 className="mb-10 text-2xl font-bold text-slate-600">
         Search Results
       </h2>
-      {loading ? (
+      {!loaded ? (
         <div className="flex items-center justify-center">
           <div
             className="inline-block animate-spin rounded-full border-4"
@@ -67,10 +44,17 @@ const SearchResults = ({ hits, setQuery }) => {
             <LoaderCircle strokeWidth={0.5} size={100} />
           </div>
         </div>
-      ) : searchData.length !== 0 ? (
+      ) : hits.length !== 0 ? (
         <div className="flex flex-wrap items-center justify-around overflow-y-auto">
-          {searchData.map((data) => (
-            <CardItem key={data.id} data={data} display={false} width={250} />
+          {hits.map((hit) => (
+            <CardItemId
+              key={hit.objectID}
+              productId={hit.objectID}
+              display={false}
+              width={250}
+              setLoaded={setLoaded}
+              loading={loaded}
+            />
           ))}
         </div>
       ) : (

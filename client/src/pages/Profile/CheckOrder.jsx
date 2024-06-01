@@ -3,15 +3,15 @@ import { useParams } from 'react-router-dom'
 import axiosInstance from '../../utils/verifyJWT'
 import Header from '../../components/Header'
 import TopSection from '../../components/TopSection'
-import CardItem from '../../components/CardItem'
+import CardItemId from '../../components/CardItemId'
 import { useNavigate } from 'react-router-dom'
 
 const CheckOrders = () => {
   const navigate = useNavigate()
   const [orderData, setOrderData] = useState()
-  const [cartData, setCartData] = useState()
   const orderConfirmationNumber = useParams().id
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
+  const [loaded, setLoaded] = useState(true)
 
   useEffect(() => {
     const getOrderData = async () => {
@@ -27,25 +27,7 @@ const CheckOrders = () => {
     getOrderData()
   }, [orderConfirmationNumber])
 
-  useEffect(() => {
-    if (orderData?.cart) {
-      const cartDataPromises = orderData.cart.map((cartItem) => {
-        return axiosInstance.get(
-          `${serverURL}/api/getProduct/${cartItem.productId}`
-        )
-      })
-
-      Promise.all(cartDataPromises)
-        .then((data) => {
-          setCartData(data.map((item) => item.data))
-        })
-        .catch((e) => {
-          console.error(e)
-        })
-    }
-  }, [orderData, serverURL])
-
-  if (!orderData || !cartData) {
+  if (!orderData) {
     return <div>Loading...</div>
   }
 
@@ -64,9 +46,16 @@ const CheckOrders = () => {
             Your Order
           </h2>
           <div className="flex w-full flex-wrap justify-center gap-5">
-            {cartData.map((product) => {
+            {orderData.cart.map((cartItem) => {
               return (
-                <CardItem display={false} key={product._id} data={product} />
+                <CardItemId
+                  key={cartItem.productId}
+                  productId={cartItem.productId}
+                  display={false}
+                  width={250}
+                  setLoaded={setLoaded}
+                  loading={loaded}
+                />
               )
             })}
           </div>

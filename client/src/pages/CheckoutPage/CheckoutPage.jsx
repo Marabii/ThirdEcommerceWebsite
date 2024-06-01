@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { ShieldCheck } from 'lucide-react'
 import { globalContext } from '../../App'
-import CardItem from '../../components/CardItem'
+import CardItemId from '../../components/CardItemId'
 import axiosInstance from '../../utils/verifyJWT'
 import { jwtDecode } from 'jwt-decode'
+import Header from '../../components/Header'
 
 const CheckoutPage = () => {
+  const [loaded, setLoaded] = useState(true)
   const { cartItems } = useContext(globalContext)
-  const [cardsData, setCardsData] = useState([])
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const clientURL = import.meta.env.VITE_REACT_APP_CLIENT
   const jwtTokenUnDecoded = localStorage.getItem('jwtToken')
@@ -29,44 +30,6 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     document.body.style.overflow = 'auto'
-  }, [])
-
-  useEffect(() => {
-    const getCartItems = async () => {
-      const requests = cartItems.map((item) => {
-        const productId = item.productId
-        return axiosInstance
-          .get(`${serverURL}/api/getProduct/${productId}`)
-          .then((response) => ({
-            quantity: item.quantity,
-            data: response.data
-          }))
-          .catch((e) => {
-            console.error(e)
-            alert('Unable to load cart items')
-          })
-      })
-
-      try {
-        const results = await Promise.all(requests)
-        // Filter undefined results in case of errors
-        setCardsData((prev) => {
-          const newData = results.filter((item) => item !== undefined)
-          // Create a set of ids (or another unique identifier) to check for duplicates
-          const existingIds = new Set(prev.map((data) => data.data.id))
-          const filteredNewData = newData.filter(
-            (data) => !existingIds.has(data.data.id)
-          )
-          return [...prev, ...filteredNewData]
-        })
-      } catch (error) {
-        console.error('Error processing requests:', error)
-      }
-    }
-
-    if (cartItems.length > 0) {
-      getCartItems()
-    }
   }, [])
 
   const useDebounce = (callback, delay) => {
@@ -123,7 +86,7 @@ const CheckoutPage = () => {
       alert(
         `${name.split('_').join(' ').toUpperCase()} is invalid: ${fieldValidation.error}`
       )
-      setFormData((prev) => ({ ...prev, [name]: '' })) // Resets the field if invalid
+      setFormData((prev) => ({ ...prev, [name]: '' }))
     }
   }
 
@@ -167,15 +130,9 @@ const CheckoutPage = () => {
     }
   }
 
-  useEffect(() => {
-    console.log(formData)
-  }, [formData])
-
   return (
     <div className="relative grid justify-center p-3 text-center">
-      <div className="absolute left-2 top-2">
-        <img src="/farnic.png" alt="farnic-logo" />
-      </div>
+      <Header />
       <div className="mt-[100px] space-y-5">
         <div className="flex space-x-1">
           <ShieldCheck stroke="white" fill="rgb(88 28 135)" />
@@ -187,12 +144,15 @@ const CheckoutPage = () => {
       </div>
       <p className="my-[20px]">Chosen Product{cartItems.length > 1 && 's'}: </p>
       <div className="flex flex-col items-center">
-        {cardsData.map((cardData) => {
+        {cartItems.map((item) => {
           return (
-            <CardItem
+            <CardItemId
+              key={item.productId}
+              productId={item.productId}
               display={false}
-              key={cardData.data._id}
-              data={cardData.data}
+              width={250}
+              setLoaded={setLoaded}
+              loading={loaded}
             />
           )
         })}

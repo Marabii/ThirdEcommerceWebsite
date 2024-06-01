@@ -83,7 +83,7 @@ const Section1 = () => {
           ))}
         </div>
       </section>
-      <section className="relative my-14 aspect-[1093/375] h-fit w-full bg-[url('/chair.jpg')] bg-cover bg-center">
+      <section className="relative -left-0.5 my-14 aspect-[1093/375] h-fit w-full bg-[url('/chair.jpg')] bg-cover bg-center">
         <div className="static left-[40%] top-1/2 translate-y-0 text-center text-white md:absolute md:-translate-y-1/2">
           <h3 className="clamp-font-size-med">NEW COLLECTIONS</h3>
           <h2 className="clamp-font-size-big my-5 font-playfair font-bold">

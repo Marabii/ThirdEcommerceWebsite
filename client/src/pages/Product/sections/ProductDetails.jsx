@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
+import { globalContext } from '../../../App'
+import axiosInstance from '../../../utils/verifyJWT'
 
 const ProductDetailsJSX = (props) => {
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
+  const { isLoggedIn, setCartItems } = useContext(globalContext)
   const { productDetails } = props
   const [quantity, setQuantity] = useState(1)
   const oldPrice = Number(productDetails?.price) * 1.2
@@ -16,6 +19,42 @@ const ProductDetailsJSX = (props) => {
       return
     }
     setQuantity(e.target.value)
+  }
+
+  const handleAddToCart = async () => {
+    if (!isLoggedIn) {
+      alert('You must log in before you can buy items')
+      navigate('/login')
+      return
+    }
+
+    setCartItems((prev) => {
+      const itemExists = prev.find(
+        (item) => item.productId === productDetails._id
+      )
+      if (itemExists) {
+        alert('Item already exists in your cart')
+        return prev
+      } else {
+        return [...prev, { productId: productDetails._id, quantity: 1 }]
+      }
+    })
+
+    try {
+      const response = await axiosInstance.post(
+        `${serverURL}/api/updateCart?isNewItem=true`,
+        { productId: productDetails._id, quantity: 1 }
+      )
+      if (response.status !== 200) {
+        throw new Error('Failed to update cart')
+      }
+    } catch (e) {
+      console.error(e)
+      setCartItems((prev) =>
+        prev.filter((item) => item.productId !== productDetails._id)
+      )
+      alert('Failed to update cart. Please try again.')
+    }
   }
 
   return (
@@ -60,7 +99,10 @@ const ProductDetailsJSX = (props) => {
             value={quantity}
           />
         </div>
-        <button className="mt-10 w-[150px] border-2 border-black px-5 py-2">
+        <button
+          onClick={handleAddToCart}
+          className="mt-10 w-[150px] border-2 border-black px-5 py-2"
+        >
           ADD TO CART
         </button>
       </div>

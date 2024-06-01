@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import CardItem from '../../../components/CardItem'
+import CardItem from '../../../components/CardItemId'
 import axios from 'axios'
 
 const Section3 = (props) => {
