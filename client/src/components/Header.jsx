@@ -12,16 +12,8 @@ import logo from '/farnic.png'
 import SideBarHeader from './SideBarHeader'
 import CartContainer from './CartContainer'
 import { globalContext } from '../App'
-import { jwtDecode } from 'jwt-decode'
 import axios from 'axios'
 import SearchResults from './SearchResults'
-
-const navbarElements = [
-  { name: 'Home', link: '/' },
-  { name: 'Pages', link: '/pages' },
-  { name: 'About', link: '/about' },
-  { name: 'Contact', link: '/contact' }
-]
 
 const Header = () => {
   const [query, setQuery] = useState('')
@@ -29,12 +21,18 @@ const Header = () => {
   const [timeoutId, setTimeoutId] = useState(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
-  const { cartItems, isLoggedIn } = useContext(globalContext)
-  const jwtTokenUnDecoded = localStorage.getItem('jwtToken')
-  const jwtToken = jwtTokenUnDecoded && jwtDecode(jwtTokenUnDecoded)
-  const userId = jwtToken?.sub
+  const { cartItems, isLoggedIn, userData } = useContext(globalContext)
+  const isAdmin = userData.isAdmin
+  const userId = userData._id
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const [scrolled, setScrolled] = useState(false)
+
+  const navbarElements = [
+    { name: 'Home', link: '/' },
+    { name: 'Pages', link: '/pages' },
+    { name: 'About', link: '/about' },
+    { name: 'Contact', link: '/contact' }
+  ]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,14 +59,9 @@ const Header = () => {
 
   const handleInputChange = (e) => {
     const value = e.target.value
-    setQuery(value) // Update the query state immediately
-
-    // Clear any existing timeout to ensure no overlapping searches
+    setQuery(value)
     if (timeoutId) clearTimeout(timeoutId)
-
-    // Set a new timeout to trigger the search
     const newTimeoutId = setTimeout(() => {
-      // Directly use 'value' here instead of relying on the possibly outdated state
       handleSearch(value)
     }, 400)
 
@@ -77,7 +70,6 @@ const Header = () => {
 
   const handleSearch = async (searchValue) => {
     try {
-      // Use the search value directly
       const response = await axios.get(
         `${serverURL}/api/search?query=${encodeURIComponent(searchValue)}`
       )
@@ -99,15 +91,19 @@ const Header = () => {
       <nav className="hidden xl:block">
         <ul className="flex space-x-20">
           {navbarElements.map((element) => (
-            <Link
-              key={element.name}
-              to={element.link}
-              className="flex items-center gap-2 font-bold"
-            >
-              {element.name}{' '}
-              {element.name === 'Pages' && <ArrowDown size={15} />}
+            <Link key={element.name} to={element.link}>
+              <li className="flex items-center gap-2 font-bold">
+                {' '}
+                {element.name}{' '}
+                {element.name === 'Pages' && <ArrowDown size={15} />}
+              </li>
             </Link>
           ))}
+          {isAdmin && (
+            <Link to={'/admin/dashboard'}>
+              <li className="flex items-center gap-2 font-bold">Admin Panel</li>
+            </Link>
+          )}
         </ul>
       </nav>
       <div className="flex items-center">
@@ -167,6 +163,7 @@ const Header = () => {
           hits={results}
           handleSearch={handleSearch}
           handleInputChange={handleInputChange}
+          isAdmin={isAdmin}
         />
       )}
       {isCartOpen && (

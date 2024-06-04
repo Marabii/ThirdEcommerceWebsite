@@ -1,17 +1,30 @@
-import React from 'react';
-import useAdminAccess from '../../utils/useAdminAccess';
+import useAdminAccess from '../../utils/useAdminAccess'
+import SideBarAdmin from './subComponents/sidebar'
+import { Routes, Route } from 'react-router-dom'
+import Dashboard from './subComponents/Dashboard'
+import HandleProducts from './subComponents/HandleProducts'
+import Header from '../../components/Header'
 
 const Admin = () => {
-    const { isAllowed, ToastContainer } = useAdminAccess();
+  const { ToastContainer } = useAdminAccess()
 
-    if (!isAllowed) return <h1>Loading or Not Authorized...</h1>;
-
-    return (
-        <>
-            <ToastContainer />
-            <h1>This is the admin protected route</h1>
-        </>
-    );
+  return (
+    <>
+      <div className="flex">
+        <Header />
+        <main className="mx-2 mt-[150px] flex w-full space-x-2 rounded-xl p-5">
+          <SideBarAdmin />
+          <div className="flex w-full bg-slate-100 p-5">
+            <Routes>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="ecommerce" element={<HandleProducts />} />
+            </Routes>
+          </div>
+        </main>
+      </div>
+      <ToastContainer />
+    </>
+  )
 }
 
-export default Admin;
+export default Admin

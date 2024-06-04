@@ -4,7 +4,7 @@ const cors = require("cors");
 const path = require("path");
 const passport = require("passport");
 const port = process.env.PORT;
-const bodyParser = require("body-parser");
+const helmet = require("helmet");
 
 // Create the Express application
 var app = express();
@@ -24,6 +24,15 @@ connectDB();
 // This will initialize the passport object on every request
 app.use(passport.initialize());
 
+app.use(
+  cors({
+    origin: process.env.FRONT_END,
+    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE"],
+    credentials: true,
+    exposedHeaders: ["X-Total-Count"],
+  })
+);
+
 app.use((req, res, next) => {
   if (req.originalUrl === "/webhook") {
     next();
@@ -39,16 +48,6 @@ app.use((req, res, next) => {
     express.urlencoded({ extended: true })(req, res, next);
   }
 });
-
-// Allows our Angular application to make HTTP requests to Express application
-app.use(
-  cors({
-    origin: process.env.FRONT_END,
-    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE"],
-    credentials: true,
-    exposedHeaders: ["X-Total-Count"],
-  })
-);
 
 app.use(express.static(path.join(__dirname, "assets")));
 

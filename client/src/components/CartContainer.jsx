@@ -8,7 +8,6 @@ const CartContainer = (props) => {
   const { isLoggedIn, cartItems, userData } = useContext(globalContext)
   const { isCartOpen, setIsCartOpen } = props
   const navigate = useNavigate()
-  const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const [loadingStates, setLoadingStates] = useState(false)
   const [itemDetails, setItemDetails] = useState({})
   const [totalPrice, setTotalPrice] = useState(0)

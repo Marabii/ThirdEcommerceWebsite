@@ -1,8 +1,9 @@
-import React, { useState, useContext } from 'react'
+import { useState, useContext } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { globalContext } from '../App'
 import { useNavigate } from 'react-router-dom'
 import axiosInstance from '../utils/verifyJWT'
+import PropTypes from 'prop-types'
 
 const CardItem = (props) => {
   const { data, display, width } = props
@@ -12,7 +13,7 @@ const CardItem = (props) => {
   const [showAddToCart, setShowAddToCart] = useState(false)
   const { isLoggedIn, setCartItems } = useContext(globalContext)
   const navigate = useNavigate()
-  const [imageLoaded, setImageLoaded] = useState(false) // State to track image loading
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   const handleAddToCart = async () => {
     if (!isLoggedIn) {
@@ -63,7 +64,7 @@ const CardItem = (props) => {
             src={`${serverURL}/products/${data._id}.png`}
             alt="card-img"
             loading="lazy"
-            onLoad={() => setImageLoaded(true)} // Set the imageLoaded state to true when the image is loaded
+            onLoad={() => setImageLoaded(true)}
           />
         </a>
         <AnimatePresence>
@@ -91,6 +92,16 @@ const CardItem = (props) => {
       </h3>
     </div>
   )
+}
+
+CardItem.propTypes = {
+  data: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired
+  }).isRequired,
+  display: PropTypes.bool,
+  width: PropTypes.number
 }
 
 export default CardItem

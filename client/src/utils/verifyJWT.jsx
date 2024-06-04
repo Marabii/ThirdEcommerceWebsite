@@ -33,10 +33,9 @@ axiosInstance.interceptors.response.use(
 
       // Instead of redirecting immediately, use history to push to login with redirect state
       const currentPath = window.location.pathname
-      window.location.href = `${import.meta.env.VITE_REACT_APP_CLIENT}/login?redirect=${currentPath}`
-
-      // If you're using React Router v6, you might need to update the way you handle history
-      // with useNavigate instead of createBrowserHistory or useHistory
+      if (currentPath !== '/') {
+        window.location.href = `${import.meta.env.VITE_REACT_APP_CLIENT}/login?redirect=${currentPath}`
+      }
     }
     return Promise.reject(error)
   }

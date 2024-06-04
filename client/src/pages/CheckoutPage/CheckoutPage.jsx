@@ -3,18 +3,17 @@ import { ShieldCheck } from 'lucide-react'
 import { globalContext } from '../../App'
 import CardItemId from '../../components/CardItemId'
 import axiosInstance from '../../utils/verifyJWT'
-import { jwtDecode } from 'jwt-decode'
 import Header from '../../components/Header'
 
 const CheckoutPage = () => {
   const [loaded, setLoaded] = useState(true)
-  const { cartItems } = useContext(globalContext)
+  const { cartItems, userData } = useContext(globalContext)
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const clientURL = import.meta.env.VITE_REACT_APP_CLIENT
-  const jwtTokenUnDecoded = localStorage.getItem('jwtToken')
-  const jwtToken = jwtTokenUnDecoded
-    ? jwtDecode(jwtTokenUnDecoded)
-    : (window.location.href = clientURL)
+  const userId =
+    Object.keys(userData).length !== 0
+      ? userData._id
+      : (window.location.href = clientURL)
   const items = cartItems.map((item) => {
     return { id: item.productId, quantity: item.quantity }
   })
@@ -25,7 +24,7 @@ const CheckoutPage = () => {
     street: '',
     city: '',
     zipcode: '',
-    userId: jwtToken.sub
+    userId: userId
   })
 
   useEffect(() => {

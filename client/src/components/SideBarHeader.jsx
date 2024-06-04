@@ -8,7 +8,7 @@ const SideBarHeader = (props) => {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState([])
   const [timeoutId, setTimeoutId] = useState(null)
-  const { setIsMenuOpen, navbarElements, SearchResults } = props
+  const { setIsMenuOpen, navbarElements, SearchResults, isAdmin } = props
 
   const handleSearch = async () => {
     try {
@@ -72,6 +72,14 @@ const SideBarHeader = (props) => {
                 {element.name === 'Pages' && <ArrowDown size={15} />}
               </Link>
             ))}
+            {isAdmin && (
+              <Link
+                className="flex items-center gap-2 font-bold"
+                to={'/admin/dashboard'}
+              >
+                Admin Panel
+              </Link>
+            )}
           </ul>
         </nav>
       </div>

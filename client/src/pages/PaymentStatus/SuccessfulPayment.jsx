@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import { useParams, useNavigate } from 'react-router-dom'
+import axiosInstance from '../../utils/verifyJWT'
 
 const SuccessfulPayment = () => {
   const [timeCheck, setTimeCheck] = useState(false)
@@ -11,7 +11,7 @@ const SuccessfulPayment = () => {
   useEffect(() => {
     const getShowPage = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           `${serverUrl}/api/getRecentOrder/${userId}`
         )
         const order = response.data

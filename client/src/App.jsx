@@ -1,6 +1,7 @@
-import React, { lazy, Suspense, useState, createContext } from 'react'
+import { lazy, Suspense, useState, createContext } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import UseAuthCheck from './utils/verifyUser'
+import ErrorFallback from './pages/ErrorFallback/ErrorFallback'
 
 const LandingPage = lazy(() => import('./pages/LandingPage/LandingPage'))
 const About = lazy(() => import('./pages/About/About'))
@@ -21,7 +22,8 @@ export const globalContext = createContext({
   cartItems: [],
   setCartItems: () => {},
   userData: {},
-  setUserData: () => {}
+  setUserData: () => {},
+  userId: ''
 })
 
 const App = () => {
@@ -82,7 +84,7 @@ const App = () => {
             }
           />
           <Route
-            path="/admin"
+            path="/admin/*"
             element={
               <Suspense fallback={<div>Loading...</div>}>
                 <Admin />
@@ -126,6 +128,14 @@ const App = () => {
             element={
               <Suspense fallback={<div>Loading...</div>}>
                 <CheckOrder />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/error-page"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ErrorFallback />
               </Suspense>
             }
           />

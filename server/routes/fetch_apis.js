@@ -290,7 +290,7 @@ router.get(
     try {
       const userData = await User.find(
         { _id: userId },
-        { username: 1, email: 1, isEmailVerified: 1 }
+        { username: 1, email: 1, isEmailVerified: 1, isAdmin: 1 }
       );
       if (userData) {
         res.status(200).json(userData);

@@ -4,7 +4,7 @@ import axiosInstance from '../utils/verifyJWT'
 import { globalContext } from '../App'
 
 const CartItem = (props) => {
-  const { productID, setLoadingStates } = props
+  const { productID, setLoadingStates, updateItemDetails } = props
   const [quantity, setQuantity] = useState()
   const [productData, setProductData] = useState()
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
@@ -18,7 +18,7 @@ const CartItem = (props) => {
         price: productData.price,
         quantity: quantity
       }
-      props.updateItemDetails(productID, newDetails)
+      updateItemDetails(productID, newDetails)
     }
   }, [productData, quantity])
 

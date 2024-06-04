@@ -1,7 +1,15 @@
 const ErrorFallback = ({ error, resetErrorBoundary }) => {
-  window.location.href = import.meta.env.VITE_REACT_APP_CLIENT
+  console.error(error)
 
-  return <></>
+  const home = () => {
+    window.location.href = import.meta.env.VITE_REACT_APP_CLIENT
+  }
+  return (
+    <div>
+      <h1>Something went wrong:</h1>
+      <button onClick={home}>Go Back Home</button>
+    </div>
+  )
 }
 
 export default ErrorFallback
