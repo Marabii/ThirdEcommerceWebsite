@@ -42,7 +42,9 @@ const AddProduct = () => {
 
   const useDropZoneImages = useDropzone({
     onDrop,
-    accept: 'image/*',
+    accept: {
+      'image/*': ['.jpeg', '.jpg', '.png']
+    },
     multiple: true
   })
 
@@ -50,7 +52,9 @@ const AddProduct = () => {
   const getInputPropsImages = useDropZoneImages.getInputProps
 
   const useDropZoneThumbnail = useDropzone({
-    accept: 'image/*',
+    accept: {
+      'image/*': ['.jpeg', '.jpg', '.png']
+    },
     multiple: false,
     onDrop: (acceptedFiles) => {
       setThumbnail(
@@ -108,8 +112,8 @@ const AddProduct = () => {
   const handleProductDetailsFormChange = (e) => {
     const { name, value } = e.target
     if (name === 'name') {
-      if (value.length > 30) {
-        alert('Product name should not exceed 30 characters')
+      if (value.length > 20) {
+        alert('Product name should not exceed 20 characters')
         return
       }
     }
@@ -233,6 +237,7 @@ const AddProduct = () => {
       delivery,
       specification,
       materials,
+      productDetails,
       tags
     } = productDetailsForm
 
@@ -243,6 +248,7 @@ const AddProduct = () => {
     formData.append('category', category)
     formData.append('description', description)
     formData.append('delivery', delivery)
+    formData.append('productDetails', productDetails)
     formData.append('specification', JSON.stringify(specification))
     formData.append('materials', JSON.stringify(materials))
     formData.append('tags', JSON.stringify(tags))
@@ -264,6 +270,24 @@ const AddProduct = () => {
 
       console.log('Product added successfully:', response.data)
       setProductId(generateHexRandomString())
+
+      // Reset the form
+      setProductDetailsForm({
+        name: '',
+        price: '',
+        stock: '',
+        category: '',
+        description: '',
+        delivery: '',
+        productDetails: '',
+        specification: {},
+        materials: [],
+        tags: []
+      })
+      setImages([])
+      setThumbnail([])
+
+      // Show success message
       alert('Product added successfully!')
     } catch (error) {
       console.error('Error:', error)
@@ -296,7 +320,7 @@ const AddProduct = () => {
           required
         />
         <p className="mt-2 text-sm text-gray-600">
-          Do not exceed 30 characters when entering the product name.
+          Do not exceed 20 characters when entering the product name.
         </p>
       </div>
       <div className="my-2 flex justify-between">
@@ -366,7 +390,7 @@ const AddProduct = () => {
         />
       </div>
       <div>
-        <label className="mb-2 block text-lg font-semibold" htmlFor="Delivery">
+        <label className="mb-2 block text-lg font-semibold" htmlFor="delivery">
           Delivery
         </label>
         <textarea
@@ -383,7 +407,7 @@ const AddProduct = () => {
         <div>
           <label
             className="mb-2 block text-lg font-semibold"
-            htmlFor="Category"
+            htmlFor="category"
           >
             Category
           </label>
@@ -403,8 +427,10 @@ const AddProduct = () => {
           </select>
         </div>
         <div className="my-5">
-          <label className="text-lg font-semibold">Specifications</label>
-          <div className="my-3 flex items-center">
+          <label htmlFor="specification" className="text-lg font-semibold">
+            Specifications
+          </label>
+          <div id="specification" className="my-3 flex items-center">
             <input
               type="text"
               placeholder="Key"
@@ -446,9 +472,15 @@ const AddProduct = () => {
         </div>
         <div className="flex flex-wrap justify-between">
           <div>
-            <label className="block text-lg font-semibold">Materials</label>
+            <label htmlFor="materials" className="block text-lg font-semibold">
+              Materials
+            </label>
             {productDetailsForm.materials.map((material, index) => (
-              <div key={index} className="my-3 flex items-center space-x-2">
+              <div
+                id="materials"
+                key={index}
+                className="my-3 flex items-center space-x-2"
+              >
                 <input
                   type="text"
                   placeholder="Material"
@@ -505,7 +537,10 @@ const AddProduct = () => {
           >
             Upload Thumbnail Image
           </label>
-          <section className="container border border-black">
+          <section
+            htmlFor="dropzone-file"
+            className="container rounded-md border border-black"
+          >
             <div
               {...getRootPropsThumbnail({ className: 'dropzone' })}
               className="grid h-[200px] w-full place-items-center"
@@ -531,7 +566,10 @@ const AddProduct = () => {
           >
             Upload up to 3 additional images
           </label>
-          <section className="container border border-black">
+          <section
+            htmlFor="dropzone-file"
+            className="container rounded-md border border-black"
+          >
             <div
               {...getRootPropsImages({ className: 'dropzone' })}
               className="grid h-[200px] w-full place-items-center"

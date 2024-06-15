@@ -1,6 +1,9 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { globalContext } from '../../../App'
 import axiosInstance from '../../../utils/verifyJWT'
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
+import { Carousel } from 'react-responsive-carousel'
+import { X } from 'lucide-react'
 
 const ProductDetailsJSX = (props) => {
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
@@ -8,6 +11,24 @@ const ProductDetailsJSX = (props) => {
   const { productDetails } = props
   const [quantity, setQuantity] = useState(1)
   const oldPrice = Number(productDetails?.price) * 1.2
+  const [additionalImages, setAdditionalImages] = useState([])
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [currentImage, setCurrentImage] = useState('')
+
+  useEffect(() => {
+    const getAdditionalImages = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `${serverURL}/api/getAdditionalImages/${productDetails._id}`
+        )
+        const data = response.data
+        setAdditionalImages(data)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    getAdditionalImages()
+  }, [])
 
   const handleQuantityChange = (e) => {
     const value = Number(e.target.value)
@@ -57,20 +78,69 @@ const ProductDetailsJSX = (props) => {
     }
   }
 
+  const handleImageClick = (imageSrc) => {
+    setCurrentImage(imageSrc)
+    setModalIsOpen(true)
+  }
+
+  const closeModal = () => {
+    setModalIsOpen(false)
+  }
+
   return (
     <>
-      <div>
-        <img
-          src={`${serverURL}/products/${productDetails._id}.png`}
-          className="self-center justify-self-center md:col-start-1 md:col-end-2"
-          alt="product image"
-          loading="lazy"
-        />
-        <div className="flex w-full flex-wrap justify-center gap-5">
-          <img className="size-28" src="/beigeChair.png" alt="beige chair" />
-          <img className="size-28" src="/beigeChair.png" alt="beige chair" />
-          <img className="size-28" src="/beigeChair.png" alt="beige chair" />
-        </div>
+      <div className="relative flex flex-col justify-between">
+        {additionalImages.length !== 0 ? (
+          <Carousel
+            autoPlay={true}
+            showThumbs={false}
+            showArrows={true}
+            swipeable={true}
+            showStatus={false}
+            onClickItem={(_, item) => {
+              handleImageClick(item.props.src)
+            }}
+          >
+            <img
+              src={`${serverURL}/products/${productDetails._id}.png`}
+              alt="product image"
+              loading="lazy"
+            />
+            {additionalImages.map((image) => (
+              <img
+                key={image}
+                src={`${serverURL}/additionalImages/${image}`}
+                alt="additional Image"
+              />
+            ))}
+          </Carousel>
+        ) : (
+          <img
+            src={`${serverURL}/products/${productDetails._id}.png`}
+            alt="product image"
+            loading="lazy"
+          />
+        )}
+        {modalIsOpen && (
+          <div
+            onClick={closeModal}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+          >
+            <div className="relative flex items-center justify-center">
+              <img
+                src={currentImage}
+                className="w-100% max-h-[800px] sm:max-w-[80%]"
+                alt="Enlarged product"
+              />
+              <button
+                onClick={closeModal}
+                className="absolute -top-10 right-0 p-2 text-xl text-white lg:top-10"
+              >
+                <X className="size-5 stroke-white sm:size-10" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
       <div className="col-start-2 col-end-3 space-y-4">
         <h2 className="font-playfair text-5xl font-bold">

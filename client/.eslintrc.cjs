@@ -9,8 +9,6 @@ module.exports = {
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-  settings: { react: { version: '19.0.0-rc-6d3110b4d9-20240531' } },
-  plugins: ['react-refresh', 'eslint-plugin-react-compiler'],
   rules: {
     'react-compiler/react-compiler': 'error',
     'react/jsx-no-target-blank': 'off',

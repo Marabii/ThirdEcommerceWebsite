@@ -9,6 +9,8 @@ const connectionOrder = require("../models/orders");
 const Order = connectionOrder.models.Order;
 const sendEmail = require("../lib/email").sendEmail;
 const { searchProductsWithAlgolia } = require("../lib/algoliaSearch");
+const path = require("path");
+const fs = require("fs");
 
 router.get("/api/getProducts", async (req, res) => {
   const limit = Number(req.query.limit) || 10;
@@ -443,6 +445,23 @@ router.get("/api/search", async (req, res) => {
     res
       .status(500)
       .json({ message: "Error searching for products", error: error });
+  }
+});
+
+router.get("/api/getAdditionalImages/:id", async (req, res) => {
+  const id = req.params.id;
+  const additionalImagesPath = path.join(
+    __dirname,
+    "../assets/additionalImages"
+  );
+
+  try {
+    const files = await fs.promises.readdir(additionalImagesPath);
+    const filteredFiles = files.filter((file) => file.startsWith(id));
+    res.json(filteredFiles);
+  } catch (error) {
+    console.error("Failed to read directory or process files:", error);
+    res.status(500).send("Error retrieving image files");
   }
 });
 

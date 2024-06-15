@@ -29,7 +29,10 @@ const Section2 = (props) => {
         <div className="space-y-4 pb-10 text-center text-xl">
           {Object.keys(productDetails.specification).map((key) => {
             return (
-              <div className="flex w-fit min-w-32 items-center justify-between gap-3">
+              <div
+                className="flex w-fit min-w-32 items-center justify-between gap-3"
+                key={key}
+              >
                 <h4 className="font-semibold">{key}: </h4>
                 <p className="text-gray-600">
                   {productDetails.specification[key]}

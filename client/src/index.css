@@ -5,6 +5,11 @@
 @tailwind components;
 @tailwind utilities;
 
+.slide {
+  display: flex;
+  justify-content: center;
+}
+
 @layer components {
   .max-width {
     max-width: 1440px;
