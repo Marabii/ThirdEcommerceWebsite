@@ -1,2 +1,9 @@
-GET http://localhost:3001/api/most-purchased-products
-Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjQ0ZjU5ZGZmNTgxODBmMDAxZGViOGMiLCJpYXQiOjE3MTczNTQ4MDgsImV4cCI6MTcxNzM1ODQwOH0.aGlUUAivF4xEGrU-9qYJVLxcWJFd8rAo_98hooRubqWg43YE8GLiBRPaJ1ReGzAysA6V1Q_CorfXeDRx11QK_WzFOlbCgS3OqqyQ5V78pO7EBqGgg3_rfRRkxLtNcvec6m3CtkLkdoJAWGLLQBbMFsPQBRlGffdk2-z1CpWIlkXk7TxV_ts54sGeDsL13GZe5pUir3p52JBaAE7rVJkrw0dF9o0Dk8kczS04b5ZCW6jf6xR6DqcQSnP1TXJk6KhFn-A-Z5jRD9xzkpkgnbOLKz7AEX5AEeWAbtq32N-iD1rUCIyaBzw7A8tQs2ZveQN9QIjWeAXV3w2gYC7rjdiPGirJISta5KClCNqq_6znY2tVHnoQD2_jsnviiYsUfUbBcbCWgQYX6X1CIq_a94kfVc7U3DiaE9QGOJ12yttDXwaPwc65tLvYbLHL2ow8Teq-Kf29UdpLtjK75EBUZEehCZWBeWHD1IaRrrlDUa6Ly_hVK99A9zj81Ub01TiZGOad3QQ_NAgaCpV5y31kt13_mWyPar01Gi8KDEEHUzyT1nw4KWpTulK0D2sKLVeGIaKM2JXShebJ9OpD9z-MwsZ03QX96QBSRbEZwhTYu_SP9G_jed9a7N28_uNFpPwLXQe4tpB0qEbaPnlTXw3wx25-JWT118s6p9lgNQ-3Fuolu0M
+POST https://lms.fun-mooc.fr/courses/course-v1:MinesTelecom+04008+session10/xblock/block-v1:MinesTelecom+04008+session10+type@problem+block@3fae23de384d4796bb3f7bcb77e86a0c/handler/xmodule_handler/problem_check
+Content-Type: application/json
+Cookie: csrftoken=opnIfvApmL6CPej4uqnHSyuoeKhLvNGJ
+Cookie: atuserid=%7B%22name%22%3A%22atuserid%22%2C%22val%22%3A%228189bd0a-dbb6-4bfa-b2a2-6596d80b870b%22%2C%22options%22%3A%7B%22end%22%3A%222025-07-02T11%3A35%3A46.655Z%22%2C%22path%22%3A%22%2F%22%7D%7D; atidvisitor=%7B%22name%22%3A%22atidvisitor%22%2C%22val%22%3A%7B%22vrn%22%3A%22-602676-%22%7D%2C%22options%22%3A%7B%22path%22%3A%22%2F%22%2C%22session%22%3A15724800%2C%22end%22%3A15724800%7D%7D
+Referer: https://lms.fun-mooc.fr/courses/course-v1:MinesTelecom+04008+session10/courseware/8a5f6e144cfa489cb2f9b4e8ab1c3828/3f1a39b0f2bb4df39bf60b6ddeb3a46c/
+
+{
+    "input_3fae23de384d4796bb3f7bcb77e86a0c" : "choice_1",
+}

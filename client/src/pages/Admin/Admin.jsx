@@ -1,8 +1,8 @@
 import useAdminAccess from '../../utils/useAdminAccess'
-import SideBarAdmin from './subComponents/sidebar'
+import SideBarAdmin from './AdminComponents/SideBar'
 import { Routes, Route } from 'react-router-dom'
-import Dashboard from './subComponents/Dashboard'
-import HandleProducts from './subComponents/HandleProducts'
+import Dashboard from './AdminComponents/Dashboard'
+import HandleProducts from './AdminComponents/HandleProducts'
 import Header from '../../components/Header'
 
 const Admin = () => {
@@ -10,7 +10,7 @@ const Admin = () => {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex overflow-x-hidden">
         <Header />
         <main className="mx-2 mt-[150px] flex w-full space-x-2 rounded-xl p-5">
           <SideBarAdmin />

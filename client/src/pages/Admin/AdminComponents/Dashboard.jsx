@@ -1,5 +1,5 @@
-import ChartMonthlyRevenues from './subSubComponents/ChartMonthlyRevenues'
-import TopProducts from './subSubComponents/TopProducts'
+import ChartMonthlyRevenues from './AdminSubComponents/ChartMonthlyRevenues'
+import TopProducts from './AdminSubComponents/TopProducts'
 
 const Dashboard = () => {
   return (

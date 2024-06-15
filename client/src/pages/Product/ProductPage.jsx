@@ -7,6 +7,7 @@ import Section2 from './sections/Section2'
 import Section3 from './sections/Section3'
 import Section4 from './sections/Section4'
 import TopSection from '../../components/TopSection'
+import { useNavigate } from 'react-router-dom'
 
 const topSectionData = {
   title: 'Product Details',
@@ -18,6 +19,7 @@ const ProductPage = () => {
   const { id } = useParams()
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const [productDetails, setProductDetails] = useState(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -28,6 +30,7 @@ const ProductPage = () => {
       } catch (e) {
         console.error(e)
         alert('Error Loading Data')
+        navigate('/')
       }
     }
     fetchProductDetails()

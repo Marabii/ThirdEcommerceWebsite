@@ -11,21 +11,17 @@ const watchProductCollection = async () => {
     const changeStream = Product.watch();
 
     changeStream.on("change", async (next) => {
-      console.log("Received a change to the collection:", next);
       try {
         if (next.operationType === "insert") {
           const document = next.fullDocument;
-          console.log("New document inserted:", document);
           await index.saveObject({ ...document, objectID: document._id });
         } else if (next.operationType === "update") {
-          console.log("Document updated with changes:", next.updateDescription);
           const updatedFields = {
             objectID: next.documentKey._id,
             ...next.updateDescription.updatedFields,
           };
           await index.partialUpdateObject(updatedFields);
         } else if (next.operationType === "delete") {
-          console.log("Document deleted:", next.documentKey);
           await index.deleteObject(next.documentKey._id);
         }
       } catch (algoliaError) {

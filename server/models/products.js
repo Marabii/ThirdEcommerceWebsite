@@ -1,39 +1,14 @@
+const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-// Define a sub-schema for specifications
-const SpecificationSchema = new mongoose.Schema(
-  {
-    weight: {
-      type: Number,
-      required: true, // Assuming weight is always required
-      min: 0, // Ensure weight cannot be negative
-    },
-    width: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-    height: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-    length: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-  },
-  { _id: false }
-); // Disable _id for sub-document if not necessary
-
 // Main Product schema
 const ProductSchema = new mongoose.Schema({
+  _id: { type: ObjectId },
   name: {
     type: String,
     required: [true, "Product name is required"],
-    trim: true, // Removes padding spaces
+    trim: true,
   },
   price: {
     type: Number,
@@ -63,7 +38,6 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  specification: SpecificationSchema, // Use the defined SpecificationSchema
   materials: {
     type: [String], // Array of Strings
     default: [],
@@ -71,6 +45,10 @@ const ProductSchema = new mongoose.Schema({
   tags: {
     type: [String], // Array of Strings
     default: [],
+  },
+  specification: {
+    type: Map,
+    of: mongoose.Schema.Types.Mixed,
   },
 });
 

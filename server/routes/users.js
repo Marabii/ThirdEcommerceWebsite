@@ -3,20 +3,7 @@ const router = require("express").Router();
 const User = mongoose.model("User");
 const passport = require("passport");
 const utils = require("../lib/utils");
-const isAdmin = require("../lib/authMiddleware.cjs");
-const sendEmail = require("../lib/email").sendEmail;
 
-router.get(
-  "/api/verifyAdmin",
-  passport.authenticate("jwt", { session: false }),
-  isAdmin,
-  (req, res, next) => {
-    res.status(200).json({
-      success: true,
-      msg: "You are successfully authenticated to this route!",
-    });
-  }
-);
 
 // Validate an existing user and issue a JWT
 router.post("/api/login", function (req, res, next) {

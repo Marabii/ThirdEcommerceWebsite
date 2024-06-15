@@ -26,31 +26,17 @@ const Section2 = (props) => {
         </p>
       )}
       {details === 'specifications' && (
-        <div className="space-y-4 pb-10 text-xl">
-          <div className="flex items-center gap-3">
-            <h4 className="font-semibold">Weight (oz): </h4>
-            <p className="text-gray-600">
-              {productDetails.specification.weight}
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <h4 className="font-semibold">Width (inch): </h4>
-            <p className="text-gray-600">
-              {productDetails.specification.width}
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <h4 className="font-semibold">height (inch): </h4>
-            <p className="text-gray-600">
-              {productDetails.specification.height}
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <h4 className="font-semibold">Length (inch): </h4>
-            <p className="text-gray-600">
-              {productDetails.specification.length}
-            </p>
-          </div>
+        <div className="space-y-4 pb-10 text-center text-xl">
+          {Object.keys(productDetails.specification).map((key) => {
+            return (
+              <div className="flex w-fit min-w-32 items-center justify-between gap-3">
+                <h4 className="font-semibold">{key}: </h4>
+                <p className="text-gray-600">
+                  {productDetails.specification[key]}
+                </p>
+              </div>
+            )
+          })}
         </div>
       )}
     </>

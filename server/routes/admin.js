@@ -4,10 +4,13 @@ const mongoose = require("mongoose");
 const connection = require("../models/products");
 const Product = connection.models.Product;
 const passport = require("passport");
-const User = require("mongoose").model("User");
+const User = mongoose.model("User");
 const connectionOrder = require("../models/orders");
 const Order = connectionOrder.models.Order;
 const isAdmin = require("../lib/authMiddleware.cjs");
+const fs = require("fs");
+const path = require("path");
+const multer = require("multer");
 
 router.get(
   "/api/verifyAdmin",
@@ -92,6 +95,93 @@ router.get(
       console.error("Failed to fetch most purchased products:", error);
       res.status(500).send("Server error");
     }
+  }
+);
+
+//----Handling Saving Products----
+
+const thumbnailStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const dir = path.join(__dirname, "../assets/products");
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    cb(null, dir);
+  },
+  filename: function (req, file, cb) {
+    cb(null, req.body.randomId + ".png");
+  },
+});
+
+const uploadThumbnail = multer({
+  storage: thumbnailStorage,
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
+});
+
+const productImagesStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const dir = path.join(__dirname, "../assets/additionalImages");
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    cb(null, dir);
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, req.params.id + "-" + uniqueSuffix + ".png");
+  },
+});
+
+const uploadImages = multer({
+  storage: productImagesStorage,
+  limits: {
+    fileSize: 10 * 1024 * 1024,
+    files: 3,
+  },
+});
+
+router.post(
+  "/api/addProduct",
+  passport.authenticate("jwt", { session: false }),
+  isAdmin,
+  uploadThumbnail.single("thumbnail"),
+  async (req, res) => {
+    try {
+      const product = new Product({
+        _id: new mongoose.Types.ObjectId(req.body.randomId),
+        name: req.body.name,
+        price: req.body.price,
+        description: req.body.description,
+        delivery: req.body.delivery,
+        stock: req.body.stock,
+        category: req.body.category,
+        productDetails: req.body.productDetails,
+        specification: JSON.parse(req.body.specification),
+        materials: JSON.parse(req.body.materials),
+        tags: JSON.parse(req.body.tags),
+      });
+
+      const savedProduct = await product.save();
+
+      res
+        .status(201)
+        .send({ message: "Product added successfully", product: savedProduct });
+    } catch (error) {
+      console.error("Failed to add product:", error);
+      res
+        .status(400)
+        .json({ message: "Failed to add product", error: error.message });
+    }
+  }
+);
+
+router.post(
+  "/api/addAdditionalImages/:id",
+  uploadImages.array("images", 3),
+  (req, res) => {
+    res.status(200).send("File uploaded successfully");
   }
 );
 

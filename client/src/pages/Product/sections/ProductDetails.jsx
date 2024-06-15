@@ -59,12 +59,19 @@ const ProductDetailsJSX = (props) => {
 
   return (
     <>
-      <img
-        src={`${serverURL}/products/${productDetails._id}.png`}
-        className="self-center justify-self-center md:col-start-1 md:col-end-2"
-        alt="product image"
-        loading="lazy"
-      />
+      <div>
+        <img
+          src={`${serverURL}/products/${productDetails._id}.png`}
+          className="self-center justify-self-center md:col-start-1 md:col-end-2"
+          alt="product image"
+          loading="lazy"
+        />
+        <div className="flex w-full flex-wrap justify-center gap-5">
+          <img className="size-28" src="/beigeChair.png" alt="beige chair" />
+          <img className="size-28" src="/beigeChair.png" alt="beige chair" />
+          <img className="size-28" src="/beigeChair.png" alt="beige chair" />
+        </div>
+      </div>
       <div className="col-start-2 col-end-3 space-y-4">
         <h2 className="font-playfair text-5xl font-bold">
           {productDetails.name}

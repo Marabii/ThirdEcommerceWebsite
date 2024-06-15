@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { ImagePlus } from 'lucide-react'
+import { ImagePlus, X } from 'lucide-react'
+import axiosInstance from '../../../../utils/verifyJWT'
 
 const AddProduct = () => {
   const [productDetailsForm, setProductDetailsForm] = useState({
@@ -9,7 +10,7 @@ const AddProduct = () => {
     description: '',
     delivery: '',
     stock: '',
-    category: '',
+    category: 'sofa',
     productDetails: '',
     specification: {},
     materials: [''],
@@ -18,12 +19,41 @@ const AddProduct = () => {
 
   const [tempKey, setTempKey] = useState('')
   const [tempValue, setTempValue] = useState('')
-  const [files, setFiles] = useState([])
+  const [productId, setProductId] = useState('')
 
-  const { getRootProps, getInputProps } = useDropzone({
+  //----Handle dropzone----
+  const [images, setImages] = useState([])
+  const [thumbnail, setThumbnail] = useState([])
+
+  const onDrop = useCallback((acceptedFiles) => {
+    if (acceptedFiles.length > 3) {
+      alert('You can only upload up to 3 images')
+      setImages([])
+    } else {
+      setImages(
+        acceptedFiles.map((file) =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file)
+          })
+        )
+      )
+    }
+  }, [])
+
+  const useDropZoneImages = useDropzone({
+    onDrop,
     accept: 'image/*',
+    multiple: true
+  })
+
+  const getRootPropsImages = useDropZoneImages.getRootProps
+  const getInputPropsImages = useDropZoneImages.getInputProps
+
+  const useDropZoneThumbnail = useDropzone({
+    accept: 'image/*',
+    multiple: false,
     onDrop: (acceptedFiles) => {
-      setFiles(
+      setThumbnail(
         acceptedFiles.map((file) =>
           Object.assign(file, {
             preview: URL.createObjectURL(file)
@@ -33,11 +63,32 @@ const AddProduct = () => {
     }
   })
 
+  const getRootPropsThumbnail = useDropZoneThumbnail.getRootProps
+  const getInputPropsThumbnail = useDropZoneThumbnail.getInputProps
+
   useEffect(() => {
     setTimeout(() => {
-      files.forEach((file) => URL.revokeObjectURL(file.preview))
+      images.forEach((file) => URL.revokeObjectURL(file.preview))
     }, 1000)
-  }, [files])
+  }, [images])
+
+  const thumbsForImages = images.map((file) => (
+    <div key={file.name} className="my-10 max-w-[120px]">
+      <div>
+        <img src={file.preview} />
+      </div>
+    </div>
+  ))
+
+  const thumbsForThumbnail = thumbnail.map((file) => (
+    <div key={file.name} className="my-10 max-w-[120px]">
+      <div>
+        <img src={file.preview} />
+      </div>
+    </div>
+  ))
+
+  //----finish handle dropzone----
 
   const handleSpecificationChange = (key, value) => {
     setProductDetailsForm((prev) => ({
@@ -56,6 +107,12 @@ const AddProduct = () => {
 
   const handleProductDetailsFormChange = (e) => {
     const { name, value } = e.target
+    if (name === 'name') {
+      if (value.length > 30) {
+        alert('Product name should not exceed 30 characters')
+        return
+      }
+    }
     setProductDetailsForm((prev) => ({
       ...prev,
       [name]: value
@@ -128,16 +185,101 @@ const AddProduct = () => {
     }
   }
 
-  const thumbs = files.map((file) => (
-    <div key={file.name} className="max-w-[120px]">
-      <div>
-        <img src={file.preview} />
-      </div>
-    </div>
-  ))
+  function generateHexRandomString() {
+    // Create a buffer of 12 bytes
+    const buffer = new Uint8Array(12)
+    // Populate the buffer with random values
+    window.crypto.getRandomValues(buffer)
+    // Convert the bytes to a hex string
+    const hexString = Array.from(buffer)
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('')
+    return hexString
+  }
+
+  useEffect(() => {
+    setProductId(generateHexRandomString())
+  }, [])
+
+  const handleAdditionalImages = async () => {
+    const formData = new FormData()
+    if (images && images.length > 0) {
+      for (let i = 0; i < images.length; i++) {
+        console.log(images[i])
+        formData.append('images', images[i])
+      }
+    }
+
+    try {
+      await axiosInstance.post(
+        `${import.meta.env.VITE_REACT_APP_SERVER}/api/addAdditionalImages/${productId}`,
+        formData
+      )
+    } catch (error) {
+      alert('Failed to upload images')
+      console.error(error)
+    }
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    const {
+      name,
+      price,
+      stock,
+      category,
+      description,
+      delivery,
+      specification,
+      materials,
+      tags
+    } = productDetailsForm
+
+    const formData = new FormData()
+    formData.append('name', name)
+    formData.append('price', price)
+    formData.append('stock', stock)
+    formData.append('category', category)
+    formData.append('description', description)
+    formData.append('delivery', delivery)
+    formData.append('specification', JSON.stringify(specification))
+    formData.append('materials', JSON.stringify(materials))
+    formData.append('tags', JSON.stringify(tags))
+    formData.append('randomId', productId)
+    formData.append('thumbnail', thumbnail[0])
+
+    try {
+      await handleAdditionalImages()
+
+      const response = await axiosInstance.post(
+        `${import.meta.env.VITE_REACT_APP_SERVER}/api/addProduct`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      )
+
+      console.log('Product added successfully:', response.data)
+      setProductId(generateHexRandomString())
+      alert('Product added successfully!')
+    } catch (error) {
+      console.error('Error:', error)
+      alert('Failed to add product. Please try again.')
+    }
+  }
+
+  useEffect(() => {
+    console.log(productDetailsForm)
+  }, [productDetailsForm])
 
   return (
-    <div className="max-w-[600px] space-y-4 rounded-xl bg-white p-4">
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-[600px] space-y-4 rounded-xl bg-white p-4"
+    >
       <h1 className="mb-5 text-2xl font-bold">Add Product</h1>
       <div>
         <label className="mb-2 block text-lg font-semibold" htmlFor="name">
@@ -151,9 +293,10 @@ const AddProduct = () => {
           placeholder="Enter Product name"
           value={productDetailsForm.name}
           onChange={handleProductDetailsFormChange}
+          required
         />
         <p className="mt-2 text-sm text-gray-600">
-          Do not exceed 20 characters when entering the product name.
+          Do not exceed 30 characters when entering the product name.
         </p>
       </div>
       <div className="my-2 flex justify-between">
@@ -169,6 +312,7 @@ const AddProduct = () => {
             placeholder="Enter Price"
             onChange={handleProductDetailsFormChange}
             value={productDetailsForm.price}
+            required
           />
         </div>
         <div>
@@ -184,6 +328,7 @@ const AddProduct = () => {
             placeholder="Enter Stock"
             onChange={handleProductDetailsFormChange}
             value={productDetailsForm.stock}
+            required
           />
         </div>
       </div>
@@ -201,6 +346,7 @@ const AddProduct = () => {
           value={productDetailsForm.description}
           onChange={handleProductDetailsFormChange}
           className="min-h-[200px] w-full resize-none overflow-hidden rounded-lg border border-gray-500 p-3"
+          required
         />
       </div>
       <div>
@@ -220,6 +366,20 @@ const AddProduct = () => {
         />
       </div>
       <div>
+        <label className="mb-2 block text-lg font-semibold" htmlFor="Delivery">
+          Delivery
+        </label>
+        <textarea
+          name="delivery"
+          id="delivery"
+          placeholder="Enter Delivery"
+          value={productDetailsForm.delivery}
+          onChange={handleProductDetailsFormChange}
+          className="min-h-[100px] w-full resize-none overflow-hidden rounded-lg border border-gray-500 p-3"
+          required
+        />
+      </div>
+      <div>
         <div>
           <label
             className="mb-2 block text-lg font-semibold"
@@ -228,6 +388,7 @@ const AddProduct = () => {
             Category
           </label>
           <select
+            required
             name="category"
             id="category"
             value={productDetailsForm.category}
@@ -242,7 +403,7 @@ const AddProduct = () => {
           </select>
         </div>
         <div className="my-5">
-          <label className="text-lg font-semibold">Specifications:</label>
+          <label className="text-lg font-semibold">Specifications</label>
           <div className="my-3 flex items-center">
             <input
               type="text"
@@ -283,11 +444,11 @@ const AddProduct = () => {
             )
           )}
         </div>
-        <div>
+        <div className="flex flex-wrap justify-between">
           <div>
-            <label className="block text-lg font-semibold">Materials:</label>
+            <label className="block text-lg font-semibold">Materials</label>
             {productDetailsForm.materials.map((material, index) => (
-              <div key={index} className="my-3 flex items-center">
+              <div key={index} className="my-3 flex items-center space-x-2">
                 <input
                   type="text"
                   placeholder="Material"
@@ -295,27 +456,25 @@ const AddProduct = () => {
                   onChange={(e) => handleMaterialChange(e.target.value, index)}
                   className="rounded border px-2 py-1"
                 />
-                <button
-                  type="button"
-                  onClick={() => removeMaterial(index)}
-                  className="ml-2 rounded bg-red-500 px-2 py-1 font-bold text-white hover:bg-red-700"
-                >
-                  Remove
-                </button>
+                {productDetailsForm.materials.length > 1 && (
+                  <button type="button" onClick={() => removeMaterial(index)}>
+                    <X className="box-content size-4 rounded-full bg-red-500 stroke-white stroke-2 p-1" />
+                  </button>
+                )}
               </div>
             ))}
             <button
               type="button"
               onClick={addMaterial}
-              className="mt-1 w-[150px] rounded bg-blue-500 p-2 font-bold text-white hover:bg-blue-700"
+              className="w-full rounded border border-slate-300 px-2 py-1 font-semibold transition-all duration-300 hover:bg-gray-200 hover:text-black"
             >
               Add Material
             </button>
           </div>
           <div className="my-2">
-            <h3 className="mb-2 text-lg font-semibold">Tags:</h3>
+            <h3 className="mb-2 text-lg font-semibold">Tags</h3>
             {productDetailsForm.tags.map((tag, index) => (
-              <div key={index} className="mb-2 flex items-center">
+              <div key={index} className="mb-2 flex items-center space-x-2">
                 <input
                   type="text"
                   placeholder="Tag"
@@ -323,43 +482,83 @@ const AddProduct = () => {
                   onChange={(e) => handleTagChange(e.target.value, index)}
                   className="rounded border px-2 py-1"
                 />
-                <button
-                  type="button"
-                  onClick={() => removeTag(index)}
-                  className="ml-2 rounded bg-red-500 px-2 py-1 font-bold text-white hover:bg-red-700"
-                >
-                  Remove
-                </button>
+                {productDetailsForm.tags.length > 1 && (
+                  <button type="button" onClick={() => removeTag(index)}>
+                    <X className="box-content size-4 rounded-full bg-red-500 stroke-white stroke-2 p-1" />
+                  </button>
+                )}
               </div>
             ))}
             <button
               type="button"
               onClick={addTag}
-              className="mt-1 w-[150px] rounded bg-blue-500 p-2 font-bold text-white hover:bg-blue-700"
+              className="w-full rounded border border-slate-300 px-2 py-1 font-semibold transition-all duration-300 hover:bg-gray-200 "
             >
               Add Tag
             </button>
           </div>
-          <div>
-            <section className="container">
-              <div
-                {...getRootProps({ className: 'dropzone' })}
-                className="grid h-[200px] w-full place-items-center"
-              >
-                <div className="flex cursor-pointer flex-col items-center gap-5">
-                  <input {...getInputProps()} />
-                  <ImagePlus size={40} />
-                  <p>Drag and drop some files here, or click to select files</p>
-                </div>
+        </div>
+        <div>
+          <label
+            className="my-5 block text-lg font-semibold"
+            htmlFor="dropzone-file"
+          >
+            Upload Thumbnail Image
+          </label>
+          <section className="container border border-black">
+            <div
+              {...getRootPropsThumbnail({ className: 'dropzone' })}
+              className="grid h-[200px] w-full place-items-center"
+            >
+              <div className="flex cursor-pointer flex-col items-center gap-5">
+                <input {...getInputPropsThumbnail()} />
+                <ImagePlus size={40} />
+                <p>
+                  Drag and drop a thumbnail image, or click to select it from
+                  your computer
+                </p>
               </div>
-              <aside className="flex w-full flex-grow flex-wrap justify-center gap-5">
-                {thumbs}
-              </aside>
-            </section>
-          </div>
+            </div>
+            <aside className="flex w-full flex-grow flex-wrap justify-center gap-5">
+              {thumbsForThumbnail}
+            </aside>
+          </section>
+        </div>
+        <div>
+          <label
+            className="my-5 block text-lg font-semibold"
+            htmlFor="dropzone-file"
+          >
+            Upload up to 3 additional images
+          </label>
+          <section className="container border border-black">
+            <div
+              {...getRootPropsImages({ className: 'dropzone' })}
+              className="grid h-[200px] w-full place-items-center"
+            >
+              <div className="flex cursor-pointer flex-col items-center gap-5">
+                <input {...getInputPropsImages()} />
+                <ImagePlus size={40} />
+                <p>
+                  Drag and drop some images, or click to select them from your
+                  computer
+                </p>
+              </div>
+            </div>
+            <aside className="flex w-full flex-grow flex-wrap justify-center gap-5">
+              {thumbsForImages}
+            </aside>
+          </section>
         </div>
       </div>
-    </div>
+      <button
+        type="submit"
+        onClick={handleSubmit}
+        className="h-24 w-full rounded-md border border-black transition-all duration-300 hover:bg-slate-800 hover:text-white"
+      >
+        Send Data
+      </button>
+    </form>
   )
 }
 
