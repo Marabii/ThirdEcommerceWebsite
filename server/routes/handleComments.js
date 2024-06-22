@@ -10,7 +10,6 @@ router.post(
   async (req, res) => {
     console.log("Request body:", req.body);
     const { comment, productId, postedBy } = req.body;
-    // console.log(comment, productId, postedBy);
     if (!comment || !productId || !postedBy) {
       return res.status(400).json({ message: "Missing required fields" });
     }
@@ -211,11 +210,29 @@ router.post(
   }
 );
 
-router.get("/api/getComments/:id", async (req, res) => {
+router.get("/api/getCommentsOfProduct/:id", async (req, res) => {
   const id = req.params.id;
 
   try {
     const comments = await Comment.find({ productId: id }).sort({
+      createdAt: -1,
+    });
+    if (!comments) {
+      console.log("No comments found for ID:", id);
+      return res.status(404).json({ message: "Comments not found" });
+    }
+    res.json(comments);
+  } catch (err) {
+    console.error("Error fetching comments:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.get("/api/getCommentsOfUser/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const comments = await Comment.find({ postedBy: id }).sort({
       createdAt: -1,
     });
     if (!comments) {

@@ -3,15 +3,14 @@ import { useParams } from 'react-router-dom'
 import axiosInstance from '../../utils/verifyJWT'
 import Header from '../../components/Header'
 import TopSection from '../../components/TopSection'
-import CardItemId from '../../components/CardItemId'
-import { useNavigate } from 'react-router-dom'
+import Comments from './sections/Comments'
+import CardItem from '../../components/CardItem'
 
 const CheckOrders = () => {
-  const navigate = useNavigate()
   const [orderData, setOrderData] = useState()
+  const [productsData, setProductsData] = useState([])
   const orderConfirmationNumber = useParams().id
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
-  const [loaded, setLoaded] = useState(true)
 
   useEffect(() => {
     const getOrderData = async () => {
@@ -26,6 +25,27 @@ const CheckOrders = () => {
     }
     getOrderData()
   }, [orderConfirmationNumber])
+
+  useEffect(() => {
+    const getProductsData = async () => {
+      try {
+        const productsPromises = orderData.cart.map((cartItem) => {
+          return axiosInstance.get(
+            `${serverURL}/api/getProduct/${cartItem.productId}`
+          )
+        })
+        const productsData = await Promise.all(productsPromises)
+        setProductsData(productsData.map((item) => item.data))
+      } catch (e) {
+        console.error(e)
+        alert('Unable to get products data')
+      }
+    }
+
+    if (orderData) {
+      getProductsData()
+    }
+  }, [orderData])
 
   if (!orderData) {
     return <div>Loading...</div>
@@ -46,17 +66,8 @@ const CheckOrders = () => {
             Your Order
           </h2>
           <div className="flex w-full flex-wrap justify-center gap-5">
-            {orderData.cart.map((cartItem) => {
-              return (
-                <CardItemId
-                  key={cartItem.productId}
-                  productId={cartItem.productId}
-                  display={false}
-                  width={250}
-                  setLoaded={setLoaded}
-                  loading={loaded}
-                />
-              )
+            {productsData.map((productData) => {
+              return <CardItem data={productData} display={false} width={250} />
             })}
           </div>
           <h2 className="my-5 w-full bg-slate-100 p-5 text-center text-3xl font-semibold">
@@ -84,6 +95,7 @@ const CheckOrders = () => {
               {orderData.shippingAddress.city}, {orderData.shippingAddress.zip}
             </p>
           </div>
+          <Comments productsData={productsData} />
         </div>
       </main>
     </div>

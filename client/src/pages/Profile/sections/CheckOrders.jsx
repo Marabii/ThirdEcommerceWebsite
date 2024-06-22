@@ -13,7 +13,7 @@ const CheckOrders = (props) => {
     const getOrdersData = async () => {
       try {
         const response = await axiosInstance.get(
-          `${serverURL}/api/getOrdersData/${userId}`
+          `${serverURL}/api/getOrdersData`
         )
         const data = response.data
         setOrdersData(data)

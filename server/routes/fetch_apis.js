@@ -287,7 +287,6 @@ router.get(
   "/api/getUserData/:id",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    console.log("getuserdata api ran");
     const userId = req.params.id;
     try {
       const userData = await User.find(
@@ -305,6 +304,21 @@ router.get(
     }
   }
 );
+
+router.get("/api/getUsername/:id", async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const userData = await User.find({ _id: userId }, { username: 1 });
+    if (userData) {
+      res.status(200).json(userData);
+    } else {
+      res.status(404).send("no user found");
+    }
+  } catch (e) {
+    console.error("getUserData", e);
+    res.status(500).send("Internal server error");
+  }
+});
 
 router.get(
   "/api/verifyEmail",
@@ -399,17 +413,16 @@ router.get(
 );
 
 router.get(
-  "/api/getOrdersData/:id",
+  "/api/getOrdersData",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const userId = req.params.id;
+    const userId = req.user._id;
     try {
       const order = await Order.find({ userId });
-      if (order) {
-        res.status(200).json(order);
-      } else {
-        res.status(404).send("No orders found");
+      if (!order) {
+        return res.status(404).send("No orders found for this user");
       }
+      res.status(200).json(order);
     } catch (e) {
       console.error("getOrdersData error: ", e);
       res.status(500).send("Internal server error");
@@ -424,11 +437,17 @@ router.get(
     const orderConfirmationNumber = req.params.id;
     try {
       const order = await Order.findOne({ orderConfirmationNumber });
-      if (order) {
-        res.status(200).json(order);
-      } else {
-        res.status(404).json(order);
+
+      if (!order) {
+        return res.status(404).send("Order not found");
       }
+
+      if (order.userId != req.user._id) {
+        console.log("Order found, but not for the logged in user");
+        return res.status(401).send("Unauthorized");
+      }
+
+      res.status(200).json(order);
     } catch (e) {
       console.error("getOrder error: ", e);
       res.status(500).send("Internal server error");

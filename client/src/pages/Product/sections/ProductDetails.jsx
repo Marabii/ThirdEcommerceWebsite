@@ -14,6 +14,7 @@ const ProductDetailsJSX = (props) => {
   const [additionalImages, setAdditionalImages] = useState([])
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [currentImage, setCurrentImage] = useState('')
+  const [isExpanded, setIsExpanded] = useState(false)
 
   useEffect(() => {
     const getAdditionalImages = async () => {
@@ -40,6 +41,10 @@ const ProductDetailsJSX = (props) => {
       return
     }
     setQuantity(e.target.value)
+  }
+
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded)
   }
 
   const handleAddToCart = async () => {
@@ -97,6 +102,7 @@ const ProductDetailsJSX = (props) => {
             showArrows={true}
             swipeable={true}
             showStatus={false}
+            infiniteLoop={true}
             onClickItem={(_, item) => {
               handleImageClick(item.props.src)
             }}
@@ -119,6 +125,11 @@ const ProductDetailsJSX = (props) => {
             src={`${serverURL}/products/${productDetails._id}.png`}
             alt="product image"
             loading="lazy"
+            onClick={() =>
+              handleImageClick(
+                `${serverURL}/products/${productDetails._id}.png`
+              )
+            }
           />
         )}
         {modalIsOpen && (
@@ -152,9 +163,19 @@ const ProductDetailsJSX = (props) => {
             $ {oldPrice.toFixed(2)} USD
           </span>
         </p>
-        <p className="text-lg leading-8 text-gray-600">
-          {productDetails.description}
-        </p>
+        <div className="z-20 h-fit">
+          <p
+            className={`relative z-20 bg-white text-lg leading-8 text-gray-600  ${!isExpanded ? 'line-clamp-6' : 'px-2'}`}
+          >
+            {productDetails.description}
+          </p>
+          <button
+            onClick={toggleExpanded}
+            className={`relative z-20 mt-2 text-blue-600 transition duration-300 hover:text-blue-800 ${isExpanded ? 'px-2' : ''}`}
+          >
+            {isExpanded ? 'Show Less' : 'Show More'}
+          </button>
+        </div>
         <div className="mt-10 flex items-center gap-5">
           <h4 className="font-playfair text-3xl">Delivery: </h4>
           <p className="relative top-[2px] text-xl">

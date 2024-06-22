@@ -22,8 +22,7 @@ export const globalContext = createContext({
   cartItems: [],
   setCartItems: () => {},
   userData: {},
-  setUserData: () => {},
-  userId: ''
+  setUserData: () => {}
 })
 
 const App = () => {

@@ -21,7 +21,7 @@ const Section2 = (props) => {
         </button>
       </div>
       {details === 'product-details' && (
-        <p className="text-lg leading-9 text-gray-600">
+        <p className="text-lg leading-9 text-gray-600 ">
           {productDetails.productDetails}
         </p>
       )}

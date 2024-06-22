@@ -1,0 +1,83 @@
+"filename", "language", "JavaScript", "HTML", "JSON", "Markdown", "JavaScript JSX", "CSS", "Properties", "comment", "blank", "total"
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\README.md", "Markdown", 0, 0, 0, 3, 0, 0, 0, 0, 0, 3
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\.env", "Properties", 0, 0, 0, 0, 0, 0, 3, 0, 0, 3
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\.eslintrc.cjs", "JavaScript", 20, 0, 0, 0, 0, 0, 0, 0, 1, 21
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\.prettierrc", "JSON", 0, 0, 9, 0, 0, 0, 0, 0, 1, 10
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\README.md", "Markdown", 0, 0, 0, 16, 0, 0, 0, 0, 7, 23
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\index.html", "HTML", 0, 13, 0, 0, 0, 0, 0, 0, 1, 14
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\package-lock.json", "JSON", 0, 0, 6271, 0, 0, 0, 0, 0, 1, 6272
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\package.json", "JSON", 0, 0, 45, 0, 0, 0, 0, 0, 1, 46
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\postcss.config.js", "JavaScript", 6, 0, 0, 0, 0, 0, 0, 0, 1, 7
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\App.jsx", "JavaScript JSX", 0, 0, 0, 0, 81, 0, 0, 62, 5, 148
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\components\CardItem.jsx", "JavaScript JSX", 0, 0, 0, 0, 100, 0, 0, 0, 8, 108
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\components\CardItemId.jsx", "JavaScript JSX", 0, 0, 0, 0, 113, 0, 0, 0, 9, 122
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\components\CartContainer.jsx", "JavaScript JSX", 0, 0, 0, 0, 110, 0, 0, 0, 8, 118
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\components\CartItem.jsx", "JavaScript JSX", 0, 0, 0, 0, 138, 0, 0, 2, 12, 152
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\components\Comment.jsx", "JavaScript JSX", 0, 0, 0, 0, 10, 0, 0, 0, 2, 12
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\components\Header.jsx", "JavaScript JSX", 0, 0, 0, 0, 165, 0, 0, 0, 12, 177
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\components\Input.jsx", "JavaScript JSX", 0, 0, 0, 0, 47, 0, 0, 2, 8, 57
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\components\SearchResults.jsx", "JavaScript JSX", 0, 0, 0, 0, 61, 0, 0, 0, 7, 68
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\components\SideBarHeader.jsx", "JavaScript JSX", 0, 0, 0, 0, 82, 0, 0, 0, 9, 91
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\components\TopSection.jsx", "JavaScript JSX", 0, 0, 0, 0, 21, 0, 0, 0, 4, 25
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\index.css", "CSS", 0, 0, 0, 0, 0, 60, 0, 1, 16, 77
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\main.jsx", "JavaScript JSX", 0, 0, 0, 0, 11, 0, 0, 7, 2, 20
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\About\About.jsx", "JavaScript JSX", 0, 0, 0, 0, 19, 0, 0, 0, 4, 23
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\About\sections\section2.jsx", "JavaScript JSX", 0, 0, 0, 0, 55, 0, 0, 0, 4, 59
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Admin\Admin.jsx", "JavaScript JSX", 0, 0, 0, 0, 27, 0, 0, 0, 4, 31
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Admin\AdminComponents\AdminSubComponents\AddProduct.jsx", "JavaScript JSX", 0, 0, 0, 0, 40, 0, 0, 559, 5, 604
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Admin\AdminComponents\AdminSubComponents\ChartMonthlyRevenues.jsx", "JavaScript JSX", 0, 0, 0, 0, 76, 0, 0, 0, 8, 84
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Admin\AdminComponents\AdminSubComponents\TopProducts.jsx", "JavaScript JSX", 0, 0, 0, 0, 68, 0, 0, 0, 8, 76
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Admin\AdminComponents\AdminSubComponents\UpdateProduct.jsx", "JavaScript JSX", 0, 0, 0, 0, 2, 0, 0, 0, 2, 4
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Admin\AdminComponents\Dashboard.jsx", "JavaScript JSX", 0, 0, 0, 0, 14, 0, 0, 0, 3, 17
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Admin\AdminComponents\HandleProducts.jsx", "JavaScript JSX", 0, 0, 0, 0, 9, 0, 0, 0, 3, 12
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Admin\AdminComponents\SideBar.jsx", "JavaScript JSX", 0, 0, 0, 0, 65, 0, 0, 0, 4, 69
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\CheckoutPage\CheckoutPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 224, 0, 0, 0, 15, 239
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\ErrorFallback\ErrorFallback.jsx", "JavaScript JSX", 0, 0, 0, 0, 13, 0, 0, 0, 3, 16
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\LandingPage\LandingPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 14, 0, 0, 0, 3, 17
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\LandingPage\sections\Section1.jsx", "JavaScript JSX", 0, 0, 0, 0, 100, 0, 0, 0, 7, 107
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\LandingPage\sections\Section2.jsx", "JavaScript JSX", 0, 0, 0, 0, 79, 0, 0, 0, 8, 87
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\LandingPage\sections\data_for_section1.jsx", "JavaScript JSX", 0, 0, 0, 0, 21, 0, 0, 0, 1, 22
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Login\Login.jsx", "JavaScript JSX", 0, 0, 0, 0, 147, 0, 0, 0, 9, 156
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\PaymentStatus\SuccessfulPayment.jsx", "JavaScript JSX", 0, 0, 0, 0, 66, 0, 0, 0, 6, 72
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Product\ProductPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 53, 0, 0, 0, 7, 60
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Product\sections\ProductDetails.jsx", "JavaScript JSX", 0, 0, 0, 0, 180, 0, 0, 0, 11, 191
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Product\sections\Section2.jsx", "JavaScript JSX", 0, 0, 0, 0, 46, 0, 0, 0, 4, 50
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Product\sections\Section3.jsx", "JavaScript JSX", 0, 0, 0, 0, 44, 0, 0, 0, 6, 50
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Product\sections\Section4.jsx", "JavaScript JSX", 0, 0, 0, 0, 81, 0, 0, 0, 6, 87
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Profile\CheckOrder.jsx", "JavaScript JSX", 0, 0, 0, 0, 87, 0, 0, 0, 7, 94
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Profile\Profile.jsx", "JavaScript JSX", 0, 0, 0, 0, 90, 0, 0, 0, 5, 95
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Profile\sections\ChangePersonalDetails.jsx", "JavaScript JSX", 0, 0, 0, 0, 56, 0, 0, 0, 3, 59
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Profile\sections\CheckOrders.jsx", "JavaScript JSX", 0, 0, 0, 0, 106, 0, 0, 0, 11, 117
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Profile\sections\Comments.jsx", "JavaScript JSX", 0, 0, 0, 0, 43, 0, 0, 0, 7, 50
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Profile\sections\SelectStatus\SelectStatus.jsx", "JavaScript JSX", 0, 0, 0, 0, 62, 0, 0, 0, 8, 70
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Profile\sections\SelectStatus\data.jsx", "JavaScript JSX", 0, 0, 0, 0, 103, 0, 0, 0, 6, 109
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Profile\sections\VerifyEmailPanel.jsx", "JavaScript JSX", 0, 0, 0, 0, 79, 0, 0, 0, 7, 86
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\pages\Register\Register.jsx", "JavaScript JSX", 0, 0, 0, 0, 145, 0, 0, 0, 7, 152
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\utils\useAdminAccess.jsx", "JavaScript JSX", 0, 0, 0, 0, 36, 0, 0, 1, 9, 46
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\utils\verifyJWT.jsx", "JavaScript JSX", 0, 0, 0, 0, 34, 0, 0, 4, 7, 45
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\src\utils\verifyUser.jsx", "JavaScript JSX", 0, 0, 0, 0, 41, 0, 0, 0, 8, 49
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\tailwind.config.js", "JavaScript", 15, 0, 0, 0, 0, 0, 0, 1, 1, 17
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\client\vite.config.js", "JavaScript", 8, 0, 0, 0, 0, 0, 0, 1, 2, 11
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\README.md", "Markdown", 0, 0, 0, 36, 0, 0, 0, 0, 18, 54
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\app.js", "JavaScript", 42, 0, 0, 0, 0, 0, 0, 11, 15, 68
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\config\database.js", "JavaScript", 10, 0, 0, 0, 0, 0, 0, 0, 3, 13
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\config\passport.js", "JavaScript", 33, 0, 0, 0, 0, 0, 0, 1, 4, 38
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\generateKeypair.js", "JavaScript", 18, 0, 0, 0, 0, 0, 0, 9, 6, 33
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\lib\algoliaSearch.js", "JavaScript", 41, 0, 0, 0, 0, 0, 0, 0, 5, 46
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\lib\authMiddleware.cjs", "JavaScript", 8, 0, 0, 0, 0, 0, 0, 0, 2, 10
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\lib\email.js", "JavaScript", 114, 0, 0, 0, 0, 0, 0, 9, 16, 139
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\lib\utils.js", "JavaScript", 41, 0, 0, 0, 0, 0, 0, 25, 12, 78
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\models\comments.js", "JavaScript", 24, 0, 0, 0, 0, 0, 0, 0, 4, 28
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\models\orders.js", "JavaScript", 60, 0, 0, 0, 0, 0, 0, 0, 6, 66
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\models\products.js", "JavaScript", 53, 0, 0, 0, 0, 0, 0, 2, 4, 59
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\models\user.js", "JavaScript", 67, 0, 0, 0, 0, 0, 0, 4, 6, 77
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\package-lock.json", "JSON", 0, 0, 1993, 0, 0, 0, 0, 0, 1, 1994
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\package.json", "JSON", 0, 0, 28, 0, 0, 0, 0, 0, 1, 29
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\products_example\ThirdEcommerceWebsite.products.json", "JSON", 0, 0, 413, 0, 0, 0, 0, 0, 0, 413
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\routes\admin.js", "JavaScript", 166, 0, 0, 0, 0, 0, 0, 4, 19, 189
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\routes\fetch_apis.js", "JavaScript", 386, 0, 0, 0, 0, 0, 0, 25, 58, 469
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\routes\handleComments.js", "JavaScript", 222, 0, 0, 0, 0, 0, 0, 1, 28, 251
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\routes\index.js", "JavaScript", 12, 0, 0, 0, 0, 0, 0, 1, 5, 18
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\routes\stripe_api.cjs", "JavaScript", 130, 0, 0, 0, 0, 0, 0, 1, 13, 144
+"c:\Users\mineh\OneDrive\Desktop\Coding\Client Projects\ThirdEcommerceWebsite\server\routes\users.js", "JavaScript", 54, 0, 0, 0, 0, 0, 0, 3, 11, 68
+"Total", "-", 1530, 13, 8759, 55, 3264, 60, 3, 736, 571, 14991
