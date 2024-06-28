@@ -1,7 +1,10 @@
-import { useEffect, useState, useCallback } from 'react'
-import { useDropzone } from 'react-dropzone'
-import { ImagePlus, X } from 'lucide-react'
-import axiosInstance from '../../../../utils/verifyJWT'
+import { useState } from 'react'
+
+import DropzoneHandler from './DropzoneHandler'
+import MaterialHandler from './MaterialHandler'
+import TagHandler from './TagHandler'
+import SpecificationHandler from './SpecificationsHandler'
+import UploadData from './UploadData'
 
 const AddProduct = () => {
   const [productDetailsForm, setProductDetailsForm] = useState({
@@ -17,97 +20,19 @@ const AddProduct = () => {
     tags: ['']
   })
 
-  const [tempKey, setTempKey] = useState('')
-  const [tempValue, setTempValue] = useState('')
-  const [productId, setProductId] = useState('')
-
   //----Handle dropzone----
   const [images, setImages] = useState([])
   const [thumbnail, setThumbnail] = useState([])
-
-  const onDrop = useCallback((acceptedFiles) => {
-    if (acceptedFiles.length > 3) {
-      alert('You can only upload up to 3 images')
-      setImages([])
-    } else {
-      setImages(
-        acceptedFiles.map((file) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file)
-          })
-        )
-      )
-    }
-  }, [])
-
-  const useDropZoneImages = useDropzone({
-    onDrop,
-    accept: {
-      'image/*': ['.jpeg', '.jpg', '.png']
-    },
-    multiple: true
-  })
-
-  const getRootPropsImages = useDropZoneImages.getRootProps
-  const getInputPropsImages = useDropZoneImages.getInputProps
-
-  const useDropZoneThumbnail = useDropzone({
-    accept: {
-      'image/*': ['.jpeg', '.jpg', '.png']
-    },
-    multiple: false,
-    onDrop: (acceptedFiles) => {
-      setThumbnail(
-        acceptedFiles.map((file) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file)
-          })
-        )
-      )
-    }
-  })
-
-  const getRootPropsThumbnail = useDropZoneThumbnail.getRootProps
-  const getInputPropsThumbnail = useDropZoneThumbnail.getInputProps
-
-  useEffect(() => {
-    setTimeout(() => {
-      images.forEach((file) => URL.revokeObjectURL(file.preview))
-    }, 1000)
-  }, [images])
-
-  const thumbsForImages = images.map((file) => (
-    <div key={file.name} className="my-10 max-w-[120px]">
-      <div>
-        <img src={file.preview} />
-      </div>
-    </div>
-  ))
-
-  const thumbsForThumbnail = thumbnail.map((file) => (
-    <div key={file.name} className="my-10 max-w-[120px]">
-      <div>
-        <img src={file.preview} />
-      </div>
-    </div>
-  ))
-
   //----finish handle dropzone----
 
-  const handleSpecificationChange = (key, value) => {
-    setProductDetailsForm((prev) => ({
-      ...prev,
-      specification: { ...prev.specification, [key]: value }
-    }))
-  }
-
-  const addSpecification = () => {
-    if (tempKey && tempValue) {
-      handleSpecificationChange(tempKey, tempValue)
-      setTempKey('')
-      setTempValue('')
-    }
-  }
+  const { handleSubmit } = UploadData({
+    productDetailsForm,
+    setProductDetailsForm,
+    thumbnail,
+    setThumbnail,
+    images,
+    setImages
+  })
 
   const handleProductDetailsFormChange = (e) => {
     const { name, value } = e.target
@@ -122,182 +47,6 @@ const AddProduct = () => {
       [name]: value
     }))
   }
-
-  const removeSpecification = (key) => {
-    const { [key]: _, ...rest } = productDetailsForm.specification
-    if (Object.keys(productDetailsForm.specification).length > 1) {
-      setProductDetailsForm((prev) => ({
-        ...prev,
-        specification: rest
-      }))
-    }
-  }
-
-  const handleMaterialChange = (material, index) => {
-    const newMaterials = [...productDetailsForm.materials]
-    newMaterials[index] = material
-    setProductDetailsForm((prev) => ({
-      ...prev,
-      materials: newMaterials
-    }))
-  }
-
-  const addMaterial = () => {
-    setProductDetailsForm((prev) => ({
-      ...prev,
-      materials: [...prev.materials, '']
-    }))
-  }
-
-  const removeMaterial = (index) => {
-    const filteredMaterials = productDetailsForm.materials.filter(
-      (_, idx) => idx !== index
-    )
-    if (productDetailsForm.materials.length > 1) {
-      setProductDetailsForm((prev) => ({
-        ...prev,
-        materials: filteredMaterials
-      }))
-    }
-  }
-
-  const handleTagChange = (tag, index) => {
-    const newTags = [...productDetailsForm.tags]
-    newTags[index] = tag
-    setProductDetailsForm((prev) => ({
-      ...prev,
-      tags: newTags
-    }))
-  }
-
-  const addTag = () => {
-    setProductDetailsForm((prev) => ({
-      ...prev,
-      tags: [...prev.tags, '']
-    }))
-  }
-
-  const removeTag = (index) => {
-    const filteredTags = productDetailsForm.tags.filter(
-      (_, idx) => idx !== index
-    )
-    if (productDetailsForm.tags.length > 1) {
-      setProductDetailsForm((prev) => ({
-        ...prev,
-        tags: filteredTags
-      }))
-    }
-  }
-
-  function generateHexRandomString() {
-    // Create a buffer of 12 bytes
-    const buffer = new Uint8Array(12)
-    // Populate the buffer with random values
-    window.crypto.getRandomValues(buffer)
-    // Convert the bytes to a hex string
-    const hexString = Array.from(buffer)
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('')
-    return hexString
-  }
-
-  useEffect(() => {
-    setProductId(generateHexRandomString())
-  }, [])
-
-  const handleAdditionalImages = async () => {
-    const formData = new FormData()
-    if (images && images.length > 0) {
-      for (let i = 0; i < images.length; i++) {
-        console.log(images[i])
-        formData.append('images', images[i])
-      }
-    }
-
-    try {
-      await axiosInstance.post(
-        `${import.meta.env.VITE_REACT_APP_SERVER}/api/addAdditionalImages/${productId}`,
-        formData
-      )
-    } catch (error) {
-      alert('Failed to upload images')
-      console.error(error)
-    }
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-
-    const {
-      name,
-      price,
-      stock,
-      category,
-      description,
-      delivery,
-      specification,
-      materials,
-      productDetails,
-      tags
-    } = productDetailsForm
-
-    const formData = new FormData()
-    formData.append('name', name)
-    formData.append('price', price)
-    formData.append('stock', stock)
-    formData.append('category', category)
-    formData.append('description', description)
-    formData.append('delivery', delivery)
-    formData.append('productDetails', productDetails)
-    formData.append('specification', JSON.stringify(specification))
-    formData.append('materials', JSON.stringify(materials))
-    formData.append('tags', JSON.stringify(tags))
-    formData.append('randomId', productId)
-    formData.append('thumbnail', thumbnail[0])
-
-    try {
-      await handleAdditionalImages()
-
-      const response = await axiosInstance.post(
-        `${import.meta.env.VITE_REACT_APP_SERVER}/api/addProduct`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
-      )
-
-      console.log('Product added successfully:', response.data)
-      setProductId(generateHexRandomString())
-
-      // Reset the form
-      setProductDetailsForm({
-        name: '',
-        price: '',
-        stock: '',
-        category: '',
-        description: '',
-        delivery: '',
-        productDetails: '',
-        specification: {},
-        materials: [],
-        tags: []
-      })
-      setImages([])
-      setThumbnail([])
-
-      // Show success message
-      alert('Product added successfully!')
-    } catch (error) {
-      console.error('Error:', error)
-      alert('Failed to add product. Please try again.')
-    }
-  }
-
-  useEffect(() => {
-    console.log(productDetailsForm)
-  }, [productDetailsForm])
 
   return (
     <form
@@ -426,168 +175,26 @@ const AddProduct = () => {
             <option value="bed">Bed</option>
           </select>
         </div>
-        <div className="my-5">
-          <label htmlFor="specification" className="text-lg font-semibold">
-            Specifications
-          </label>
-          <div id="specification" className="my-3 flex items-center">
-            <input
-              type="text"
-              placeholder="Key"
-              value={tempKey}
-              onChange={(e) => setTempKey(e.target.value)}
-              className="rounded border px-2 py-1"
-            />
-            <input
-              type="text"
-              placeholder="Value"
-              value={tempValue}
-              onChange={(e) => setTempValue(e.target.value)}
-              className="ml-2 rounded border px-2 py-1"
-            />
-            <button
-              type="button"
-              onClick={addSpecification}
-              className="ml-2 rounded border border-slate-300 px-2 py-1 text-gray-500 transition-all duration-300 hover:bg-gray-200 hover:text-black"
-            >
-              Add/Update Spec
-            </button>
-          </div>
-          {Object.entries(productDetailsForm.specification).map(
-            ([key, value], index) => (
-              <div key={index} className="mb-2 flex items-center">
-                <div className="px-2 py-1">
-                  {key}: {value}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => removeSpecification(key)}
-                  className="ml-2 rounded bg-red-500 px-2 py-1 font-bold text-white hover:bg-red-700"
-                >
-                  Remove
-                </button>
-              </div>
-            )
-          )}
-        </div>
+        <SpecificationHandler
+          productDetailsForm={productDetailsForm}
+          setProductDetailsForm={setProductDetailsForm}
+        />
         <div className="flex flex-wrap justify-between">
-          <div>
-            <label htmlFor="materials" className="block text-lg font-semibold">
-              Materials
-            </label>
-            {productDetailsForm.materials.map((material, index) => (
-              <div
-                id="materials"
-                key={index}
-                className="my-3 flex items-center space-x-2"
-              >
-                <input
-                  type="text"
-                  placeholder="Material"
-                  value={material}
-                  onChange={(e) => handleMaterialChange(e.target.value, index)}
-                  className="rounded border px-2 py-1"
-                />
-                {productDetailsForm.materials.length > 1 && (
-                  <button type="button" onClick={() => removeMaterial(index)}>
-                    <X className="box-content size-4 rounded-full bg-red-500 stroke-white stroke-2 p-1" />
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={addMaterial}
-              className="w-full rounded border border-slate-300 px-2 py-1 font-semibold transition-all duration-300 hover:bg-gray-200 hover:text-black"
-            >
-              Add Material
-            </button>
-          </div>
-          <div className="my-2">
-            <h3 className="mb-2 text-lg font-semibold">Tags</h3>
-            {productDetailsForm.tags.map((tag, index) => (
-              <div key={index} className="mb-2 flex items-center space-x-2">
-                <input
-                  type="text"
-                  placeholder="Tag"
-                  value={tag}
-                  onChange={(e) => handleTagChange(e.target.value, index)}
-                  className="rounded border px-2 py-1"
-                />
-                {productDetailsForm.tags.length > 1 && (
-                  <button type="button" onClick={() => removeTag(index)}>
-                    <X className="box-content size-4 rounded-full bg-red-500 stroke-white stroke-2 p-1" />
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={addTag}
-              className="w-full rounded border border-slate-300 px-2 py-1 font-semibold transition-all duration-300 hover:bg-gray-200 "
-            >
-              Add Tag
-            </button>
-          </div>
+          <MaterialHandler
+            productDetailsForm={productDetailsForm}
+            setProductDetailsForm={setProductDetailsForm}
+          />
+          <TagHandler
+            productDetailsForm={productDetailsForm}
+            setProductDetailsForm={setProductDetailsForm}
+          />
         </div>
-        <div>
-          <label
-            className="my-5 block text-lg font-semibold"
-            htmlFor="dropzone-file"
-          >
-            Upload Thumbnail Image
-          </label>
-          <section
-            htmlFor="dropzone-file"
-            className="container rounded-md border border-black"
-          >
-            <div
-              {...getRootPropsThumbnail({ className: 'dropzone' })}
-              className="grid h-[200px] w-full place-items-center"
-            >
-              <div className="flex cursor-pointer flex-col items-center gap-5">
-                <input {...getInputPropsThumbnail()} />
-                <ImagePlus size={40} />
-                <p>
-                  Drag and drop a thumbnail image, or click to select it from
-                  your computer
-                </p>
-              </div>
-            </div>
-            <aside className="flex w-full flex-grow flex-wrap justify-center gap-5">
-              {thumbsForThumbnail}
-            </aside>
-          </section>
-        </div>
-        <div>
-          <label
-            className="my-5 block text-lg font-semibold"
-            htmlFor="dropzone-file"
-          >
-            Upload up to 3 additional images
-          </label>
-          <section
-            htmlFor="dropzone-file"
-            className="container rounded-md border border-black"
-          >
-            <div
-              {...getRootPropsImages({ className: 'dropzone' })}
-              className="grid h-[200px] w-full place-items-center"
-            >
-              <div className="flex cursor-pointer flex-col items-center gap-5">
-                <input {...getInputPropsImages()} />
-                <ImagePlus size={40} />
-                <p>
-                  Drag and drop some images, or click to select them from your
-                  computer
-                </p>
-              </div>
-            </div>
-            <aside className="flex w-full flex-grow flex-wrap justify-center gap-5">
-              {thumbsForImages}
-            </aside>
-          </section>
-        </div>
+        <DropzoneHandler
+          images={images}
+          setImages={setImages}
+          setThumbnail={setThumbnail}
+          thumbnail={thumbnail}
+        />
       </div>
       <button
         type="submit"

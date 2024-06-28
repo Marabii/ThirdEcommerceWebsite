@@ -26,6 +26,7 @@ const Header = () => {
   const userId = userData._id
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const [scrolled, setScrolled] = useState(false)
+  const [searchLoaded, setSearchLoaded] = useState(false)
 
   const navbarElements = [
     { name: 'Home', link: '/' },
@@ -75,8 +76,10 @@ const Header = () => {
       )
       const data = response.data
       setResults(data.hits)
+      setSearchLoaded(true)
     } catch (error) {
       console.error('Failed to fetch:', error)
+      setSearchLoaded(false)
     }
   }
 
@@ -85,7 +88,7 @@ const Header = () => {
       className={`fixed left-0 right-0 top-0 z-30 flex items-center justify-between p-2 font-playfair transition-all duration-500 sm:p-6 ${scrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}
     >
       {query.length !== 0 && (
-        <SearchResults hits={results} setQuery={setQuery} />
+        <SearchResults hits={results} searchLoaded = {searchLoaded} setQuery={setQuery} />
       )}
       <img src={logo} alt="logo" />
       <nav className="hidden xl:block">

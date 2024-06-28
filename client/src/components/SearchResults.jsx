@@ -2,7 +2,7 @@ import CardItemId from './CardItemId'
 import { useEffect, useState, useRef } from 'react'
 import { X, LoaderCircle } from 'lucide-react'
 
-const SearchResults = ({ hits, setQuery }) => {
+const SearchResults = ({ hits, setQuery, searchLoaded }) => {
   const [loaded, setLoaded] = useState(true)
   const ref = useRef()
 
@@ -35,7 +35,8 @@ const SearchResults = ({ hits, setQuery }) => {
       <h2 className="mb-10 text-2xl font-bold text-slate-600">
         Search Results
       </h2>
-      {!loaded ? (
+      {hits.length === 0 && searchLoaded && <div>No results are found</div>}
+      {!searchLoaded ? (
         <div className="flex items-center justify-center">
           <div
             className="inline-block animate-spin rounded-full border-4"
@@ -44,7 +45,7 @@ const SearchResults = ({ hits, setQuery }) => {
             <LoaderCircle strokeWidth={0.5} size={100} />
           </div>
         </div>
-      ) : hits.length !== 0 ? (
+      ) : (
         <div className="flex flex-wrap items-center justify-around overflow-y-auto">
           {hits.map((hit) => (
             <CardItemId
@@ -57,8 +58,6 @@ const SearchResults = ({ hits, setQuery }) => {
             />
           ))}
         </div>
-      ) : (
-        <div>No results are found</div>
       )}
     </div>
   )
