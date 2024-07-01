@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Search,
@@ -27,6 +27,7 @@ const Header = () => {
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const [scrolled, setScrolled] = useState(false)
   const [searchLoaded, setSearchLoaded] = useState(false)
+  const isFirstRender = useRef(true)
 
   const navbarElements = [
     { name: 'Home', link: '/' },
@@ -34,6 +35,16 @@ const Header = () => {
     { name: 'About', link: '/about' },
     { name: 'Contact', link: '/contact' }
   ]
+
+  useEffect(() => {
+    console.log('Current isFirstRender:', isFirstRender.current)
+    console.log('Current cartItems.length:', cartItems.length)
+    if (isFirstRender.current && cartItems.length > 0) {
+      isFirstRender.current = false
+    } else {
+      setIsCartOpen(true)
+    }
+  }, [cartItems])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,7 +99,11 @@ const Header = () => {
       className={`fixed left-0 right-0 top-0 z-30 flex items-center justify-between p-2 font-playfair transition-all duration-500 sm:p-6 ${scrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}
     >
       {query.length !== 0 && (
-        <SearchResults hits={results} searchLoaded = {searchLoaded} setQuery={setQuery} />
+        <SearchResults
+          hits={results}
+          searchLoaded={searchLoaded}
+          setQuery={setQuery}
+        />
       )}
       <img src={logo} alt="logo" />
       <nav className="hidden xl:block">

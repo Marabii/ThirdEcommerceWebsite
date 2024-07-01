@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { X } from 'lucide-react'
 
 const SpecificationHandler = ({
   productDetailsForm,
@@ -24,12 +25,10 @@ const SpecificationHandler = ({
 
   const removeSpecification = (key) => {
     const { [key]: _, ...rest } = productDetailsForm.specification
-    // if (Object.keys(productDetailsForm.specification).length > 1) {
     setProductDetailsForm((prev) => ({
       ...prev,
       specification: rest
     }))
-    // }
   }
   return (
     <div className="my-5">
@@ -61,16 +60,15 @@ const SpecificationHandler = ({
       </div>
       {Object.entries(productDetailsForm.specification).map(
         ([key, value], index) => (
-          <div key={index} className="mb-2 flex items-center">
+          <div
+            key={index}
+            className="mb-2 flex w-full items-center justify-between rounded-md bg-slate-200 p-2"
+          >
             <div className="px-2 py-1">
               {key}: {value}
             </div>
-            <button
-              type="button"
-              onClick={() => removeSpecification(key)}
-              className="ml-2 rounded bg-red-500 px-2 py-1 font-bold text-white hover:bg-red-700"
-            >
-              Remove
+            <button type="button" onClick={() => removeSpecification(key)}>
+              <X className="box-content size-4 rounded-full bg-red-500 stroke-white stroke-2 p-1" />
             </button>
           </div>
         )

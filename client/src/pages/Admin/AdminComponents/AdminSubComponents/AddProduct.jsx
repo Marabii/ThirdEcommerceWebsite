@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import DropzoneHandler from './DropzoneHandler'
 import MaterialHandler from './MaterialHandler'
@@ -51,7 +51,7 @@ const AddProduct = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-[600px] space-y-4 rounded-xl bg-white p-4"
+      className="h-fit w-[580px] space-y-4 rounded-xl bg-white p-4"
     >
       <h1 className="mb-5 text-2xl font-bold">Add Product</h1>
       <div>
@@ -201,7 +201,7 @@ const AddProduct = () => {
         onClick={handleSubmit}
         className="h-24 w-full rounded-md border border-black transition-all duration-300 hover:bg-slate-800 hover:text-white"
       >
-        Send Data
+        Add Product
       </button>
     </form>
   )

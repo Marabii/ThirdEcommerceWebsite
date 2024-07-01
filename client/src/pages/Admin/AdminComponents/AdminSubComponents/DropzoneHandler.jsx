@@ -1,13 +1,21 @@
 import { useDropzone } from 'react-dropzone'
 import { useCallback, useEffect } from 'react'
-import { ImagePlus } from 'lucide-react'
+import { ImagePlus, X } from 'lucide-react'
 
-const DropzoneHandler = ({ images, setImages, thumbnail, setThumbnail }) => {
+const DropzoneHandler = ({
+  images,
+  setImages,
+  thumbnail,
+  setThumbnail,
+  setHasThumbnailChanged,
+  setHaveImagesChanged
+}) => {
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles.length > 3) {
       alert('You can only upload up to 3 images')
       setImages([])
     } else {
+      setHaveImagesChanged(true)
       setImages(
         acceptedFiles.map((file) =>
           Object.assign(file, {
@@ -35,6 +43,7 @@ const DropzoneHandler = ({ images, setImages, thumbnail, setThumbnail }) => {
     },
     multiple: false,
     onDrop: (acceptedFiles) => {
+      setHasThumbnailChanged(true)
       setThumbnail(
         acceptedFiles.map((file) =>
           Object.assign(file, {
@@ -55,17 +64,35 @@ const DropzoneHandler = ({ images, setImages, thumbnail, setThumbnail }) => {
   }, [images])
 
   const thumbsForImages = images.map((file) => (
-    <div key={file.name} className="my-10 max-w-[120px]">
-      <div>
-        <img src={file.preview} />
+    <div key={file.name} className="my-10">
+      <div className="relative flex w-fit gap-2 rounded-md border-2 border-black p-2 align-top">
+        <img src={file.preview} className="size-28" />
+        <X
+          size={20}
+          className="absolute right-1 top-1 box-content cursor-pointer rounded-full bg-red-600 stroke-white p-1"
+          onClick={() =>
+            setImages((prev) => {
+              return prev.filter((image) => image.name !== file.name)
+            })
+          }
+        />
       </div>
     </div>
   ))
 
   const thumbsForThumbnail = thumbnail.map((file) => (
-    <div key={file.name} className="my-10 max-w-[120px]">
-      <div>
-        <img src={file.preview} />
+    <div key={file.name} className="my-10">
+      <div className="relative flex w-fit gap-2 rounded-md border-2 border-black p-2 align-top">
+        <img src={file.preview} className="size-28" />
+        <X
+          size={20}
+          className="absolute right-1 top-1 box-content cursor-pointer rounded-full bg-red-600 stroke-white p-1"
+          onClick={() =>
+            setThumbnail((prev) => {
+              return prev.filter((image) => image.name !== file.name)
+            })
+          }
+        />
       </div>
     </div>
   ))

@@ -109,7 +109,7 @@ const thumbnailStorage = multer.diskStorage({
     cb(null, dir);
   },
   filename: function (req, file, cb) {
-    cb(null, req.body.randomId + ".png");
+    cb(null, req.body.randomId || req.params.id + ".png");
   },
 });
 
@@ -178,11 +178,118 @@ router.post(
 );
 
 router.post(
+  "/api/updateThumbnail/:id",
+  uploadThumbnail.single("thumbnail"),
+  (req, res) => {
+    res.status(200).send("thumbnail uploaded successfully");
+  }
+);
+
+router.post(
   "/api/addAdditionalImages/:id",
   uploadImages.array("images", 3),
   (req, res) => {
     res.status(200).send("File uploaded successfully");
   }
 );
+
+router.post(
+  "/api/updateProduct/:id",
+  passport.authenticate("jwt", { session: false }),
+  isAdmin,
+  uploadThumbnail.none(),
+  uploadImages.none(),
+  async (req, res) => {
+    try {
+      const {
+        name,
+        price,
+        description,
+        delivery,
+        stock,
+        category,
+        productDetails,
+      } = req.body;
+      if (!name || !price || !description) {
+        return res
+          .status(400)
+          .json({ success: false, msg: "Missing required fields" });
+      }
+
+      // Prepare the product object, safely parsing JSON fields
+      const product = {
+        name,
+        price,
+        description,
+        delivery,
+        stock,
+        category,
+        productDetails,
+        specification: tryParseJSON(req.body.specification),
+        materials: tryParseJSON(req.body.materials),
+        tags: tryParseJSON(req.body.tags),
+      };
+
+      // Use findOneAndReplace to update the product
+      const data = await Product.findOneAndReplace(
+        { _id: req.params.id },
+        product,
+        { new: true }
+      );
+      if (!data) {
+        return res
+          .status(404)
+          .json({ success: false, msg: "Product not found" });
+      }
+
+      // Respond with success
+      res.status(200).json({
+        success: true,
+        msg: "Product updated successfully",
+      });
+    } catch (error) {
+      console.error("Error updating product:", error);
+      res.status(500).json({ success: false, msg: "Failed to update product" });
+    }
+  }
+);
+
+router.delete("/api/deleteProduct/:id", async (req, res) => {
+  try {
+    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+    if (!deletedProduct) {
+      return res.status(404).json({ success: false, msg: "Product not found" });
+    }
+
+    // Delete additional images
+    const dir = path.join(__dirname, "../assets/additionalImages");
+    const images = fs.readdirSync(dir);
+    images.forEach((image) => {
+      if (image.startsWith(deletedProduct._id)) {
+        fs.unlinkSync(path.join(dir, image));
+      }
+    });
+
+    // Delete thumbnail
+    const thumbnailPath = path.join(
+      __dirname,
+      `../assets/thumbnails/${deletedProduct._id}.png`
+    );
+    fs.unlinkSync(thumbnailPath);
+
+    res
+      .status(200)
+      .json({ success: true, msg: "Product deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    res.status(500).json({ success: false, msg: "Failed to delete product" });
+  }
+});
+
+function tryParseJSON(jsonString) {
+  let parsedData =
+    typeof jsonString === "string" ? JSON.parse(jsonString) : jsonString;
+  return parsedData;
+}
 
 module.exports = router;

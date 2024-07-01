@@ -4,6 +4,7 @@ import axiosInstance from '../../../utils/verifyJWT'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import { Carousel } from 'react-responsive-carousel'
 import { X } from 'lucide-react'
+import axios from 'axios'
 
 const ProductDetailsJSX = (props) => {
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
@@ -19,7 +20,7 @@ const ProductDetailsJSX = (props) => {
   useEffect(() => {
     const getAdditionalImages = async () => {
       try {
-        const response = await axiosInstance.get(
+        const response = await axios.get(
           `${serverURL}/api/getAdditionalImages/${productDetails._id}`
         )
         const data = response.data

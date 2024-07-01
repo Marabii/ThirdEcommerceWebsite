@@ -27,7 +27,6 @@ const UploadData = ({
     const formData = new FormData()
     if (images && images.length > 0) {
       for (let i = 0; i < images.length; i++) {
-        console.log(images[i])
         formData.append('images', images[i])
       }
     }

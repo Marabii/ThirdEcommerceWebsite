@@ -73,7 +73,7 @@ const ChartMonthlyRevenues = () => {
   }
 
   return (
-    <div className="h-[400px] w-full rounded-xl bg-white p-5">
+    <div className="h-[400px] w-full rounded-xl bg-white p-5 pb-20 shadow-lg">
       <h2 className="mb-5 text-2xl font-bold">Revenue For The Last Year</h2>
       <Bar data={data} options={options} />
     </div>
