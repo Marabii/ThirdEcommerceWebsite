@@ -15,14 +15,20 @@ const fs = require("fs");
 router.get("/api/getProducts", async (req, res) => {
   const limit = Number(req.query.limit) || 10;
   const skip = Number(req.query.skip) || 0;
-  const categoryFilter = String(req.query.filter);
+  const categoryFilter = String(req.query.filter).toLowerCase();
   const isCard = req.query.isCard === "true";
+  const sort = req.query.sort || "price-desc"; // Default sort order
   const projection = { _id: 1, name: 1, price: 1, promo: 1 };
-  let query = {};
 
+  let query = {};
   if (categoryFilter !== "all") {
     query["category"] = categoryFilter;
   }
+
+  // Sorting logic
+  const sortOptions = {};
+  const [field, order] = sort.split("-");
+  sortOptions[field] = order === "desc" ? -1 : 1;
 
   try {
     // Get total count for the current filter
@@ -31,13 +37,13 @@ router.get("/api/getProducts", async (req, res) => {
     // Define the projection based on isCard flag
     const dataProjection = isCard ? { ...projection, category: 1 } : projection;
 
-    // Fetch data with applied limit and skip, and projection
+    // Fetch data with applied limit, skip, projection, and sort
     const data = await Product.find(query, dataProjection)
+      .sort(sortOptions)
       .skip(skip)
       .limit(limit);
 
     res.setHeader("X-Total-Count", totalCount);
-
     res.json(data);
   } catch (e) {
     console.error(e);
@@ -481,6 +487,37 @@ router.get("/api/getAdditionalImages/:id", async (req, res) => {
   } catch (error) {
     console.error("Failed to read directory or process files:", error);
     res.status(500).send("Error retrieving image files");
+  }
+});
+
+router.get("/api/most-purchased-products", async (req, res) => {
+  try {
+    // Step 1: Aggregate to get top 10 most purchased product IDs
+    const topProducts = await Order.aggregate([
+      { $unwind: "$cart" },
+      {
+        $group: {
+          _id: { $toObjectId: "$cart.productId" }, // Convert to ObjectId if needed
+          totalQuantity: { $sum: "$cart.quantity" },
+        },
+      },
+      { $sort: { totalQuantity: -1 } },
+      { $limit: 10 },
+      { $project: { _id: 1 } }, // Only return the _id field
+    ]);
+
+    // Step 2: Validate these IDs against the Product collection
+    const productIds = topProducts.map((product) => product._id);
+    const validProducts = await Product.find({
+      _id: { $in: productIds },
+    }).select("_id"); // Select only _id to check existence
+
+    const validProductIds = validProducts.map((product) => product._id);
+
+    res.json(validProductIds);
+  } catch (error) {
+    console.error("Failed to fetch most purchased products:", error);
+    res.status(500).send("Server error");
   }
 });
 

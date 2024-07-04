@@ -10,7 +10,6 @@ const ProductDetailsJSX = (props) => {
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const { isLoggedIn, setCartItems } = useContext(globalContext)
   const { productDetails } = props
-  const [quantity, setQuantity] = useState(1)
   const oldPrice = Number(productDetails?.price) * 1.2
   const [additionalImages, setAdditionalImages] = useState([])
   const [modalIsOpen, setModalIsOpen] = useState(false)
@@ -31,18 +30,6 @@ const ProductDetailsJSX = (props) => {
     }
     getAdditionalImages()
   }, [])
-
-  const handleQuantityChange = (e) => {
-    const value = Number(e.target.value)
-    if (value < 0) {
-      setQuantity(1)
-      return
-    } else if (value > productDetails.stock) {
-      setQuantity(productDetails.stock)
-      return
-    }
-    setQuantity(e.target.value)
-  }
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded)
@@ -186,17 +173,6 @@ const ProductDetailsJSX = (props) => {
         <div className="mt-10 flex items-center gap-5">
           <h4 className="font-playfair text-3xl">Stock: </h4>
           <p className="relative top-[2px] text-xl">{productDetails.stock}</p>
-        </div>
-        <div className="mt-10 flex items-center gap-5">
-          <h4 className="font-playfair text-3xl">Quantity: </h4>
-          <input
-            type="number"
-            className="relative top-[2px] text-xl"
-            min={0}
-            max={productDetails.stock}
-            onChange={handleQuantityChange}
-            value={quantity}
-          />
         </div>
         <button
           onClick={handleAddToCart}

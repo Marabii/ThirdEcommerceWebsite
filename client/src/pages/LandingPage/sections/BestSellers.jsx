@@ -1,18 +1,17 @@
 import { useEffect, useState } from 'react'
-import axiosInstance from '../../../../utils/verifyJWT'
+import axios from 'axios'
 import { LoaderCircle } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import CardItem from '../../../components/CardItem'
 
-const TopProducts = () => {
+const BestSellers = () => {
   const [topProductsIds, setTopProductsIds] = useState([])
   const [topProductsData, setTopProductsData] = useState([])
-  const navigate = useNavigate()
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
 
   useEffect(() => {
     const getTopProductsIds = async () => {
       try {
-        const response = await axiosInstance.get(
+        const response = await axios.get(
           `${serverURL}/api/most-purchased-products`
         )
         setTopProductsIds(response.data)
@@ -28,13 +27,11 @@ const TopProducts = () => {
     const getTopProductsData = async () => {
       if (topProductsIds.length !== 0) {
         const productsDataPromises = topProductsIds.map((productId) =>
-          axiosInstance
-            .get(`${serverURL}/api/getProduct/${productId}`)
-            .catch((e) => ({
-              error: true,
-              productId,
-              message: e.message
-            }))
+          axios.get(`${serverURL}/api/getProduct/${productId}`).catch((e) => ({
+            error: true,
+            productId,
+            message: e.message
+          }))
         )
 
         const results = await Promise.allSettled(productsDataPromises)
@@ -64,29 +61,16 @@ const TopProducts = () => {
   }
 
   return (
-    <div className="scrollbar-hide h-[400px] w-[500px] overflow-y-scroll rounded-xl bg-white p-5 shadow-lg">
-      <h2 className="mb-5 text-2xl font-bold">Top Products</h2>
-      <div className="space-y-3">
+    <div className="mt-24 space-y-5 p-2 md:px-10 2xl:px-24">
+      <h2 className="font-playfair text-4xl font-bold">Best Sellers</h2>
+      <p className="font-jost text-gray-600">Most Selling Product</p>
+      <div className="flex flex-wrap gap-5">
         {topProductsData.map((product) => (
-          <div
-            key={product._id}
-            className="flex cursor-pointer gap-2 rounded-md p-2 transition-all duration-300 hover:bg-slate-200"
-            onClick={() => navigate(`/product-page/${product._id}`)}
-          >
-            <img
-              src={`${serverURL}/products/${product._id}.png`}
-              alt={product.name}
-              className="aspect-square w-[40px]"
-            />
-            <div>
-              <h2 className="font-semibold">{product.name}</h2>
-              <p className="text-gray-500">{product.stock} items left</p>
-            </div>
-          </div>
+          <CardItem key={product._id} data={product} display={true} />
         ))}
       </div>
     </div>
   )
 }
 
-export default TopProducts
+export default BestSellers

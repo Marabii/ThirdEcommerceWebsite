@@ -15,6 +15,8 @@ const CheckOrder = lazy(() => import('./pages/Profile/CheckOrder'))
 const SuccessfulPayment = lazy(
   () => import('./pages/PaymentStatus/SuccessfulPayment')
 )
+const Contact = lazy(() => import('./pages/Contact/Contact'))
+const Shop = lazy(() => import('./pages/Shop/Shop'))
 
 export const globalContext = createContext({
   isLoggedIn: false,
@@ -135,6 +137,22 @@ const App = () => {
             element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ErrorFallback />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <Contact />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/shop"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <Shop />
               </Suspense>
             }
           />

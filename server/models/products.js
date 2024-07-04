@@ -50,6 +50,23 @@ const ProductSchema = new mongoose.Schema({
     type: Map,
     of: mongoose.Schema.Types.Mixed,
   },
+  reviews: {
+    type: Number,
+    min: [0, "Reviews cannot be negative"],
+    max: [5, "Reviews cannot be greater than 5"],
+    default: 0,
+  },
+  promo: {
+    type: Number,
+    min: [0, "Promo cannot be negative"],
+    max: [100, "Promo cannot be greater than 100%"],
+    default: 0,
+  },
+  numberOfOrders: {
+    type: Number,
+    min: [0, "Number of Orders cannot be negative"],
+    default: 0,
+  },
 });
 
 const Product = mongoose.model("Product", ProductSchema);

@@ -27,22 +27,40 @@ const Header = () => {
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const [scrolled, setScrolled] = useState(false)
   const [searchLoaded, setSearchLoaded] = useState(false)
-  const isFirstRender = useRef(true)
+  const changeTarget = useRef()
+  const prevDeps = usePrevious(cartItems)
 
   const navbarElements = [
     { name: 'Home', link: '/' },
-    { name: 'Pages', link: '/pages' },
     { name: 'About', link: '/about' },
-    { name: 'Contact', link: '/contact' }
+    { name: 'Contact', link: '/contact' },
+    { name: 'Shop', link: '/shop' }
   ]
 
+  function usePrevious(value) {
+    const ref = useRef()
+
+    useEffect(() => {
+      ref.current = value
+    }, [value])
+
+    return ref.current
+  }
+
   useEffect(() => {
-    console.log('Current isFirstRender:', isFirstRender.current)
-    console.log('Current cartItems.length:', cartItems.length)
-    if (isFirstRender.current && cartItems.length > 0) {
-      isFirstRender.current = false
-    } else {
-      setIsCartOpen(true)
+    if (cartItems.length > 0) {
+      if (changeTarget.current === undefined) {
+        changeTarget.current = prevDeps
+      }
+
+      // make sure every dependency has changed
+      if (
+        changeTarget.current &&
+        changeTarget.current.length !== cartItems.length
+      ) {
+        changeTarget.current = cartItems
+        setIsCartOpen(true)
+      }
     }
   }, [cartItems])
 

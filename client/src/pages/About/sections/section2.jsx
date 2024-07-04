@@ -9,7 +9,7 @@ const data = [
 
 const Section1 = () => {
   return (
-    <div className="bg-white">
+    <div className="my-10 bg-white">
       <div className="flex flex-col items-center justify-center space-x-0 px-5 md:flex-row md:space-x-20">
         <img
           src="/section2_about.png"

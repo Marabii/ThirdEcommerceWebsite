@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import data from './data_for_section1'
-import axios from 'axios'
-import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { useNavigate } from 'react-router-dom'
 
 const Section1 = () => {
   const [currSlide, setCurrSlide] = useState(0)
@@ -12,6 +11,7 @@ const Section1 = () => {
     'sofa3.png'
   ])
   const [autoPlay, setAutoPlay] = useState(true)
+  const navigate = useNavigate()
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
 
   const nextSlide = () => {
@@ -62,7 +62,10 @@ const Section1 = () => {
                 {slide.text2}
               </h2>
               <p className={`mb-5 max-w-[50ch] font-[jost]`}>{slide.text3}</p>
-              <button className="border border-black bg-[#1e1c1c] px-6 py-4 font-[jost] text-white duration-300 ease-in-out hover:bg-white hover:text-[#1e1c1c]">
+              <button
+                className="border border-black bg-[#1e1c1c] px-6 py-4 font-[jost] text-white duration-300 ease-in-out hover:bg-white hover:text-[#1e1c1c]"
+                onClick={() => navigate('/shop')}
+              >
                 SHOP NOW
               </button>
             </div>
@@ -98,7 +101,6 @@ const Section1 = () => {
           </button>
         </div>
       </section>
-      <ToastContainer />
     </>
   )
 }

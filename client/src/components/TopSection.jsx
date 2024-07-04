@@ -14,7 +14,7 @@ const TopSection = (props) => {
       </div>
       <img
         className="h-auto w-full max-w-[800px] sm:w-2/3"
-        src="/sofa.png"
+        src={`${data.image ? data.image : '/sofa.png'}`}
         alt="sofa-img"
       />
     </div>
