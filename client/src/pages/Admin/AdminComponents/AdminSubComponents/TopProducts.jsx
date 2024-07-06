@@ -64,7 +64,7 @@ const TopProducts = () => {
   }
 
   return (
-    <div className="scrollbar-hide h-[400px] w-[500px] overflow-y-scroll rounded-xl bg-white p-5 shadow-lg">
+    <div className="h-[400px] w-[500px] overflow-y-scroll rounded-xl bg-white p-5 shadow-lg">
       <h2 className="mb-5 text-2xl font-bold">Top Products</h2>
       <div className="space-y-3">
         {topProductsData.map((product) => (

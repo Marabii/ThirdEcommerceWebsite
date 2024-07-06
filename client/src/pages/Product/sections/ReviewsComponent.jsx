@@ -7,7 +7,6 @@ import { globalContext } from '../../../App'
 const ReviewsComponent = (props) => {
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const [comments, setComments] = useState([])
-  const [usernames, setUsernames] = useState([])
   const { isLoggedIn, userData } = useContext(globalContext)
   const { productDetails } = props
 
@@ -27,28 +26,6 @@ const ReviewsComponent = (props) => {
 
     fetchComments()
   }, [productDetails])
-
-  useEffect(() => {
-    const getUsernames = async () => {
-      try {
-        const userNamesPromises = comments.map((comment) => {
-          return axios.get(`${serverURL}/api/getUsername/${comment.postedBy}`)
-        })
-
-        const data = await Promise.all(userNamesPromises)
-
-        setUsernames(
-          data.map((item) => {
-            return item.data[0].username
-          })
-        )
-      } catch (e) {
-        console.error(e)
-        alert('Error loading User Names')
-      }
-    }
-    getUsernames()
-  }, [comments])
 
   const likeComment = async (commentId) => {
     if (!isLoggedIn) {
@@ -100,14 +77,14 @@ const ReviewsComponent = (props) => {
       <h1 className="font-playfair text-xl font-semibold">Reviews</h1>
       {comments.length !== 0 ? (
         <div className="space-y-4">
-          {comments.map((comment, index) => {
+          {comments.map((comment) => {
             return (
               <div
                 key={comment._id}
                 className="flex-col items-center gap-2 sm:flex-row"
               >
                 <p className="mb-1 mb-2 w-fit border-b border-black">
-                  {usernames[index]}
+                  {comment.postedBy}
                 </p>
                 <p className="text-gray-600">{comment.text}</p>
                 <div>
@@ -115,7 +92,7 @@ const ReviewsComponent = (props) => {
                     <button onClick={() => likeComment(comment._id)}>
                       <ThumbsUp />
                     </button>
-                    <p>{comment.likes.length}</p>
+                    <p>{comment?.likes?.length}</p>
                   </div>
                   <div></div>
                 </div>

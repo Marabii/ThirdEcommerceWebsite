@@ -1,5 +1,6 @@
 import ChartMonthlyRevenues from './AdminSubComponents/ChartMonthlyRevenues'
 import TopProducts from './AdminSubComponents/TopProducts'
+import LatestComments from './AdminSubComponents/LatestComments'
 
 const Dashboard = () => {
   return (
@@ -9,6 +10,7 @@ const Dashboard = () => {
       </h1>
       <ChartMonthlyRevenues />
       <TopProducts />
+      <LatestComments />
     </div>
   )
 }

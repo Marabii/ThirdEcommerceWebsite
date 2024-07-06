@@ -8,8 +8,10 @@ const SearchResults = ({ hits, setQuery, searchLoaded }) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (ref.current && !ref.current.contains(event.target)) {
-        setQuery('')
+      if (window.innerWidth > 1280) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setQuery('')
+        }
       }
     }
 

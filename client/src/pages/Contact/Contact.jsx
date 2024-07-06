@@ -1,6 +1,7 @@
 import Header from '../../components/Header'
 import TopSection from '../../components/TopSection'
 import Footer from '../../components/Footer'
+import { useNavigate } from 'react-router-dom'
 
 const topSectionData = {
   title: 'Contact Us',
@@ -13,6 +14,9 @@ const Contact = () => {
   const handleSubmit = () => {
     console.log('submitted')
   }
+
+  const navigate = useNavigate()
+
   return (
     <div>
       <Header />
@@ -52,7 +56,7 @@ const Contact = () => {
           </div>
         </div>
         <div className="flex w-screen flex-col xl:flex-row 2xl:items-center">
-          <div className="h-fit px-10 xl:mx-auto">
+          <div className="mb-10 h-fit px-10 xl:mx-auto">
             <h2 className="text-balance font-playfair text-5xl font-bold leading-relaxed xl:text-nowrap">
               Contact Us Through Email
             </h2>
@@ -119,7 +123,10 @@ const Contact = () => {
                 Lorem ipsum dolor sit amet, consectetur scelerisque a tincidunt
                 urna quam
               </p>
-              <button className="bg-white px-4 py-3 font-jost uppercase text-black shadow-md transition-colors duration-300 hover:bg-green-200">
+              <button
+                onClick={() => navigate('/shop')}
+                className="bg-white px-4 py-3 font-jost uppercase text-black shadow-md transition-colors duration-300 hover:bg-green-200"
+              >
                 Shop Now
               </button>
             </div>

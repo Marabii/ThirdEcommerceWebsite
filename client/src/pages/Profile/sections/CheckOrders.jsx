@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom'
 
 const CheckOrders = (props) => {
   const navigate = useNavigate()
-  const { userId } = props
   const [ordersData, setOrdersData] = useState()
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
 
@@ -55,6 +54,20 @@ const CheckOrders = (props) => {
 
   if (!ordersData) {
     return <div>Loading ....</div>
+  }
+
+  if (ordersData.length === 0) {
+    return (
+      <div className="space-y-5 text-center">
+        <h2 className="text-xl font-bold text-slate-700">No Orders Found</h2>
+        <button
+          className="rounded-lg border-2 border-slate-500 px-4 py-3 font-semibold text-slate-700 transition-all duration-300 hover:bg-slate-500 hover:text-white"
+          onClick={() => navigate('/shop')}
+        >
+          Checkout Our Store
+        </button>
+      </div>
+    )
   }
 
   return (

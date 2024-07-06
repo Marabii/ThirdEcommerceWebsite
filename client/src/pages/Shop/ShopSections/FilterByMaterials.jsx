@@ -1,21 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { ChevronDown } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
 import { useSearchParams } from 'react-router-dom'
 
-const FilterDropdown = ({ filters }) => {
+const FilterByMaterials = ({ materials }) => {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef(null)
   const [searchParams, setSearchParams] = useSearchParams()
-  const currentFilter = searchParams.get('filter') || 'all' // Default filter
+  const currentMaterial = searchParams.get('material') || 'all' // Default material
 
   const handleDropdownToggle = () => setIsOpen(!isOpen)
 
-  const handleFilterChange = (newFilter) => {
-    if (newFilter.toLowerCase() !== currentFilter.toLowerCase()) {
-      searchParams.set('filter', newFilter.toLowerCase())
+  const handleMaterialChange = (newMaterial) => {
+    if (newMaterial.toLowerCase() !== currentMaterial.toLowerCase()) {
+      searchParams.set('material', newMaterial)
       setSearchParams(searchParams)
-      setIsOpen(false)
+      setIsOpen(false) // Close the dropdown after selection
     }
   }
 
@@ -37,28 +36,26 @@ const FilterDropdown = ({ filters }) => {
   return (
     <div className="relative" ref={dropdownRef}>
       <button
-        name="filter"
-        id="filter"
         className="flex items-center justify-between rounded-md border border-gray-300 px-4 py-2 text-left shadow-sm"
         onClick={handleDropdownToggle}
       >
         <div>
-          Filter By:{' '}
-          {currentFilter.charAt(0).toUpperCase() + currentFilter.slice(1)}
+          Material:{' '}
+          {currentMaterial.charAt(0).toUpperCase() + currentMaterial.slice(1)}
         </div>
         <ChevronDown
           className={`ml-2 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
         />
       </button>
       {isOpen && (
-        <div className="absolute z-10 mt-1 w-full rounded-md border border-gray-300 bg-white shadow-lg">
-          {filters.map((filter) => (
+        <div className="absolute z-10 mt-1 h-52 w-full overflow-y-scroll rounded-md border border-gray-300 bg-white shadow-lg">
+          {['All', ...materials].map((material) => (
             <button
-              key={filter}
-              className={`w-full cursor-pointer px-4 py-2 text-left hover:bg-gray-100 ${filter.toLowerCase() === currentFilter.toLowerCase() ? 'bg-gray-200' : ''}`}
-              onClick={() => handleFilterChange(filter)}
+              key={material}
+              className={`w-full cursor-pointer px-4 py-2 text-left hover:bg-gray-100 ${material.toLowerCase() === currentMaterial.toLowerCase() ? 'bg-gray-200' : ''}`}
+              onClick={() => handleMaterialChange(material)}
             >
-              {filter}
+              {material}
             </button>
           ))}
         </div>
@@ -67,4 +64,4 @@ const FilterDropdown = ({ filters }) => {
   )
 }
 
-export default FilterDropdown
+export default FilterByMaterials

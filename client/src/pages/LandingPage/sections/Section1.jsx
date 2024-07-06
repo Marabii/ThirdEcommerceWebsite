@@ -96,7 +96,10 @@ const Section1 = () => {
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat
             repudiandae sunt exercitationem sit distinctio eum
           </p>
-          <button className="mb-2 bg-white px-6 py-4 text-slate-600 transition-all duration-300 hover:bg-green-200">
+          <button
+            onClick={() => navigate('/shop')}
+            className="mb-2 bg-white px-6 py-4 text-slate-600 transition-all duration-300 hover:bg-green-200"
+          >
             SHOP NOW
           </button>
         </div>

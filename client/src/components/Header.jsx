@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Search,
   Menu,
@@ -29,6 +29,7 @@ const Header = () => {
   const [searchLoaded, setSearchLoaded] = useState(false)
   const changeTarget = useRef()
   const prevDeps = usePrevious(cartItems)
+  const navigate = useNavigate()
 
   const navbarElements = [
     { name: 'Home', link: '/' },
@@ -116,14 +117,21 @@ const Header = () => {
     <header
       className={`fixed left-0 right-0 top-0 z-30 flex items-center justify-between p-2 font-playfair transition-all duration-500 sm:p-6 ${scrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}
     >
-      {query.length !== 0 && (
-        <SearchResults
-          hits={results}
-          searchLoaded={searchLoaded}
-          setQuery={setQuery}
-        />
-      )}
-      <img src={logo} alt="logo" />
+      <div className="hidden xl:block">
+        {query.length !== 0 && (
+          <SearchResults
+            hits={results}
+            searchLoaded={searchLoaded}
+            setQuery={setQuery}
+          />
+        )}
+      </div>
+      <img
+        className="cursor-pointer"
+        onClick={() => navigate('/')}
+        src={logo}
+        alt="logo"
+      />
       <nav className="hidden xl:block">
         <ul className="flex space-x-20">
           {navbarElements.map((element) => (
@@ -193,13 +201,14 @@ const Header = () => {
       {isMenuOpen && (
         <SideBarHeader
           setIsMenuOpen={setIsMenuOpen}
-          isMenuOpen={isMenuOpen}
           navbarElements={navbarElements}
           SearchResults={SearchResults}
-          hits={results}
-          handleSearch={handleSearch}
-          handleInputChange={handleInputChange}
           isAdmin={isAdmin}
+          hits={results}
+          searchLoaded={searchLoaded}
+          setQuery={setQuery}
+          handleInputChange={handleInputChange}
+          query={query}
         />
       )}
       {isCartOpen && (

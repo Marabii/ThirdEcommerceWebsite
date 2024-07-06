@@ -19,10 +19,13 @@ router.get("/api/getProducts", async (req, res) => {
   const isCard = req.query.isCard === "true";
   const sort = req.query.sort || "price-desc"; // Default sort order
   const projection = { _id: 1, name: 1, price: 1, promo: 1 };
+  const material = req.query.material;
 
   let query = {};
   if (categoryFilter !== "all") {
     query["category"] = categoryFilter;
+  } else if (material && material.toLowerCase() !== "all") {
+    query["materials"] = material;
   }
 
   // Sorting logic
@@ -311,21 +314,6 @@ router.get(
   }
 );
 
-router.get("/api/getUsername/:id", async (req, res) => {
-  const userId = req.params.id;
-  try {
-    const userData = await User.find({ _id: userId }, { username: 1 });
-    if (userData) {
-      res.status(200).json(userData);
-    } else {
-      res.status(404).send("no user found");
-    }
-  } catch (e) {
-    console.error("getUserData", e);
-    res.status(500).send("Internal server error");
-  }
-});
-
 router.get(
   "/api/verifyEmail",
   passport.authenticate("jwt", { session: false }),
@@ -520,5 +508,26 @@ router.get("/api/most-purchased-products", async (req, res) => {
     res.status(500).send("Server error");
   }
 });
+
+router.post(
+  "/api/updateUser",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const { name, email } = req.body;
+    try {
+      const user = await User.findById(req.user._id);
+      if (user.email !== email) {
+        user.isEmailVerified = false;
+      }
+      user.name = name;
+      user.email = email;
+      await user.save();
+      res.status(200).json(user);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal server error");
+    }
+  }
+);
 
 module.exports = router;

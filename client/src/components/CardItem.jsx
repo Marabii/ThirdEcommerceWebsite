@@ -9,7 +9,7 @@ const CardItem = (props) => {
   const { data, display, width } = props
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const clientURL = import.meta.env.VITE_REACT_APP_CLIENT
-  const oldPrice = Number(data.price) * 1.2
+  const oldPrice = Number(data.price) * (1 + data?.promo / 100 || 0)
   const [showAddToCart, setShowAddToCart] = useState(false)
   const { isLoggedIn, setCartItems } = useContext(globalContext)
   const navigate = useNavigate()
@@ -58,6 +58,11 @@ const CardItem = (props) => {
         onMouseLeave={() => setShowAddToCart(false)}
         className={`relative aspect-square w-full max-w-[400px] ${!imageLoaded && 'h-[420px] animate-pulse rounded-md'} bg-gray-400`}
       >
+        {data.promo !== 0 && (
+          <div className="text-playfair absolute left-2 top-2 bg-gray-100 px-4 py-2 font-semibold text-gray-600">
+            Promo: <span className="text-red-500">{data.promo}%</span> off
+          </div>
+        )}
         <a href={`${clientURL}/product-page/${data._id}`}>
           <img
             className="aspect-square w-full max-w-[400px]"

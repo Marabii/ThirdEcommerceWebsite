@@ -4,6 +4,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 import App from './App.jsx'
 import './index.css'
 import ErrorFallback from './pages/ErrorFallback/ErrorFallback.jsx'
+import Header from './components/Header.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

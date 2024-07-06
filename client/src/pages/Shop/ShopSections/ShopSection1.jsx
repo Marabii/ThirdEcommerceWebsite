@@ -3,6 +3,7 @@ import axios from 'axios'
 import CardItem from '../../../components/CardItem'
 import SortByDropdown from './SortByDropdown'
 import FilterDropdown from './FilterByDorpdown'
+import FilterByMaterials from './FilterByMaterials'
 import { toast, ToastContainer } from 'react-toastify'
 import { useSearchParams } from 'react-router-dom'
 
@@ -20,6 +21,7 @@ const ShopSection1 = () => {
   // Read and set filter and sortOrder from URL
   const filter = searchParams.get('filter') || 'all'
   const sortOrder = searchParams.get('sort') || 'price-desc'
+  const material = searchParams.get('material') || 'all'
 
   useEffect(() => {
     async function fetchProducts() {
@@ -30,7 +32,8 @@ const ShopSection1 = () => {
             filter,
             limit,
             skip,
-            sort: sortOrder
+            sort: sortOrder,
+            material: material
           }
         })
         if (skip === 0) {
@@ -45,29 +48,28 @@ const ShopSection1 = () => {
       }
     }
     fetchProducts()
-  }, [filter, limit, skip, sortOrder])
+  }, [filter, limit, skip, sortOrder, material])
 
-  const setFilter = (newFilter) => {
-    searchParams.set('filter', newFilter)
-    setSearchParams(searchParams)
-  }
-
-  const setSortOrder = (newSortOrder) => {
-    searchParams.set('sort', newSortOrder)
-    setSearchParams(searchParams)
-  }
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(`${serverURL}/api/exploreAll`)
+        const data = response.data
+        setExploreAll(data)
+      } catch (e) {
+        console.error(e)
+        alert('Error Loading Data')
+      }
+    }
+    fetchProducts()
+  }, [])
 
   return (
     <div>
       <div className="mx-5 my-10 flex justify-between">
         <div className="flex gap-5">
-          <FilterDropdown
-            currentFilter={filter}
-            setFilter={setFilter}
-            filters={filters}
-            setSkip={setSkip}
-          />
-          <SortByDropdown sortOrder={sortOrder} setSortOrder={setSortOrder} />
+          <FilterDropdown filters={filters} />
+          <SortByDropdown />
           {exploreAll?.materials && (
             <FilterByMaterials materials={exploreAll?.materials} />
           )}

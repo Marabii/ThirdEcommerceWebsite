@@ -3,7 +3,7 @@ import { globalContext } from '../../../App'
 import axiosInstance from '../../../utils/verifyJWT'
 
 const Comments = (props) => {
-  const { productsData } = props
+  const { productsData, orderData } = props
   const [selectedProduct, setSelectedProduct] = useState(null)
   const { userData } = useContext(globalContext)
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
@@ -36,10 +36,6 @@ const Comments = (props) => {
     setSelectedProduct(e.target.value)
   }
 
-  useEffect(() => {
-    console.log(selectedProduct)
-  }, [selectedProduct])
-
   return (
     <section>
       <h2 className="my-5 w-full bg-slate-100 p-5 text-center text-3xl font-semibold">
@@ -48,9 +44,9 @@ const Comments = (props) => {
       <form className="grid space-y-5 p-4">
         <div className="flex justify-between">
           <label htmlFor="productToCommentOn" className="block">
-            You bought {productsData.length} product
-            {productsData.length > 1 ? 's' : ''}. Please select the product you
-            would like to leave a review for:
+            You bought {orderData.cart.length} product
+            {orderData.cart.length > 1 ? 's' : ''}. Please select the product
+            you would like to leave a review for:
           </label>
           <select
             name="productToCommentOn"

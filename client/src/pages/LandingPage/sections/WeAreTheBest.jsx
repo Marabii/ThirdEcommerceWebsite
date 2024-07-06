@@ -1,4 +1,7 @@
+import { useNavigate } from 'react-router-dom'
+
 const WeAreTheBest = () => {
+  const navigate = useNavigate()
   return (
     <div className="my-10 flex w-screen flex-col overflow-x-hidden xl:flex-row 2xl:items-center">
       <div className="relative grid w-full items-center">
@@ -16,7 +19,10 @@ const WeAreTheBest = () => {
             Lorem ipsum dolor sit amet, consectetur scelerisque a tincidunt urna
             quam
           </p>
-          <button className="bg-white px-4 py-3 font-jost uppercase text-black shadow-md transition-colors duration-300 hover:bg-green-200">
+          <button
+            onClick={() => navigate('/shop')}
+            className="bg-white px-4 py-3 font-jost uppercase text-black shadow-md transition-colors duration-300 hover:bg-green-200"
+          >
             Shop Now
           </button>
         </div>

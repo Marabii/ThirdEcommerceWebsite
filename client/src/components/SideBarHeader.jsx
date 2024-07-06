@@ -1,36 +1,25 @@
-import { useState } from 'react'
 import { X, Search, ArrowDown } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
+import SearchResults from './SearchResults'
+import { useEffect } from 'react'
 
-const SideBarHeader = (props) => {
-  const serverURL = import.meta.env.VITE_REACT_APP_SERVER
-  const [query, setQuery] = useState('')
-  const [results, setResults] = useState([])
-  const [timeoutId, setTimeoutId] = useState(null)
-  const { setIsMenuOpen, navbarElements, SearchResults, isAdmin } = props
-
-  const handleSearch = async () => {
-    try {
-      const response = await axios.get(`${serverURL}/api/search?query=${query}`)
-      const data = response.data
-      setResults(data.hits)
-    } catch (error) {
-      console.error('Failed to fetch:', error)
+const SideBarHeader = ({
+  hits,
+  query,
+  setQuery,
+  searchLoaded,
+  setIsMenuOpen,
+  navbarElements,
+  isAdmin,
+  handleInputChange
+}) => {
+  useEffect(() => {
+    if (query.length !== 0) {
+      document.body.style.overflowY = 'hidden'
+    } else {
+      document.body.style.overflowY = 'auto'
     }
-  }
-
-  const handleInputChange = (e) => {
-    const value = e.target.value
-    setQuery(value)
-    if (timeoutId) clearTimeout(timeoutId)
-
-    const newTimeoutId = setTimeout(() => {
-      handleSearch()
-    }, 400)
-
-    setTimeoutId(newTimeoutId)
-  }
+  }, [query])
 
   return (
     <>
@@ -53,13 +42,20 @@ const SideBarHeader = (props) => {
             name="search"
             id="search"
             onChange={handleInputChange}
+            value={query}
             className="w-full border-b border-black text-black focus:outline-none"
           />
           <Search size={20} />
         </div>
-        {query.length !== 0 && (
-          <SearchResults hits={results} setQuery={setQuery} />
-        )}
+        <div className="z-20">
+          {query.length !== 0 && (
+            <SearchResults
+              hits={hits}
+              searchLoaded={searchLoaded}
+              setQuery={setQuery}
+            />
+          )}
+        </div>
         <nav>
           <ul className="space-y-3">
             {navbarElements.map((element) => (

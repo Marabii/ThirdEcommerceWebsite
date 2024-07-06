@@ -33,7 +33,7 @@
 #     "commentId" : "666d9a3ed98cbf1a44dc1e60"
 # }
 
-GET http://localhost:3001/api/most-purchased-products
+GET http://localhost:3001/api/getLatestComments
 
 
 

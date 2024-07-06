@@ -214,13 +214,50 @@ router.get("/api/getCommentsOfProduct/:id", async (req, res) => {
   const id = req.params.id;
 
   try {
-    const comments = await Comment.find({ productId: id }).sort({
-      createdAt: -1,
-    });
-    if (!comments) {
-      console.log("No comments found for ID:", id);
-      return res.status(404).json({ message: "Comments not found" });
-    }
+    const comments = await Comment.aggregate([
+      { $match: { productId: id } }, // Match comments by productId
+      { $sort: { createdAt: -1 } }, // Sort comments by creation time
+      {
+        $addFields: {
+          postedById: { $toObjectId: "$postedBy" }, // Convert postedBy from String to ObjectId
+        },
+      },
+      {
+        $lookup: {
+          from: "users", // Specify the collection to join
+          localField: "postedById", // Field to join on from Comment collection
+          foreignField: "_id", // Field to join on from User collection
+          as: "userDetails", // Array of matching users
+        },
+      },
+      {
+        $unwind: {
+          path: "$userDetails",
+          preserveNullAndEmptyArrays: true, // Include comments even if no user is found
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [
+              "$$ROOT",
+              {
+                postedBy: {
+                  $ifNull: ["$userDetails.username", "Unknown user"],
+                },
+              }, // Replace user ID with username
+            ],
+          },
+        },
+      },
+      {
+        $project: {
+          userDetails: 0, // Remove userDetails field from final output
+          postedById: 0, // Remove temporary postedById field
+        },
+      },
+    ]);
+
     res.json(comments);
   } catch (err) {
     console.error("Error fetching comments:", err);
@@ -239,6 +276,59 @@ router.get("/api/getCommentsOfUser/:id", async (req, res) => {
       console.log("No comments found for ID:", id);
       return res.status(404).json({ message: "Comments not found" });
     }
+    res.json(comments);
+  } catch (err) {
+    console.error("Error fetching comments:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.get("/api/getLatestComments", async (req, res) => {
+  try {
+    const comments = await Comment.aggregate([
+      { $sort: { createdAt: -1 } },
+      { $limit: 5 },
+      {
+        $addFields: {
+          postedById: { $toObjectId: "$postedBy" }, // Convert postedBy from String to ObjectId
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "postedById", // Use the new ObjectId field for lookup
+          foreignField: "_id",
+          as: "userDetails",
+        },
+      },
+      {
+        $unwind: {
+          path: "$userDetails",
+          preserveNullAndEmptyArrays: true, // Keep comments even if there's no user match
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [
+              "$$ROOT",
+              {
+                postedBy: {
+                  $ifNull: ["$userDetails.username", "Unknown user"],
+                },
+              }, // Replace postedBy with username
+            ],
+          },
+        },
+      },
+      {
+        $project: {
+          userDetails: 0, // Remove userDetails field from the final output
+          postedById: 0, // Remove temporary postedById field
+        },
+      },
+    ]);
+
     res.json(comments);
   } catch (err) {
     console.error("Error fetching comments:", err);

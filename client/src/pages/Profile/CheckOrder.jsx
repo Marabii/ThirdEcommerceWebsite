@@ -32,10 +32,6 @@ const CheckOrders = () => {
   }, [orderConfirmationNumber, serverURL, axiosInstance])
 
   useEffect(() => {
-    console.log(isErrorAlertShown)
-  }, [isErrorAlertShown])
-
-  useEffect(() => {
     if (orderData) {
       const fetchProductsData = async () => {
         const productsPromises = orderData.cart.map((cartItem) =>
@@ -138,7 +134,7 @@ const CheckOrders = () => {
                 {orderData.shippingAddress.zip}
               </p>
             </div>
-            <Comments productsData={productsData} />
+            <Comments productsData={productsData} orderData={orderData} />
           </div>
         </div>
       </main>

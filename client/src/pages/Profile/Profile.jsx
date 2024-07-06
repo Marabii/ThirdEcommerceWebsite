@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import TopSection from '../../components/TopSection.jsx'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import VerifyEmailPanel from './sections/VerifyEmailPanel.jsx'
 import { globalContext } from '../../App'
 import Header from '../../components/Header.jsx'
@@ -11,7 +11,13 @@ const Profile = () => {
   const userId = useParams().id
   const [showVerifyEmail, setShowVerifyEmail] = useState(false)
   const { userData } = useContext(globalContext)
-  const [currPage, setCurrPage] = useState(0)
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const currPage = parseInt(searchParams.get('page')) || 0
+
+  const changePage = (newPage) => {
+    setSearchParams({ page: newPage })
+  }
 
   if (!userData) {
     return <div>Loading ....</div>
@@ -46,7 +52,7 @@ const Profile = () => {
         <ul className="text-normal flex items-center justify-center gap-10 font-semibold md:text-xl">
           <li>
             <button
-              onClick={() => setCurrPage(0)}
+              onClick={() => changePage(0)}
               className={`rounded-md border-2 border-slate-500 px-4 py-3 transition-all duration-300 hover:bg-slate-500 hover:text-white ${currPage === 0 && 'bg-slate-500 font-bold text-white'}`}
             >
               Change personal details
@@ -54,7 +60,7 @@ const Profile = () => {
           </li>
           <li>
             <button
-              onClick={() => setCurrPage(1)}
+              onClick={() => changePage(1)}
               className={`rounded-md border-2 border-slate-500 px-4 py-3 ${currPage === 1 && 'bg-slate-500 font-bold text-white'} transition-all duration-300 hover:bg-slate-500 hover:text-white`}
             >
               Check orders

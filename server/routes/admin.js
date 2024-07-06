@@ -11,6 +11,8 @@ const isAdmin = require("../lib/authMiddleware.cjs");
 const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
+const connectionComment = require("../models/comments");
+const Comment = connectionComment.models.Comment;
 
 router.get(
   "/api/verifyAdmin",
@@ -66,35 +68,6 @@ router.get(
     });
 
     res.json(monthlyTotals);
-  }
-);
-
-router.get(
-  "/api/most-purchased-products",
-  passport.authenticate("jwt", { session: false }),
-  isAdmin,
-  async (req, res) => {
-    try {
-      const topProducts = await Order.aggregate([
-        { $unwind: "$cart" }, // Flatten the cart array
-        {
-          $group: {
-            _id: "$cart.productId", // Group by productId
-            totalQuantity: { $sum: "$cart.quantity" }, // Sum up all quantities for each product
-          },
-        },
-        { $sort: { totalQuantity: -1 } }, // Sort by totalQuantity in descending order
-        { $limit: 10 }, // Limit to top 10
-      ]);
-
-      // Extract only product IDs
-      const productIds = topProducts.map((product) => product._id);
-
-      res.json(productIds);
-    } catch (error) {
-      console.error("Failed to fetch most purchased products:", error);
-      res.status(500).send("Server error");
-    }
   }
 );
 
@@ -291,5 +264,27 @@ function tryParseJSON(jsonString) {
     typeof jsonString === "string" ? JSON.parse(jsonString) : jsonString;
   return parsedData;
 }
+
+router.delete(
+  "/api/deleteComment/:id",
+  passport.authenticate("jwt", { session: false }),
+  isAdmin,
+  async (req, res) => {
+    try {
+      const commentId = req.params.id;
+      if (!commentId) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+      const deletedComment = await Comment.findByIdAndDelete(commentId);
+      if (!deletedComment) {
+        return res.status(404).json({ message: "Comment not found" });
+      }
+      res.status(200).json({ message: "Comment deleted successfully" });
+    } catch (err) {
+      console.error("Error deleting comment:", err);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+);
 
 module.exports = router;
