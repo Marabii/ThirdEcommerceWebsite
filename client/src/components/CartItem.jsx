@@ -83,7 +83,7 @@ const CartItem = (props) => {
 
   const handleQuantityChange = (e) => {
     const quantityInput = parseInt(e.target.value, 10)
-    if (quantityInput > productData.stock) {
+    if (quantityInput >= productData.stock) {
       setQuantity(productData.stock)
     } else if (quantityInput < 1) {
       setQuantity(1)
@@ -98,9 +98,7 @@ const CartItem = (props) => {
         `${serverURL}/api/deleteCartItem/${productID}`
       )
       const cartItems = response.data.cartItems
-      console.log(cartItems)
       setCartItems(cartItems)
-      alert('Cart item deleted successfully')
     } catch (error) {
       console.error('Failed to delete cart item:', error)
       alert("Can't delete cart item")

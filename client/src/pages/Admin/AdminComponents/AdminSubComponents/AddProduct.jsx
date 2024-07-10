@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useContext } from 'react'
+import { globalContext } from '../../../../App'
 
 import DropzoneHandler from './DropzoneHandler'
 import MaterialHandler from './MaterialHandler'
@@ -7,18 +8,23 @@ import SpecificationHandler from './SpecificationsHandler'
 import UploadData from './UploadData'
 
 const AddProduct = () => {
+  const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const [productDetailsForm, setProductDetailsForm] = useState({
     name: '',
     price: '',
     description: '',
     delivery: '',
     stock: '',
-    category: 'sofa',
+    category: '',
     productDetails: '',
     specification: {},
     materials: [''],
     tags: ['']
   })
+
+  //----Get Categories----
+  const categories = useContext(globalContext).exploreAll.categories
+  //----End Of Get Categories----
 
   //----Handle dropzone----
   const [images, setImages] = useState([])
@@ -160,20 +166,30 @@ const AddProduct = () => {
           >
             Category
           </label>
-          <select
-            required
-            name="category"
-            id="category"
-            value={productDetailsForm.category}
-            onChange={handleProductDetailsFormChange}
-            className="w-full rounded-md border border-gray-500 p-2 text-lg"
-          >
-            <option value="sofa">Sofa</option>
-            <option value="table">Table</option>
-            <option value="chair">Chair</option>
-            <option value="storage">Storage</option>
-            <option value="bed">Bed</option>
-          </select>
+          {categories ? (
+            <select
+              required
+              name="category"
+              id="category"
+              value={productDetailsForm.category}
+              onChange={handleProductDetailsFormChange}
+              className="w-full rounded-md border border-gray-500 p-2 text-lg"
+            >
+              {categories.map((category) => {
+                return (
+                  <option
+                    key={category}
+                    value={category}
+                    className="capitalize"
+                  >
+                    {category}
+                  </option>
+                )
+              })}
+            </select>
+          ) : (
+            <div className="w-full animate-pulse rounded-md border border-gray-500 p-2 text-lg"></div>
+          )}
         </div>
         <SpecificationHandler
           productDetailsForm={productDetailsForm}

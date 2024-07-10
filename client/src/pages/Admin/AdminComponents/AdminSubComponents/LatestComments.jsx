@@ -94,7 +94,7 @@ const LatestComments = () => {
                   key={comment._id}
                   className="flex-col items-center gap-2 sm:flex-row"
                 >
-                  <p className="mb-1 mb-2 w-fit border-b border-black">
+                  <p className="mb-2 w-fit border-b border-black">
                     {comment.postedBy}
                   </p>
                   <p className="text-gray-600">{comment.text}</p>

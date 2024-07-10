@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import axios from 'axios'
 import CardItem from '../../../components/CardItem'
 import SortByDropdown from './SortByDropdown'
@@ -6,8 +6,8 @@ import FilterDropdown from './FilterByDorpdown'
 import FilterByMaterials from './FilterByMaterials'
 import { toast, ToastContainer } from 'react-toastify'
 import { useSearchParams } from 'react-router-dom'
-
-const filters = ['All', 'Table', 'Sofa', 'Bed', 'Chair', 'Storage']
+import 'react-toastify/dist/ReactToastify.css'
+import { globalContext } from '../../../App'
 
 const ShopSection1 = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -16,6 +16,8 @@ const ShopSection1 = () => {
   const [totalAvailable, setTotalAvailable] = useState(0)
   const [exploreAll, setExploreAll] = useState({})
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
+  const categories = useContext(globalContext).exploreAll.categories || []
+  const filters = ['All', ...categories]
   const limit = 6
 
   // Read and set filter and sortOrder from URL

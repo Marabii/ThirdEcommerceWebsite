@@ -24,19 +24,22 @@ export const globalContext = createContext({
   cartItems: [],
   setCartItems: () => {},
   userData: {},
-  setUserData: () => {}
+  setUserData: () => {},
+  exploreAll: {}
 })
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [cartItems, setCartItems] = useState([])
   const [userData, setUserData] = useState({})
+  const [exploreAll, setExploreAll] = useState({})
 
   UseAuthCheck({
     interval: 10 * 60 * 1000,
     setIsLoggedIn: setIsLoggedIn,
     setCartItems: setCartItems,
-    setUserData: setUserData
+    setUserData: setUserData,
+    setExploreAll: setExploreAll
   })
 
   return (
@@ -47,7 +50,8 @@ const App = () => {
         cartItems,
         setCartItems,
         userData,
-        setUserData
+        setUserData,
+        exploreAll
       }}
     >
       <BrowserRouter>

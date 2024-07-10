@@ -18,7 +18,7 @@ router.get("/api/getProducts", async (req, res) => {
   const categoryFilter = String(req.query.filter).toLowerCase();
   const isCard = req.query.isCard === "true";
   const sort = req.query.sort || "price-desc"; // Default sort order
-  const projection = { _id: 1, name: 1, price: 1, promo: 1 };
+  const projection = { _id: 1, name: 1, price: 1, promo: 1, stock: 1 };
   const material = req.query.material;
 
   let query = {};
@@ -269,15 +269,25 @@ router.delete(
 );
 
 router.get(
-  "/api/getRecentOrder/:id",
+  "/api/getRecentOrder",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const { id } = req.params;
     try {
       // Find the most recent order by this user and sort by 'createdAt' in descending order
-      const recentOrder = await Order.findOne({ userId: id })
-        .sort({ createdAt: -1 })
-        .select("createdAt");
+      let recentOrder;
+      try {
+        recentOrder = await Order.findOne({ userId: req.user._id })
+          .sort({ createdAt: -1 })
+          .select("createdAt isSuccessfulPageSeen")
+          .limit(1);
+      } catch (error) {
+        console.error("Error fetching recent order:", error);
+        return res.status(500).send("Internal server error");
+      }
+      if (!recentOrder) {
+        console.log("No recent order found for user:", req.user._id);
+        return res.status(404).send("No orders found for this user");
+      }
 
       // Check if an order was found
       if (recentOrder) {

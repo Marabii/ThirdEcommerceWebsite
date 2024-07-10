@@ -42,11 +42,8 @@ const Footer = () => {
         <ul className="w-fit">
           {linksForCompany.map((link) => {
             return (
-              <Link className="block w-fit" to={link.link}>
-                <li
-                  className="mb-2 font-jost text-gray-600 transition-all duration-300 hover:translate-x-2"
-                  key={link.name}
-                >
+              <Link className="block w-fit" to={link.link} key={link.name}>
+                <li className="mb-2 font-jost text-gray-600 transition-all duration-300 hover:translate-x-2">
                   {link.name}
                 </li>
               </Link>
@@ -61,11 +58,8 @@ const Footer = () => {
         <ul className="w-fit">
           {linksForInformation.map((link) => {
             return (
-              <Link className="block w-fit" to={link.link}>
-                <li
-                  className="mb-2 font-jost text-gray-600 transition-all duration-300 hover:translate-x-2"
-                  key={link.name}
-                >
+              <Link className="block w-fit" to={link.link} key={link.name}>
+                <li className="mb-2 font-jost text-gray-600 transition-all duration-300 hover:translate-x-2">
                   {link.name}
                 </li>
               </Link>
@@ -73,14 +67,14 @@ const Footer = () => {
           })}
         </ul>
       </div>
-      <div className="space-y-5 md:row-start-2 md:row-end-3 md:w-1/2">
+      <div className="md:row-start-2 md:row-end-3 md:w-1/2">
         <h3 className="mb-3 font-playfair text-2xl font-semibold">
           Contact Us
         </h3>
-        <p className="max-w-[20ch] text-balance font-jost text-gray-600">
+        <p className="mb-2 max-w-[20ch] text-balance font-jost text-gray-600">
           256, Central City, Borlex House Main town, New York, USA
         </p>
-        <p className="text-xl text-gray-800">+880(12) 125 48765</p>
+        <p className="mb-2 text-xl text-gray-800">+880(12) 125 48765</p>
         <p className="font-jost text-xl text-gray-500">
           <Link to="/">www.farnic.com</Link>
         </p>

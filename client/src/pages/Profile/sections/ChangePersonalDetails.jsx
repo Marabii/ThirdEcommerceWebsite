@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import axiosInstance from '../../../utils/verifyJWT'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -6,8 +6,21 @@ import { globalContext } from '../../../App'
 
 const ChangePersonalDetails = () => {
   const userData = useContext(globalContext)
-  const [name, setName] = useState(userData?.userData?.username)
-  const [email, setEmail] = useState(userData?.userData?.email)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+
+  useEffect(() => {
+    setName(userData?.userData?.username)
+    setEmail(userData?.userData?.email)
+  }, [userData])
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (Object.keys(userData).length === 0) {
+        window.location.reload()
+      }
+    }, 5000)
+  }, [])
 
   const handleSaveChanges = async () => {
     try {
@@ -18,6 +31,22 @@ const ChangePersonalDetails = () => {
       console.error('Failed to update user details:', error)
       toast.error('Failed to update details. Please try again.')
     }
+  }
+
+  const handleCancelChanges = () => {
+    if (
+      userData?.userData?.email !== email ||
+      userData?.userData?.username !== name
+    ) {
+      if (window.confirm('Are you sure you want to discard these changes?')) {
+        setName(userData?.userData?.username)
+        setEmail(userData?.userData?.email)
+      }
+    }
+  }
+
+  if (Object.keys(userData).length === 0) {
+    return <div>Loading ...</div>
   }
 
   return (
@@ -66,11 +95,14 @@ const ChangePersonalDetails = () => {
           </div>
         </div>
         <div className="mt-10 flex w-full justify-end space-x-2 border-t border-slate-400 p-2">
-          <button className="rounded-lg border border-slate-500 px-5 py-2">
+          <button
+            onClick={handleCancelChanges}
+            className="rounded-md border-2 border-slate-500 bg-slate-500 px-4 py-3 font-semibold text-white transition-all duration-300 hover:bg-white hover:text-black"
+          >
             Cancel
           </button>
           <button
-            className="rounded-lg bg-purple-500 px-5 py-2 text-white transition-all duration-300 hover:bg-purple-600"
+            className="rounded-md border-2 border-slate-500 px-4 py-3 font-semibold transition-all duration-300 hover:bg-slate-500 hover:text-white"
             onClick={handleSaveChanges}
           >
             Save changes

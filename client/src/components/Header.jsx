@@ -88,6 +88,14 @@ const Header = () => {
     }
   }, [isCartOpen])
 
+  useEffect(() => {
+    if (query.length !== 0) {
+      document.body.style.overflowY = 'hidden'
+    } else {
+      document.body.style.overflowY = 'auto'
+    }
+  }, [query])
+
   const handleInputChange = (e) => {
     const value = e.target.value
     setQuery(value)
@@ -117,15 +125,15 @@ const Header = () => {
     <header
       className={`fixed left-0 right-0 top-0 z-30 flex items-center justify-between p-2 font-playfair transition-all duration-500 sm:p-6 ${scrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}
     >
-      <div className="hidden xl:block">
-        {query.length !== 0 && (
+      {query.length !== 0 && (
+        <div className="hidden xl:block">
           <SearchResults
             hits={results}
             searchLoaded={searchLoaded}
             setQuery={setQuery}
           />
-        )}
-      </div>
+        </div>
+      )}
       <img
         className="cursor-pointer"
         onClick={() => navigate('/')}

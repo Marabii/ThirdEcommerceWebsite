@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import CardItem from '../../../components/CardItem'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import axios from 'axios'
-
-const links = ['All', 'Sofa', 'Table', 'Chair', 'Bed', 'Storage']
+import { globalContext } from '../../../App'
 
 const Section2 = () => {
   const [cardsData, setCardsData] = useState([])
@@ -12,6 +11,8 @@ const Section2 = () => {
   const [limit, setLimit] = useState(6)
   const [skip, setSkip] = useState(0) // Added skip state
   const [totalAvailable, setTotalAvailable] = useState(0)
+  const categories = useContext(globalContext).exploreAll.categories || []
+  const links = ['All', ...categories]
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
 
   useEffect(() => {
@@ -58,7 +59,7 @@ const Section2 = () => {
             <button
               key={link}
               onClick={() => handleFilter(link)}
-              className={`transform border-b-4 border-transparent transition-all duration-300 ease-in-out hover:-translate-y-1 hover:border-black hover:font-bold ${filter === link ? 'border-black font-bold' : ''}`}
+              className={`transform border-b-4 border-transparent capitalize transition-all duration-300 ease-in-out hover:-translate-y-1 hover:border-black hover:font-bold ${filter === link ? 'border-black font-bold' : ''}`}
             >
               {link}
             </button>

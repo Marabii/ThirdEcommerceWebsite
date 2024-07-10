@@ -15,6 +15,12 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     const items = req.body.items;
+    items.forEach(async (item) => {
+      const product = await Product.findById(item.id);
+      if (product.stock < item.quantity || product.stock === 0) {
+        return res.status(400).json({ error: "Not enough stock" });
+      }
+    });
     const productIds = items.map((item) => item.id);
     const products = await Product.find({ _id: { $in: productIds } });
     const metadata = {
@@ -128,6 +134,12 @@ router.post(
       try {
         const order = new Order(newOrder);
         await order.save();
+        cartItems.forEach(async (item) => {
+          const product = await Product.findById(item.productId);
+          console.log("item: ", item);
+          product.stock -= item.quantity;
+          await product.save();
+        });
       } catch (err) {
         console.error("Error saving order:", err);
         return response.status(500).send("Failed to create order");
@@ -137,6 +149,35 @@ router.post(
     }
 
     response.json({ received: true });
+  }
+);
+
+router.put(
+  "/api/setIsSuccessfulPageSeen/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const userId = req.user._id;
+    const orderId = req.params.id;
+
+    try {
+      const order = await Order.findById(orderId);
+      if (!order) {
+        return res.status(404).send("Order not found");
+      }
+
+      if (order.userId.toString() !== userId.toString()) {
+        return res.status(401).send("Unauthorized");
+      }
+
+      order.isSuccessfulPageSeen = true;
+      const updatedOrder = await order.save();
+      res
+        .status(200)
+        .json({ isSuccessfulPageSeen: updatedOrder.isSuccessfulPageSeen });
+    } catch (e) {
+      console.error(e);
+      res.status(500).send("Internal server error");
+    }
   }
 );
 

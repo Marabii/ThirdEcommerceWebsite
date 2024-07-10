@@ -1,6 +1,7 @@
 import AddProduct from './AdminSubComponents/AddProduct'
 import UpdateProduct from './AdminSubComponents/UpdateProduct'
 import DeleteProduct from './AdminSubComponents/DeleteProduct'
+import SetPromo from './AdminSubComponents/SetPromo'
 
 const HandleProducts = () => {
   return (
@@ -9,6 +10,7 @@ const HandleProducts = () => {
       <div className="flex flex-col gap-5">
         <UpdateProduct />
         <DeleteProduct />
+        <SetPromo />
       </div>
     </div>
   )

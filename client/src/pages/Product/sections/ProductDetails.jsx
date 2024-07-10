@@ -14,7 +14,6 @@ const ProductDetailsJSX = (props) => {
   const [additionalImages, setAdditionalImages] = useState([])
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [currentImage, setCurrentImage] = useState('')
-  const [isExpanded, setIsExpanded] = useState(false)
 
   useEffect(() => {
     const getAdditionalImages = async () => {
@@ -31,14 +30,15 @@ const ProductDetailsJSX = (props) => {
     getAdditionalImages()
   }, [])
 
-  const toggleExpanded = () => {
-    setIsExpanded(!isExpanded)
-  }
-
   const handleAddToCart = async () => {
     if (!isLoggedIn) {
       alert('You must log in before you can buy items')
       navigate('/login')
+      return
+    }
+
+    if (productDetails.stock === 0) {
+      alert('Sorry, we are out of stock')
       return
     }
 
@@ -141,28 +141,17 @@ const ProductDetailsJSX = (props) => {
           </div>
         )}
       </div>
-      <div className="col-start-2 col-end-3 space-y-4">
+      <div className="col-start-2 col-end-3 space-y-4 bg-white">
         <h2 className="font-playfair text-5xl font-bold">
           {productDetails.name}
         </h2>
-        <p className="text-lg font-semibold">
-          $ {productDetails.price} USD{' '}
-          <span className="ml-3 text-gray-500 line-through">
-            $ {oldPrice.toFixed(2)} USD
-          </span>
-        </p>
+        <p className="text-lg font-semibold">$ {productDetails.price} USD </p>
         <div className="z-20 h-fit">
           <p
-            className={`relative z-20 bg-white text-lg leading-8 text-gray-600  ${!isExpanded ? 'line-clamp-6' : 'px-2'}`}
+            className={`relative z-20 line-clamp-6 bg-white text-lg leading-8 text-gray-600`}
           >
             {productDetails.description}
           </p>
-          <button
-            onClick={toggleExpanded}
-            className={`relative z-20 mt-2 text-blue-600 transition duration-300 hover:text-blue-800 ${isExpanded ? 'px-2' : ''}`}
-          >
-            {isExpanded ? 'Show Less' : 'Show More'}
-          </button>
         </div>
         <div className="mt-10 flex items-center gap-5">
           <h4 className="font-playfair text-3xl">Delivery: </h4>
@@ -172,11 +161,17 @@ const ProductDetailsJSX = (props) => {
         </div>
         <div className="mt-10 flex items-center gap-5">
           <h4 className="font-playfair text-3xl">Stock: </h4>
-          <p className="relative top-[2px] text-xl">{productDetails.stock}</p>
+          <p className="relative top-[2px] text-xl">
+            {productDetails.stock < 1
+              ? 'Out of Stock'
+              : productDetails.stock <= 3
+                ? `Only ${productDetails.stock} left`
+                : 'In Stock'}
+          </p>
         </div>
         <button
           onClick={handleAddToCart}
-          className="mt-10 w-[150px] border-2 border-black px-5 py-2"
+          className="mt-10 w-[150px] border-2 border-black bg-white px-5 py-2"
         >
           ADD TO CART
         </button>

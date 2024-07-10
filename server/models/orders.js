@@ -56,6 +56,7 @@ const OrdersSchema = new Schema(
     totalAmount: { type: Number, required: true },
     paymentDate: { type: Date, required: true },
     orderConfirmationNumber: { type: String, required: true },
+    isSuccessfulPageSeen: { type: Boolean, default: false },
   },
   { collection: "orders", timestamps: true }
 );

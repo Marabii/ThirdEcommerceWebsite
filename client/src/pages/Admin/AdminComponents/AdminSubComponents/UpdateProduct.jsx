@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import axiosInstance from '../../../../utils/verifyJWT'
+import { globalContext } from '../../../../App'
 
 import DropzoneHandler from './DropzoneHandler'
 import MaterialHandler from './MaterialHandler'
@@ -17,12 +18,16 @@ const UpdateProduct = () => {
     description: '',
     delivery: '',
     stock: '',
-    category: 'sofa',
+    category: '',
     productDetails: '',
     specification: {},
     materials: [''],
     tags: ['']
   })
+
+  //----Get Categories----
+  const categories = useContext(globalContext).exploreAll.categories
+  //----End Of Get Categories----
 
   //----Getting Product Data----
   useEffect(() => {
@@ -85,6 +90,12 @@ const UpdateProduct = () => {
         return
       }
     }
+
+    if (name === 'description' && value.length > 360) {
+      alert('Description should not exceed 360 characters')
+      return
+    }
+
     setProductDetailsForm((prev) => ({
       ...prev,
       [name]: value
@@ -99,7 +110,7 @@ const UpdateProduct = () => {
         description: '',
         delivery: '',
         stock: '',
-        category: 'sofa',
+        category: '',
         productDetails: '',
         specification: {},
         materials: [''],
@@ -319,11 +330,15 @@ const UpdateProduct = () => {
                 onChange={handleProductDetailsFormChange}
                 className="w-full rounded-md border border-gray-500 p-2 text-lg"
               >
-                <option value="sofa">Sofa</option>
-                <option value="table">Table</option>
-                <option value="chair">Chair</option>
-                <option value="storage">Storage</option>
-                <option value="bed">Bed</option>
+                {categories.map((category) => (
+                  <option
+                    key={category}
+                    value={category}
+                    className="capitalize"
+                  >
+                    {category}
+                  </option>
+                ))}
               </select>
             </div>
             <SpecificationHandler

@@ -8,6 +8,7 @@ import Section3 from './sections/Section3'
 import Section4 from './sections/Section4'
 import ReviewsComponent from './sections/ReviewsComponent'
 import TopSection from '../../components/TopSection'
+import Footer from '../../components/Footer'
 import { useNavigate } from 'react-router-dom'
 
 const topSectionData = {
@@ -52,8 +53,9 @@ const ProductPage = () => {
           <ReviewsComponent productDetails={productDetails} />
           <Section3 productDetails={productDetails} />
         </div>
-        <Section4 />
+        <Section4 id={id} />
       </div>
+      <Footer />
     </>
   )
 }

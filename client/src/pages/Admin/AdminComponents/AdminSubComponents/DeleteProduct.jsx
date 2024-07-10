@@ -4,6 +4,7 @@ import CardItemId from '../../../../components/CardItemId'
 import { motion, AnimatePresence } from 'framer-motion'
 import axiosInstance from '../../../../utils/verifyJWT'
 import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const DeleteProduct = () => {
   const [currentProduct, setCurrentProduct] = useState('')
@@ -76,7 +77,7 @@ const DeleteProduct = () => {
             onClick={() => setCurrentProduct('')}
             className="rounded-md bg-slate-200 px-3 py-2 transition-all duration-300 hover:bg-slate-300"
           >
-            Reset Product
+            Reset Search
           </button>
         </>
       )}

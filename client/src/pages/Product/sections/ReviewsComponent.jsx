@@ -25,7 +25,7 @@ const ReviewsComponent = (props) => {
     }
 
     fetchComments()
-  }, [productDetails])
+  }, [productDetails, serverURL])
 
   const likeComment = async (commentId) => {
     if (!isLoggedIn) {
@@ -41,34 +41,72 @@ const ReviewsComponent = (props) => {
       return alert('You already liked this comment')
     }
 
-    setComments((prevComments) => {
-      return prevComments.map((comment) => {
-        if (comment._id === commentId) {
-          return { ...comment, likes: [...comment.likes, userData._id] }
-        }
-        return comment
-      })
-    })
+    const updatedComments = comments.map((comment) =>
+      comment._id === commentId
+        ? { ...comment, likes: [...comment.likes, userData._id] }
+        : comment
+    )
+    setComments(updatedComments)
 
     try {
-      await axiosInstance.post(`${serverURL}/api/likeComment`, {
-        commentId
-      })
+      await axiosInstance.post(`${serverURL}/api/likeComment`, { commentId })
     } catch (e) {
       console.error(e)
       alert('Error liking comment')
+      setComments((prevComments) =>
+        prevComments.map((comment) =>
+          comment._id === commentId
+            ? {
+                ...comment,
+                likes: comment.likes.filter((id) => id !== userData._id)
+              }
+            : comment
+        )
+      )
+    }
+  }
 
-      setComments((prevComments) => {
-        return prevComments.map((comment) => {
-          if (comment._id === commentId) {
-            return {
-              ...comment,
-              likes: comment.likes.filter((id) => id !== userData._id)
-            }
-          }
-          return comment
-        })
-      })
+  const flagComment = async (commentId) => {
+    if (!isLoggedIn) {
+      return alert('Please login to flag a comment')
+    }
+
+    const commentIndex = comments.findIndex(
+      (comment) => comment._id === commentId
+    )
+
+    const hasFlagged = comments[commentIndex].flags.includes(userData._id)
+
+    if (hasFlagged) {
+      return alert('You already flagged this comment')
+    }
+
+    const updatedComments = comments.map((comment) =>
+      comment._id === commentId
+        ? { ...comment, flags: [...comment.flags, userData._id] }
+        : comment
+    )
+    setComments(updatedComments)
+
+    try {
+      await axiosInstance.post(`${serverURL}/api/flagComment`, { commentId })
+    } catch (e) {
+      console.error(e)
+      if (e.response.data.message === 'Cannot flag your own comment') {
+        alert('Cannot flag your own comment')
+      } else {
+        alert('Error flagging comment')
+      }
+      setComments((prevComments) =>
+        prevComments.map((comment) =>
+          comment._id === commentId
+            ? {
+                ...comment,
+                flags: comment.flags.filter((id) => id !== userData._id)
+              }
+            : comment
+        )
+      )
     }
   }
 
@@ -77,28 +115,37 @@ const ReviewsComponent = (props) => {
       <h1 className="font-playfair text-xl font-semibold">Reviews</h1>
       {comments.length !== 0 ? (
         <div className="space-y-4">
-          {comments.map((comment) => {
-            return (
-              <div
-                key={comment._id}
-                className="flex-col items-center gap-2 sm:flex-row"
-              >
-                <p className="mb-1 mb-2 w-fit border-b border-black">
-                  {comment.postedBy}
-                </p>
-                <p className="text-gray-600">{comment.text}</p>
-                <div>
-                  <div className="mt-4 flex w-fit gap-2 rounded-md border border-black px-2 py-1">
-                    <button onClick={() => likeComment(comment._id)}>
-                      <ThumbsUp />
-                    </button>
+          {comments.map((comment) => (
+            <div
+              key={comment._id}
+              className="flex-col items-center gap-2 sm:flex-row"
+            >
+              <p className="mb-2 w-fit border-b border-black">
+                {comment.postedBy}
+              </p>
+              <p className="text-gray-600">{comment.text}</p>
+              <div className="flex gap-2">
+                <div className="mt-4 flex w-fit gap-2 rounded-md border border-black px-2 py-1">
+                  <button
+                    className="flex w-fit gap-2 rounded-md px-2 py-1"
+                    onClick={() => likeComment(comment._id)}
+                  >
+                    <ThumbsUp />
                     <p>{comment?.likes?.length}</p>
-                  </div>
-                  <div></div>
+                  </button>
+                </div>
+                <div className="mt-4 flex w-fit gap-2 rounded-md border border-black px-2 py-1">
+                  <button
+                    className="flex w-fit gap-2 rounded-md px-2 py-1"
+                    onClick={() => flagComment(comment._id)}
+                  >
+                    <Flag />
+                    <p>{comment?.flags?.length}</p>
+                  </button>
                 </div>
               </div>
-            )
-          })}
+            </div>
+          ))}
         </div>
       ) : (
         <div>

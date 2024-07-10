@@ -3,37 +3,29 @@ import { useParams, useNavigate } from 'react-router-dom'
 import axiosInstance from '../../utils/verifyJWT'
 
 const SuccessfulPayment = () => {
-  const [timeCheck, setTimeCheck] = useState(false)
   const serverUrl = import.meta.env.VITE_REACT_APP_SERVER
-  const userId = useParams().id
   const navigate = useNavigate()
 
   useEffect(() => {
     const getShowPage = async () => {
       try {
         const response = await axiosInstance.get(
-          `${serverUrl}/api/getRecentOrder/${userId}`
+          `${serverUrl}/api/getRecentOrder`
         )
         const order = response.data
-        if (order) {
-          const orderTime = new Date(order.createdAt).getTime()
-          const currentTime = Date.now()
-          const period = 5000 // 2 minutes in milliseconds
-          setTimeCheck(currentTime - orderTime < period)
-        } else {
-          navigate('/') // Redirect if no order found
+        if (order.isSuccessfulPageSeen) {
+          navigate('/')
         }
+        await axiosInstance.put(
+          `${serverUrl}/api/setIsSuccessfulPageSeen/${order._id}`
+        )
       } catch (e) {
         console.error(e)
-        navigate('/') // Redirect on error
+        navigate('/')
       }
     }
     getShowPage()
   }, [])
-
-  if (!timeCheck) {
-    navigate('/')
-  }
 
   return (
     <div className="grid h-screen w-screen place-items-center overflow-x-hidden py-52 font-jost">

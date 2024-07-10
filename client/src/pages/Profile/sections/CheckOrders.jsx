@@ -3,7 +3,7 @@ import axiosInstance from '../../../utils/verifyJWT'
 import SelectStatus from './SelectStatus/SelectStatus'
 import { useNavigate } from 'react-router-dom'
 
-const CheckOrders = (props) => {
+const CheckOrders = () => {
   const navigate = useNavigate()
   const [ordersData, setOrdersData] = useState()
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER

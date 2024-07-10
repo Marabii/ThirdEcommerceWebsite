@@ -11,7 +11,7 @@ const CardItemId = (props) => {
   const [showAddToCart, setShowAddToCart] = useState(false)
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const clientURL = import.meta.env.VITE_REACT_APP_CLIENT
-  const oldPrice = Number(data.price) * (1 + data?.promo / 100 || 0)
+  const oldPrice = Number(data?.price || 0) * (1 + data?.promo / 100 || 0)
   const { isLoggedIn, setCartItems } = useContext(globalContext)
   const navigate = useNavigate()
 
@@ -20,6 +20,10 @@ const CardItemId = (props) => {
       alert('You must log in before you can buy items')
       navigate('/login')
       return
+    }
+
+    if (data.stock === 0) {
+      return alert('Sorry, we are out of stock')
     }
 
     setCartItems((prev) => {
@@ -84,6 +88,11 @@ const CardItemId = (props) => {
             Promo: <span className="text-red-500">{data.promo}%</span> off
           </div>
         )}
+        {data.stock === 0 && (
+          <div className="text-playfair absolute right-2 top-2 bg-gray-100 px-4 py-2 font-semibold text-gray-600">
+            Out Of Stock
+          </div>
+        )}
         <a href={`${clientURL}/product-page/${data._id}`}>
           <img
             className="aspect-square w-full max-w-[400px]"
@@ -112,7 +121,7 @@ const CardItemId = (props) => {
       </h2>
       <h3 className="w-fit p-2 text-lg font-semibold">
         $ {data.price} USD{' '}
-        {oldPrice !== 0 && (
+        {oldPrice !== 0 && data.promo !== 0 && (
           <span className="font-normal text-slate-400 line-through">
             ${oldPrice.toFixed()} USD
           </span>

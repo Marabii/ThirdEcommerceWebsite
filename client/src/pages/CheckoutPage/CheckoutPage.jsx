@@ -4,9 +4,11 @@ import { globalContext } from '../../App'
 import CardItemId from '../../components/CardItemId'
 import axiosInstance from '../../utils/verifyJWT'
 import Header from '../../components/Header'
+import { useNavigate } from 'react-router-dom'
 
 const CheckoutPage = () => {
   const [loaded, setLoaded] = useState(true)
+  const navigate = useNavigate()
   const { cartItems, userData } = useContext(globalContext)
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const clientURL = import.meta.env.VITE_REACT_APP_CLIENT
@@ -30,6 +32,71 @@ const CheckoutPage = () => {
   useEffect(() => {
     document.body.style.overflow = 'auto'
   }, [])
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const productsPromises = cartItems.map((item) =>
+          axiosInstance.get(`${serverURL}/api/getProduct/${item.productId}`)
+        )
+        const products = await Promise.all(productsPromises)
+        products.forEach((product) => {
+          if (product.data.stock == 0) {
+            alert('Sorry, one of the items in your cart is out of stock')
+            handleRemoveCartItem(product.data._id)
+            if (
+              !window.confirm(
+                'Would you like to proceed with checkout without this item: ' +
+                  product.data.name
+              )
+            ) {
+              navigate('/')
+            }
+          } else if (
+            product.data.stock <
+            cartItems.filter((item) => item.productId === product.data._id)[0]
+              .quantity
+          ) {
+            alert(
+              `Sorry, you can only buy ${product.data.stock} items of ${product.data.name}`
+            )
+            if (window.confirm('Would you like to proceed with checkout?')) {
+              handleChangeQuantity(product.data._id, product.data.stock)
+            } else {
+              handleRemoveCartItem(product.data._id)
+              navigate('/')
+            }
+          }
+        })
+      } catch (error) {
+        console.error('Failed to get products:', error)
+      }
+    }
+
+    getProducts()
+  }, [cartItems])
+
+  async function handleRemoveCartItem(productID) {
+    try {
+      await axiosInstance.delete(`${serverURL}/api/deleteCartItem/${productID}`)
+      window.location.reload()
+    } catch (error) {
+      console.error('Failed to delete cart item:', error)
+      alert("Can't delete cart item")
+    }
+  }
+
+  async function handleChangeQuantity(productID, quantity) {
+    try {
+      await axiosInstance.post(`${serverURL}/api/updateCart?isNewItem=false`, {
+        productId: productID,
+        quantity: quantity
+      })
+    } catch (e) {
+      alert('Cannot set that quantity')
+      console.error(e)
+    }
+  }
 
   const useDebounce = (callback, delay) => {
     const [timer, setTimer] = useState(null)

@@ -2,6 +2,7 @@ import { X, Search, ArrowDown } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import SearchResults from './SearchResults'
 import { useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const SideBarHeader = ({
   hits,
@@ -13,29 +14,56 @@ const SideBarHeader = ({
   isAdmin,
   handleInputChange
 }) => {
-  useEffect(() => {
-    if (query.length !== 0) {
-      document.body.style.overflowY = 'hidden'
-    } else {
-      document.body.style.overflowY = 'auto'
+  const sidebarVariants = {
+    hidden: { x: '-100%' },
+    visible: {
+      x: 0,
+      transition: { type: 'spring', stiffness: 300, damping: 20 }
     }
-  }, [query])
+  }
+
+  const inputVariants = {
+    hidden: { scale: 0.98 },
+    visible: { scale: 1, transition: { duration: 0.5 } }
+  }
+
+  const linkVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { delay: 0.1, duration: 0.4 }
+    }
+  }
 
   return (
-    <>
-      <div
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 1 }}
         className="fixed inset-0 z-10 bg-black bg-opacity-50"
         onClick={() => setIsMenuOpen(false)}
-      ></div>
+      ></motion.div>
 
-      <div className="min-width-custom fixed left-0 top-0 z-20 h-screen bg-white p-6">
+      <motion.div
+        className="min-width-custom fixed left-0 top-0 z-20 h-screen bg-white p-6"
+        variants={sidebarVariants}
+        initial="hidden"
+        animate="visible"
+        exit="hidden"
+      >
         <X
           size={30}
           onClick={() => setIsMenuOpen(false)}
           className="absolute right-2 top-3 cursor-pointer stroke-black"
         />
         <img className="mx-auto" src="/farnic.png" alt="Farnic logo" />
-        <div className="my-5 flex w-full items-center">
+        <motion.div
+          className="my-5 flex w-full items-center"
+          variants={inputVariants}
+        >
           <input
             type="text"
             placeholder="Search"
@@ -46,7 +74,7 @@ const SideBarHeader = ({
             className="w-full border-b border-black text-black focus:outline-none"
           />
           <Search size={20} />
-        </div>
+        </motion.div>
         <div className="z-20">
           {query.length !== 0 && (
             <SearchResults
@@ -59,27 +87,31 @@ const SideBarHeader = ({
         <nav>
           <ul className="space-y-3">
             {navbarElements.map((element) => (
-              <Link
-                key={element.name}
-                to={element.link}
-                className="flex items-center gap-2 font-bold"
-              >
-                {element.name}{' '}
-                {element.name === 'Pages' && <ArrowDown size={15} />}
-              </Link>
+              <motion.li variants={linkVariants}>
+                <Link
+                  key={element.name}
+                  to={element.link}
+                  className="flex items-center gap-2 font-bold"
+                >
+                  {element.name}{' '}
+                  {element.name === 'Pages' && <ArrowDown size={15} />}
+                </Link>
+              </motion.li>
             ))}
             {isAdmin && (
-              <Link
-                className="flex items-center gap-2 font-bold"
-                to={'/admin/dashboard'}
-              >
-                Admin Panel
-              </Link>
+              <motion.li variants={linkVariants}>
+                <Link
+                  className="flex items-center gap-2 font-bold"
+                  to={'/admin/dashboard'}
+                >
+                  Admin Panel
+                </Link>
+              </motion.li>
             )}
           </ul>
         </nav>
-      </div>
-    </>
+      </motion.div>
+    </AnimatePresence>
   )
 }
 

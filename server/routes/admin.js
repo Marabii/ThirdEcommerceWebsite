@@ -287,4 +287,76 @@ router.delete(
   }
 );
 
+router.post(
+  "/api/setPromo",
+  passport.authenticate("jwt", { session: false }),
+  isAdmin,
+  async (req, res) => {
+    const { option, itemsWithDiscount, discountForAll } = req.body;
+
+    // Validate input
+    if (
+      !option ||
+      (option === "specific" && !Array.isArray(itemsWithDiscount)) ||
+      (option === "all" && !discountForAll)
+    ) {
+      return res.status(400).json({ message: "Invalid request parameters" });
+    }
+
+    try {
+      if (option === "all") {
+        const products = await Product.find({});
+        await Promise.all(
+          products.map(async (product) => {
+            product.promo = discountForAll;
+            await product.save().catch((error) => {
+              console.error(
+                `Error saving product ID ${product._id}:`,
+                error.message
+              );
+              throw new Error(
+                `Failed to set promo for product ID ${product._id}`
+              );
+            });
+          })
+        );
+      } else if (option === "specific") {
+        await Promise.all(
+          itemsWithDiscount.map(async (item) => {
+            try {
+              const product = await Product.findById(item.product);
+              if (!product) {
+                throw new Error(`Product with ID ${item.product} not found`);
+              }
+              product.promo = item.discount;
+              await product.save().catch((error) => {
+                console.error(
+                  `Error saving product ID ${product._id}:`,
+                  error.message
+                );
+                throw new Error(
+                  `Failed to set promo for product ID ${product._id}`
+                );
+              });
+            } catch (error) {
+              console.error(
+                `Error processing item with product ID ${item.product}:`,
+                error.message
+              );
+              throw error;
+            }
+          })
+        );
+      }
+
+      res.status(200).json({ message: "Promo set successfully" });
+    } catch (error) {
+      console.error("Error setting promo:", error.message);
+      res
+        .status(500)
+        .json({ message: "Internal server error", error: error.message });
+    }
+  }
+);
+
 module.exports = router;

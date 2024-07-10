@@ -80,7 +80,16 @@ const TopProducts = () => {
             />
             <div>
               <h2 className="font-semibold">{product.name}</h2>
-              <p className="text-gray-500">{product.stock} items left</p>
+              <p
+                className={`${product.stock <= 5 ? 'font-semibold text-red-600' : 'text-gray-500'}`}
+              >
+                {product.stock} items left
+                {product.stock <= 5 && (
+                  <span className="ml-2 text-gray-500">
+                    Consider adding to the stock
+                  </span>
+                )}
+              </p>
             </div>
           </div>
         ))}
