@@ -4,9 +4,9 @@ const User = mongoose.model("User");
 const passport = require("passport");
 const utils = require("../lib/utils");
 
-
 // Validate an existing user and issue a JWT
 router.post("/api/login", function (req, res, next) {
+  console.log("api called");
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {

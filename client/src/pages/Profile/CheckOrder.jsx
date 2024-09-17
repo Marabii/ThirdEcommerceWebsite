@@ -124,7 +124,7 @@ const CheckOrders = () => {
               <p className="mb-2 mt-5 text-xl font-semibold">Total Amount:</p>
               <p>${orderData.totalAmount.toFixed(2)}</p>
               <p className="mb-2 mt-5 text-xl font-semibold">Payment Date:</p>
-              <p>{new Date(orderData.createdAt).toLocaleDateString()}</p>
+              <p>{new Date(orderData.createdAt).toISOString().split('T')[0]}</p>
               <h2 className="mb-2 mt-5 text-xl font-semibold">
                 Shipping Address
               </h2>

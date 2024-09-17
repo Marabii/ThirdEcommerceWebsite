@@ -48,6 +48,12 @@ const AddProduct = () => {
         return
       }
     }
+
+    if (name === 'description' && value.length > 360) {
+      alert('Description should not exceed 360 characters')
+      return
+    }
+    
     setProductDetailsForm((prev) => ({
       ...prev,
       [name]: value
