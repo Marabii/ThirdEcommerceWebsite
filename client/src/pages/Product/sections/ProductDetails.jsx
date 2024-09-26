@@ -5,15 +5,25 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import { Carousel } from 'react-responsive-carousel'
 import { X } from 'lucide-react'
 import axios from 'axios'
+import convertCurrency from '../../../utils/convertCurrency'
 
 const ProductDetailsJSX = (props) => {
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const { isLoggedIn, setCartItems } = useContext(globalContext)
   const { productDetails } = props
-  const oldPrice = Number(productDetails?.price) * 1.2
   const [additionalImages, setAdditionalImages] = useState([])
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [currentImage, setCurrentImage] = useState('')
+  const [priceData, setPriceData] = useState({});
+
+  useEffect(() => {
+    const getCorrectPrice = async () => {
+      const result = await convertCurrency(productDetails.price);
+      setPriceData(result);
+    }
+    if (productDetails.price) getCorrectPrice()
+    else setPriceData({price: productDetails.price, currency: 'SAR'})
+  }, [productDetails])
 
   useEffect(() => {
     const getAdditionalImages = async () => {
@@ -145,12 +155,17 @@ const ProductDetailsJSX = (props) => {
         <h2 className="font-playfair text-5xl font-bold">
           {productDetails.name}
         </h2>
-        <p className="text-lg font-semibold">$ {productDetails.price} USD </p>
         <div className="z-20 h-fit">
           <p
             className={`relative z-20 line-clamp-6 bg-white text-lg leading-8 text-gray-600`}
           >
             {productDetails.description}
+          </p>
+        </div>
+        <div className="mt-10 flex items-center gap-5">
+          <h4 className="font-playfair text-3xl">Price: </h4>
+          <p className="relative top-[2px] text-xl">
+          {priceData.price?.toFixed(2)} {priceData.currency}{' '}
           </p>
         </div>
         <div className="mt-10 flex items-center gap-5">

@@ -51,10 +51,17 @@ function deleteFilesInDirectory(directory) {
 // Function to get all files in a directory
 function getFilesInDirectory(directory) {
   try {
-    const files = fs.readdirSync(directory); // Synchronous reading of the directory
+    // Check if the directory exists
+    if (!fs.existsSync(directory)) {
+      // Create the directory if it does not exist
+      fs.mkdirSync(directory, { recursive: true });
+    }
+
+    // Synchronously read the directory
+    const files = fs.readdirSync(directory);
     return files.map((file) => path.join(directory, file));
   } catch (err) {
-    throw new Error(`Failed to read directory: ${err.message}`);
+    throw new Error(`Failed to read or create directory: ${err.message}`);
   }
 }
 

@@ -14,7 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         console.error('Logging error:', error, info)
       }}
     > */}
-    <App />
+      <App />
     {/* </ErrorBoundary> */}
   </React.StrictMode>
 )

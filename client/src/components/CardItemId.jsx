@@ -4,6 +4,7 @@ import { globalContext } from '../App'
 import { useNavigate } from 'react-router-dom'
 import axiosInstance from '../utils/verifyJWT'
 import axios from 'axios'
+import convertCurrency from '../utils/convertCurrency';
 
 const CardItemId = (props) => {
   const { productId, display, width, setLoaded, loaded } = props
@@ -11,9 +12,10 @@ const CardItemId = (props) => {
   const [showAddToCart, setShowAddToCart] = useState(false)
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const clientURL = import.meta.env.VITE_REACT_APP_CLIENT
-  const oldPrice = Number(data?.price || 0) * (1 + data?.promo / 100 || 0)
   const { isLoggedIn, setCartItems } = useContext(globalContext)
   const navigate = useNavigate()
+  const [priceData, setPriceData] = useState({});
+  const [oldPrice, setOldPrice] = useState(0);
 
   const handleAddToCart = async () => {
     if (!isLoggedIn) {
@@ -68,6 +70,23 @@ const CardItemId = (props) => {
     getProductData()
   }, [])
 
+  useEffect(() => {
+    const getCorrectPrice = async () => {
+      const result = await convertCurrency(data.price);
+      setPriceData(result);
+
+      // Calculate old price
+      if (data.promo && data.promo > 0) {
+        const oldPriceValue = Number(result.price) / (1 - data.promo / 100);
+        setOldPrice(oldPriceValue);
+      } else {
+        setOldPrice(0);
+      }
+    };
+
+    if (data.price) getCorrectPrice();
+  }, [data]);
+
   if (!data) {
     return
   }
@@ -96,7 +115,7 @@ const CardItemId = (props) => {
         <a href={`${clientURL}/product-page/${data._id}`}>
           <img
             className="aspect-square w-full max-w-[400px]"
-            src={`${serverURL}/products/${data._id}.png`}
+            src={data.productThumbnail}
             alt="card-img"
             loading="lazy"
             onLoad={() => setLoaded(true)}
@@ -120,10 +139,10 @@ const CardItemId = (props) => {
         {data.name}
       </h2>
       <h3 className="w-fit p-2 text-lg font-semibold">
-        $ {data.price} USD{' '}
-        {oldPrice !== 0 && data.promo !== 0 && (
+        {priceData.price?.toFixed(2)} {priceData.currency}{' '}
+        {oldPrice !== 0 && (
           <span className="font-normal text-slate-400 line-through">
-            ${oldPrice.toFixed()} USD
+            {oldPrice?.toFixed(2)} {priceData.currency}
           </span>
         )}
       </h3>

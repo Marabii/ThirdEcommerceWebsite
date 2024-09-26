@@ -33,6 +33,8 @@ app.use(
   })
 );
 
+app.set("trust proxy", 1);
+
 app.use((req, res, next) => {
   if (req.originalUrl === "/webhook") {
     next();

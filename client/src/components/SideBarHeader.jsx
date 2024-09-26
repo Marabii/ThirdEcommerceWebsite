@@ -86,10 +86,10 @@ const SideBarHeader = ({
         </div>
         <nav>
           <ul className="space-y-3">
-            {navbarElements.map((element) => (
-              <motion.li variants={linkVariants}>
+            {navbarElements.map((element, index) => (
+              <motion.li variants={linkVariants} key={index}>
                 <Link
-                  key={element.name}
+                  key={index}
                   to={element.link}
                   className="flex items-center gap-2 font-bold"
                 >

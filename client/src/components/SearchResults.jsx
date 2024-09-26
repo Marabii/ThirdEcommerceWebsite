@@ -47,7 +47,7 @@ const SearchResults = ({ hits, setQuery, searchLoaded }) => {
               {hits.map((hit) => (
                 <CardItemId
                   key={hit.objectID}
-                  productId={hit.objectID}
+                  productId={hit._id.$oid}
                   display={false}
                   width={250}
                   setLoaded={setLoaded}

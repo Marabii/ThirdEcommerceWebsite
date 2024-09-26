@@ -112,7 +112,7 @@ const CartContainer = (props) => {
                   <div className="h-[200px] w-full border-t border-gray-500 p-5">
                     <div className="flex justify-between pb-2 font-jost">
                       <p className="text-gray-500">Subtotal</p>
-                      <p className="font-semibold">$ {totalPrice} USD</p>
+                      <p className="font-semibold">$ {totalPrice} {localStorage.getItem('currencyCode') || 'SAR'}</p>
                     </div>
                     <button
                       className={`w-full bg-blue-400 py-5 font-semibold text-white transition-all duration-200 hover:bg-blue-500 ${loadingStates ? 'opacity-20' : 'opacity-100'}`}

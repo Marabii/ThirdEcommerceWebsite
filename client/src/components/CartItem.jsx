@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import axiosInstance from '../utils/verifyJWT'
 import { globalContext } from '../App'
+import convertCurrency from '../utils/convertCurrency'
 
 const CartItem = (props) => {
   const { productID, setLoadingStates, updateItemDetails } = props
@@ -10,17 +11,18 @@ const CartItem = (props) => {
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const [loading, setLoading] = useState(false)
   const { setCartItems } = useContext(globalContext)
+  const [priceData, setPriceData] = useState({});
 
   // In CartItem.js
   useEffect(() => {
-    if (productData && quantity !== undefined) {
+    if (priceData && quantity !== undefined) {
       const newDetails = {
-        price: productData.price,
+        price: priceData.price,
         quantity: quantity
       }
       updateItemDetails(productID, newDetails)
     }
-  }, [productData, quantity])
+  }, [priceData, quantity])
 
   useEffect(() => {
     const getProduct = async () => {
@@ -81,6 +83,15 @@ const CartItem = (props) => {
     setLoadingStates(loading)
   }, [loading])
 
+  useEffect(() => {
+    const getCorrectPrice = async () => {
+      const result = await convertCurrency(productData.price);
+      setPriceData(result);
+    }
+
+    if (productData) getCorrectPrice()
+  }, [productData])
+
   const handleQuantityChange = (e) => {
     const quantityInput = parseInt(e.target.value, 10)
     if (quantityInput >= productData.stock) {
@@ -105,7 +116,7 @@ const CartItem = (props) => {
     }
   }
 
-  if (!productData || quantity === undefined) {
+  if (!productData || quantity === undefined || !priceData) {
     return <div>Loading...</div>
   }
 
@@ -123,7 +134,7 @@ const CartItem = (props) => {
       >
         <div>
           <h3 className="mb-2 font-bold text-gray-500">{productData.name}</h3>
-          <p className="py-2 text-gray-500">$ {productData.price} USD</p>
+          <p className="py-2 text-gray-500">{priceData.price?.toFixed(2)} {priceData.currency}{' '}</p>
           <button
             onClick={handleRemoveCartItem}
             className="border-b-2 border-red-600 pb-[1px] text-red-600 transition-all duration-200 hover:font-bold"

@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import axiosInstance from './verifyJWT'
+import countryToCurrency from 'country-to-currency'
 import { jwtDecode } from 'jwt-decode'
 import axios from 'axios'
 
@@ -55,6 +56,46 @@ const UseAuthCheck = (props) => {
       }
     }
     getExploreAll()
+  }, [])
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords
+        const getCountryIsoCode = async () => {
+          try {
+            const response = await axios.get(
+              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+            )
+            const data = response.data
+            localStorage.setItem('countryCode', data.countryCode)
+            return data.countryCode
+          } catch (e) {
+            console.error(e)
+          }
+        }
+
+        const getCurrencyCode = async () => {
+          try {
+            const countryCode = await getCountryIsoCode()
+            const currencyCode = countryToCurrency[countryCode]
+            localStorage.setItem('currencyCode', currencyCode)
+            return currencyCode
+          } catch (e) {
+            console.error(e)
+          }
+        }
+
+        ;(async () => {
+          try {
+            const currencyCode = await getCurrencyCode()
+            console.log('currencyCode: ', currencyCode)
+          } catch (e) {
+            console.error(e)
+          }
+        })()
+      })
+    }
   }, [])
 
   return null
