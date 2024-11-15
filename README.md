@@ -107,8 +107,8 @@ server/
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/ecommerce-platform.git
-cd ecommerce-platform
+git clone https://github.com/Marabii/ThirdEcommerceWebsite.git
+cd ThirdEcommerceWebsite
 ```
 
 ### Install Dependencies
