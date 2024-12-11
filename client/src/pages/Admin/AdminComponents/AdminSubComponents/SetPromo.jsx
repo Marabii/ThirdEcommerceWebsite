@@ -42,7 +42,7 @@ const SetPromo = () => {
       const response = await axiosInstance.post(`${serverURL}/api/setPromo`, {
         option: option,
         itemsWithDiscount: itemsWithDiscount,
-        discountForAll: discountForAll
+        discountForAll: discountForAll,
       })
       alert('Discount set successfully')
       //---reset form---

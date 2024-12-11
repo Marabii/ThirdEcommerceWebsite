@@ -35,8 +35,8 @@ const ShopSection1 = () => {
             limit,
             skip,
             sort: sortOrder,
-            material: material
-          }
+            material: material,
+          },
         })
         if (skip === 0) {
           setCardsData(response.data)

@@ -19,7 +19,7 @@ const AddProduct = () => {
     productDetails: '',
     specification: {},
     materials: [''],
-    tags: ['']
+    tags: [''],
   })
 
   //----Get Categories----
@@ -37,7 +37,7 @@ const AddProduct = () => {
     thumbnail,
     setThumbnail,
     images,
-    setImages
+    setImages,
   })
 
   const handleProductDetailsFormChange = (e) => {
@@ -53,10 +53,10 @@ const AddProduct = () => {
       alert('Description should not exceed 360 characters')
       return
     }
-    
+
     setProductDetailsForm((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }))
   }
 

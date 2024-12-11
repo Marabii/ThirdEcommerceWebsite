@@ -58,7 +58,7 @@ const ReviewsComponent = (props) => {
           comment._id === commentId
             ? {
                 ...comment,
-                likes: comment.likes.filter((id) => id !== userData._id)
+                likes: comment.likes.filter((id) => id !== userData._id),
               }
             : comment
         )
@@ -102,7 +102,7 @@ const ReviewsComponent = (props) => {
           comment._id === commentId
             ? {
                 ...comment,
-                flags: comment.flags.filter((id) => id !== userData._id)
+                flags: comment.flags.filter((id) => id !== userData._id),
               }
             : comment
         )

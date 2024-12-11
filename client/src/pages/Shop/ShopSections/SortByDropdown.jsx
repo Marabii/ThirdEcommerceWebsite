@@ -11,7 +11,7 @@ const SortByDropdown = () => {
   const sortingOptions = [
     { label: 'Price Ascending', value: 'price-asc' },
     { label: 'Price Descending', value: 'price-desc' },
-    { label: 'Discount', value: 'promo-desc' }
+    { label: 'Discount', value: 'promo-desc' },
   ]
 
   const handleDropdownToggle = () => setIsOpen(!isOpen)

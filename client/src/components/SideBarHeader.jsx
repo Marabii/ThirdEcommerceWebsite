@@ -12,19 +12,19 @@ const SideBarHeader = ({
   setIsMenuOpen,
   navbarElements,
   isAdmin,
-  handleInputChange
+  handleInputChange,
 }) => {
   const sidebarVariants = {
     hidden: { x: '-100%' },
     visible: {
       x: 0,
-      transition: { type: 'spring', stiffness: 300, damping: 20 }
-    }
+      transition: { type: 'spring', stiffness: 300, damping: 20 },
+    },
   }
 
   const inputVariants = {
     hidden: { scale: 0.98 },
-    visible: { scale: 1, transition: { duration: 0.5 } }
+    visible: { scale: 1, transition: { duration: 0.5 } },
   }
 
   const linkVariants = {
@@ -32,8 +32,8 @@ const SideBarHeader = ({
     visible: {
       opacity: 1,
       y: 0,
-      transition: { delay: 0.1, duration: 0.4 }
-    }
+      transition: { delay: 0.1, duration: 0.4 },
+    },
   }
 
   return (

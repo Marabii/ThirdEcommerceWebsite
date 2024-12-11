@@ -22,7 +22,7 @@ const Comments = (props) => {
       await axiosInstance.post(`${serverURL}/api/postComment`, {
         comment: comment,
         productId: selectedProduct,
-        postedBy: userData._id
+        postedBy: userData._id,
       })
       alert('Comment posted successfully')
       document.querySelector('#comment').value = ''

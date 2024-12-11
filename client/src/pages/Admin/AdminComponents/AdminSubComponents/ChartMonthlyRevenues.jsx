@@ -37,7 +37,7 @@ const ChartMonthlyRevenues = () => {
       'September',
       'October',
       'November',
-      'December'
+      'December',
     ],
     datasets: [
       {
@@ -47,21 +47,21 @@ const ChartMonthlyRevenues = () => {
         borderWidth: 2,
         hoverBackgroundColor: 'rgba(75,192,192,0.7)',
         hoverBorderColor: 'rgba(75,192,192,1)',
-        data: monthlyRevenues
-      }
-    ]
+        data: monthlyRevenues,
+      },
+    ],
   }
 
   const options = {
     maintainAspectRatio: false,
     scales: {
       y: {
-        beginAtZero: true
+        beginAtZero: true,
       },
       x: {
-        beginAtZero: true
-      }
-    }
+        beginAtZero: true,
+      },
+    },
   }
 
   if (!monthlyRevenues) {

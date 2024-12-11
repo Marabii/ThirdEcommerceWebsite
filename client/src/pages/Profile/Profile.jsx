@@ -44,7 +44,7 @@ const Profile = () => {
           data={{
             title: 'Profile',
             description:
-              'You can change all your personal information from here as well as check your orders'
+              'You can change all your personal information from here as well as check your orders',
           }}
         />
       </div>

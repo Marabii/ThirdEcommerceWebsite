@@ -1,3 +1,1 @@
-const Orders = () => {
-    
-}
+const Orders = () => {}

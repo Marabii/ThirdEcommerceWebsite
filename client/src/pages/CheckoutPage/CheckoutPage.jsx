@@ -26,7 +26,7 @@ const CheckoutPage = () => {
     street: '',
     city: '',
     zipcode: '',
-    userId: userId
+    userId: userId,
   })
 
   useEffect(() => {
@@ -90,7 +90,7 @@ const CheckoutPage = () => {
     try {
       await axiosInstance.post(`${serverURL}/api/updateCart?isNewItem=false`, {
         productId: productID,
-        quantity: quantity
+        quantity: quantity,
       })
     } catch (e) {
       alert('Cannot set that quantity')
@@ -117,33 +117,33 @@ const CheckoutPage = () => {
       first_name: {
         regex: /^[a-zA-Z]{2,30}$/,
         error:
-          'First name must be between 2 and 30 letters and contain no numbers or special characters.'
+          'First name must be between 2 and 30 letters and contain no numbers or special characters.',
       },
       last_name: {
         regex: /^[a-zA-Z]{2,30}$/,
         error:
-          'Last name must be between 2 and 30 letters and contain no numbers or special characters.'
+          'Last name must be between 2 and 30 letters and contain no numbers or special characters.',
       },
       phone_number: {
         regex: /^\+?[0-9]{7,15}$/,
         error:
-          "Phone number must be between 7 and 15 digits and may start with a '+'."
+          "Phone number must be between 7 and 15 digits and may start with a '+'.",
       },
       street: {
         regex: /^[a-zA-Z0-9\s,'-]{3,100}$/,
         error:
-          'Street must be between 3 and 100 characters long and can include letters, numbers, spaces, commas, and hyphens.'
+          'Street must be between 3 and 100 characters long and can include letters, numbers, spaces, commas, and hyphens.',
       },
       city: {
         regex: /^[a-zA-Z\s]{2,50}$/,
         error:
-          'City should only contain letters and spaces, and be between 2 and 50 characters long.'
+          'City should only contain letters and spaces, and be between 2 and 50 characters long.',
       },
       zipcode: {
         regex: /^[0-9]{5}(-[0-9]{4})?$/,
         error:
-          'Zip code must be a 5-digit number or a 9-digit format with a dash.'
-      }
+          'Zip code must be a 5-digit number or a 9-digit format with a dash.',
+      },
     }
 
     const fieldValidation = validations[name]
@@ -162,7 +162,7 @@ const CheckoutPage = () => {
     const { name, value } = e.target
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }))
     debouncedValidation(name, value)
   }

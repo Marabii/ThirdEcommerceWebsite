@@ -3,7 +3,7 @@ import { X } from 'lucide-react'
 
 const SpecificationHandler = ({
   productDetailsForm,
-  setProductDetailsForm
+  setProductDetailsForm,
 }) => {
   const [tempKey, setTempKey] = useState('')
   const [tempValue, setTempValue] = useState('')
@@ -11,7 +11,7 @@ const SpecificationHandler = ({
   const handleSpecificationChange = (key, value) => {
     setProductDetailsForm((prev) => ({
       ...prev,
-      specification: { ...prev.specification, [key]: value }
+      specification: { ...prev.specification, [key]: value },
     }))
   }
 
@@ -27,7 +27,7 @@ const SpecificationHandler = ({
     const { [key]: _, ...rest } = productDetailsForm.specification
     setProductDetailsForm((prev) => ({
       ...prev,
-      specification: rest
+      specification: rest,
     }))
   }
   return (

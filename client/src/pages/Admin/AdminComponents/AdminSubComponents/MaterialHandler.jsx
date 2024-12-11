@@ -6,14 +6,14 @@ const MaterialHandler = ({ productDetailsForm, setProductDetailsForm }) => {
     newMaterials[index] = material
     setProductDetailsForm((prev) => ({
       ...prev,
-      materials: newMaterials
+      materials: newMaterials,
     }))
   }
 
   const addMaterial = () => {
     setProductDetailsForm((prev) => ({
       ...prev,
-      materials: [...prev.materials, '']
+      materials: [...prev.materials, ''],
     }))
   }
 
@@ -24,7 +24,7 @@ const MaterialHandler = ({ productDetailsForm, setProductDetailsForm }) => {
     if (productDetailsForm.materials.length > 1) {
       setProductDetailsForm((prev) => ({
         ...prev,
-        materials: filteredMaterials
+        materials: filteredMaterials,
       }))
     }
   }

@@ -8,7 +8,7 @@ const DropzoneHandler = ({
   thumbnail,
   setThumbnail,
   setHasThumbnailChanged,
-  setHaveImagesChanged
+  setHaveImagesChanged,
 }) => {
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles.length > 3) {
@@ -19,7 +19,7 @@ const DropzoneHandler = ({
       setImages(
         acceptedFiles.map((file) =>
           Object.assign(file, {
-            preview: URL.createObjectURL(file)
+            preview: URL.createObjectURL(file),
           })
         )
       )
@@ -29,9 +29,9 @@ const DropzoneHandler = ({
   const useDropZoneImages = useDropzone({
     onDrop,
     accept: {
-      'image/*': ['.jpeg', '.jpg', '.png']
+      'image/*': ['.jpeg', '.jpg', '.png'],
     },
-    multiple: true
+    multiple: true,
   })
 
   const getRootPropsImages = useDropZoneImages.getRootProps
@@ -39,7 +39,7 @@ const DropzoneHandler = ({
 
   const useDropZoneThumbnail = useDropzone({
     accept: {
-      'image/*': ['.jpeg', '.jpg', '.png']
+      'image/*': ['.jpeg', '.jpg', '.png'],
     },
     multiple: false,
     onDrop: (acceptedFiles) => {
@@ -47,11 +47,11 @@ const DropzoneHandler = ({
       setThumbnail(
         acceptedFiles.map((file) =>
           Object.assign(file, {
-            preview: URL.createObjectURL(file)
+            preview: URL.createObjectURL(file),
           })
         )
       )
-    }
+    },
   })
 
   const getRootPropsThumbnail = useDropZoneThumbnail.getRootProps

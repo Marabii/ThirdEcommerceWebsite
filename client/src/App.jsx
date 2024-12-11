@@ -25,7 +25,7 @@ export const globalContext = createContext({
   setCartItems: () => {},
   userData: {},
   setUserData: () => {},
-  exploreAll: {}
+  exploreAll: {},
 })
 
 const App = () => {
@@ -39,7 +39,7 @@ const App = () => {
     setIsLoggedIn: setIsLoggedIn,
     setCartItems: setCartItems,
     setUserData: setUserData,
-    setExploreAll: setExploreAll
+    setExploreAll: setExploreAll,
   })
 
   return (
@@ -51,7 +51,7 @@ const App = () => {
         setCartItems,
         userData,
         setUserData,
-        exploreAll
+        exploreAll,
       }}
     >
       <BrowserRouter>

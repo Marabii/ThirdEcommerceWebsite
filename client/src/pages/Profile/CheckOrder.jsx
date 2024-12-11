@@ -40,7 +40,7 @@ const CheckOrders = () => {
             .catch((e) => ({
               error: true,
               productId: cartItem.productId,
-              message: e.message
+              message: e.message,
             }))
         )
 
@@ -85,7 +85,7 @@ const CheckOrders = () => {
       <TopSection
         data={{
           title: 'Your Order Details',
-          description: 'You can check your order details on this page.'
+          description: 'You can check your order details on this page.',
         }}
       />
       <main className="w-full">

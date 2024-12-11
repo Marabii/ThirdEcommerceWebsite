@@ -15,8 +15,8 @@ const dot = (color = 'transparent') => ({
     display: 'block',
     marginRight: 8,
     height: 10,
-    width: 10
-  }
+    width: 10,
+  },
 })
 
 const colourStyles = {
@@ -47,13 +47,13 @@ const colourStyles = {
           ? isSelected
             ? data.color
             : color.alpha(0.3).css()
-          : undefined
-      }
+          : undefined,
+      },
     }
   },
   input: (styles) => ({ ...styles, ...dot() }),
   placeholder: (styles) => ({ ...styles, ...dot('#ccc') }),
-  singleValue: (styles, { data }) => ({ ...styles, ...dot(data.color) })
+  singleValue: (styles, { data }) => ({ ...styles, ...dot(data.color) }),
 }
 
 const SelectStatus = () => {

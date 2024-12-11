@@ -47,7 +47,7 @@ const LatestComments = () => {
 
     try {
       await axiosInstance.post(`${serverURL}/api/likeComment`, {
-        commentId
+        commentId,
       })
     } catch (e) {
       console.error(e)
@@ -58,7 +58,7 @@ const LatestComments = () => {
           if (comment._id === commentId) {
             return {
               ...comment,
-              likes: comment.likes.filter((id) => id !== userData._id)
+              likes: comment.likes.filter((id) => id !== userData._id),
             }
           }
           return comment

@@ -8,14 +8,14 @@ const linksForCompany = [
   { name: 'Contact Us', link: '/contact' },
   { name: 'Login', link: '/login' },
   { name: 'Register', link: '/register' },
-  { name: 'shop', link: '/shop' }
+  { name: 'shop', link: '/shop' },
 ]
 
 const linksForInformation = [
   { name: 'Terms & Conditions', link: '/terms-and-conditions' },
   { name: 'Style Guide', link: '/style-guide' },
   { name: 'Change Log', link: '/change-log' },
-  { name: 'Liscense', link: '/license' }
+  { name: 'Liscense', link: '/license' },
 ]
 
 const Footer = () => {

@@ -22,7 +22,7 @@ const UpdateProduct = () => {
     productDetails: '',
     specification: {},
     materials: [''],
-    tags: ['']
+    tags: [''],
   })
 
   //----Get Categories----
@@ -48,8 +48,8 @@ const UpdateProduct = () => {
         setThumbnail([
           {
             preview: `${serverURL}/products/${currentProduct}.png`,
-            name: `${currentProduct}.png`
-          }
+            name: `${currentProduct}.png`,
+          },
         ])
         const additionalImages = await axios.get(
           `${serverURL}/api/getAdditionalImages/${currentProduct}`
@@ -59,7 +59,7 @@ const UpdateProduct = () => {
           additionalImages.data.map((imgName) => {
             return {
               preview: `${serverURL}/additionalImages/${imgName}`,
-              name: imgName
+              name: imgName,
             }
           })
         )
@@ -98,7 +98,7 @@ const UpdateProduct = () => {
 
     setProductDetailsForm((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }))
   }
 
@@ -114,7 +114,7 @@ const UpdateProduct = () => {
         productDetails: '',
         specification: {},
         materials: [''],
-        tags: ['']
+        tags: [''],
       })
 
       setImages([])
@@ -180,7 +180,7 @@ const UpdateProduct = () => {
         productDetails: '',
         specification: {},
         materials: [],
-        tags: []
+        tags: [],
       })
       setImages([])
       setThumbnail([])

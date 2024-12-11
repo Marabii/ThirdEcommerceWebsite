@@ -4,7 +4,7 @@ const data = [
   { number: '20k+', name: 'Properties' },
   { number: '12k+', name: 'Customers' },
   { number: '62+', name: 'Agents' },
-  { number: '160+', name: 'Awards' }
+  { number: '160+', name: 'Awards' },
 ]
 
 const Section1 = () => {

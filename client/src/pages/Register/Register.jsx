@@ -11,7 +11,7 @@ const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
   })
 
   const handleRegisterSubmit = async (e) => {
@@ -39,7 +39,7 @@ const Register = () => {
     const { name, value } = e.target
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }))
   }
 

@@ -8,7 +8,7 @@ import Footer from '../../components/Footer'
 const topSectionData = {
   title: 'About Us',
   description:
-    'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Expedita adipisci voluptatum reprehenderit. Quibusdam cumque ipsa iure distinctio nemo explicabo libero?'
+    'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Expedita adipisci voluptatum reprehenderit. Quibusdam cumque ipsa iure distinctio nemo explicabo libero?',
 }
 
 const About = () => {

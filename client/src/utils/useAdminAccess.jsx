@@ -24,7 +24,7 @@ const useAdminAccess = () => {
 
       try {
         const response = await axios.get(`${serverURL}/api/verifyAdmin`, {
-          headers: { Authorization: localStorage.getItem('jwtToken') }
+          headers: { Authorization: localStorage.getItem('jwtToken') },
         })
 
         if (!response.data || !response.data.success) {

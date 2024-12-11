@@ -30,7 +30,7 @@ const BestSellers = () => {
           axios.get(`${serverURL}/api/getProduct/${productId}`).catch((e) => ({
             error: true,
             productId,
-            message: e.message
+            message: e.message,
           }))
         )
 

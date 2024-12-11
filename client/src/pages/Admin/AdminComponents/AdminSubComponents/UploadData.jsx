@@ -7,7 +7,7 @@ const UploadData = ({
   thumbnail,
   setThumbnail,
   images,
-  setImages
+  setImages,
 }) => {
   const [productId, setProductId] = useState('')
   function generateHexRandomString() {
@@ -55,7 +55,7 @@ const UploadData = ({
       specification,
       materials,
       productDetails,
-      tags
+      tags,
     } = productDetailsForm
 
     const formData = new FormData()
@@ -86,8 +86,8 @@ const UploadData = ({
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data'
-          }
+            'Content-Type': 'multipart/form-data',
+          },
         }
       )
 
@@ -105,7 +105,7 @@ const UploadData = ({
         productDetails: '',
         specification: {},
         materials: [],
-        tags: []
+        tags: [],
       })
       setImages([])
       setThumbnail([])
@@ -119,7 +119,7 @@ const UploadData = ({
   }
 
   return {
-    handleSubmit
+    handleSubmit,
   }
 }
 

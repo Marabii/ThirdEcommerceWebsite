@@ -6,7 +6,7 @@ import {
   CircleUserRound,
   ShoppingBag,
   ArrowDown,
-  Key
+  Key,
 } from 'lucide-react'
 import logo from '/farnic.png'
 import SideBarHeader from './SideBarHeader'
@@ -35,7 +35,7 @@ const Header = () => {
     { name: 'Home', link: '/' },
     { name: 'About', link: '/about' },
     { name: 'Contact', link: '/contact' },
-    { name: 'Shop', link: '/shop' }
+    { name: 'Shop', link: '/shop' },
   ]
 
   function usePrevious(value) {

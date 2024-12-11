@@ -11,14 +11,14 @@ const CartItem = (props) => {
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER
   const [loading, setLoading] = useState(false)
   const { setCartItems } = useContext(globalContext)
-  const [priceData, setPriceData] = useState({});
+  const [priceData, setPriceData] = useState({})
 
   // In CartItem.js
   useEffect(() => {
     if (priceData && quantity !== undefined) {
       const newDetails = {
         price: priceData.price,
-        quantity: quantity
+        quantity: quantity,
       }
       updateItemDetails(productID, newDetails)
     }
@@ -85,8 +85,8 @@ const CartItem = (props) => {
 
   useEffect(() => {
     const getCorrectPrice = async () => {
-      const result = await convertCurrency(productData.price);
-      setPriceData(result);
+      const result = await convertCurrency(productData.price)
+      setPriceData(result)
     }
 
     if (productData) getCorrectPrice()
@@ -134,7 +134,9 @@ const CartItem = (props) => {
       >
         <div>
           <h3 className="mb-2 font-bold text-gray-500">{productData.name}</h3>
-          <p className="py-2 text-gray-500">{priceData.price?.toFixed(2)} {priceData.currency}{' '}</p>
+          <p className="py-2 text-gray-500">
+            {priceData.price?.toFixed(2)} {priceData.currency}{' '}
+          </p>
           <button
             onClick={handleRemoveCartItem}
             className="border-b-2 border-red-600 pb-[1px] text-red-600 transition-all duration-200 hover:font-bold"

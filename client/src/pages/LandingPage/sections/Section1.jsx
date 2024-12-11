@@ -5,11 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Section1 = () => {
   const [currSlide, setCurrSlide] = useState(0)
-  const sliderImgs = [
-    'sofa1.png',
-    'sofa2.png',
-    'sofa3.png'
-  ]
+  const sliderImgs = ['sofa1.png', 'sofa2.png', 'sofa3.png']
   const [autoPlay, setAutoPlay] = useState(true)
   const navigate = useNavigate()
   const serverURL = import.meta.env.VITE_REACT_APP_SERVER

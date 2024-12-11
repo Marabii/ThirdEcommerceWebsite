@@ -3,14 +3,14 @@ export const colourOptions = [
   { value: 'green', label: 'Shipped', color: '#31c423', isDisabled: false },
   { value: 'orange', label: 'Delivered', color: '#fc8003' },
   { value: 'red', label: 'Cancelled', color: '#FF5630', isFixed: false },
-  { value: 'gray', label: 'All', color: '#6e6d6a', isFixed: false }
+  { value: 'gray', label: 'All', color: '#6e6d6a', isFixed: false },
 ]
 
 export const flavourOptions = [
   { value: 'vanilla', label: 'Vanilla', rating: 'safe' },
   { value: 'chocolate', label: 'Chocolate', rating: 'good' },
   { value: 'strawberry', label: 'Strawberry', rating: 'wild' },
-  { value: 'salted-caramel', label: 'Salted Caramel', rating: 'crazy' }
+  { value: 'salted-caramel', label: 'Salted Caramel', rating: 'crazy' },
 ]
 
 export const stateOptions = [
@@ -72,7 +72,7 @@ export const stateOptions = [
   { value: 'WA', label: 'Washington' },
   { value: 'WV', label: 'West Virginia' },
   { value: 'WI', label: 'Wisconsin' },
-  { value: 'WY', label: 'Wyoming' }
+  { value: 'WY', label: 'Wyoming' },
 ]
 
 export const optionLength = [
@@ -80,29 +80,29 @@ export const optionLength = [
   {
     value: 2,
     label:
-      'Evil is the moment when I lack the strength to be true to the Good that compels me.'
+      'Evil is the moment when I lack the strength to be true to the Good that compels me.',
   },
   {
     value: 3,
     label:
-      "It is now an easy matter to spell out the ethic of a truth: 'Do all that you can to persevere in that which exceeds your perseverance. Persevere in the interruption. Seize in your being that which has seized and broken you."
-  }
+      "It is now an easy matter to spell out the ethic of a truth: 'Do all that you can to persevere in that which exceeds your perseverance. Persevere in the interruption. Seize in your being that which has seized and broken you.",
+  },
 ]
 
 export const dogOptions = [
   { id: 1, label: 'Chihuahua' },
   { id: 2, label: 'Bulldog' },
   { id: 3, label: 'Dachshund' },
-  { id: 4, label: 'Akita' }
+  { id: 4, label: 'Akita' },
 ]
 
 export const groupedOptions = [
   {
     label: 'Colours',
-    options: colourOptions
+    options: colourOptions,
   },
   {
     label: 'Flavours',
-    options: flavourOptions
-  }
+    options: flavourOptions,
+  },
 ]

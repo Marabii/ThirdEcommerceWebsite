@@ -7,7 +7,7 @@ const topSectionData = {
   title: 'Shop',
   description:
     'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Expedita adipisci voluptatum reprehenderit. Quibusdam cumque ipsa iure distinctio nemo explicabo libero?',
-  image: '/chair4.jpg'
+  image: '/chair4.jpg',
 }
 
 const Shop = () => {

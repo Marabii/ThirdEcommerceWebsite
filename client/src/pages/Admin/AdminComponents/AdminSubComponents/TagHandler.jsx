@@ -6,14 +6,14 @@ const TagHandler = ({ productDetailsForm, setProductDetailsForm }) => {
     newTags[index] = tag
     setProductDetailsForm((prev) => ({
       ...prev,
-      tags: newTags
+      tags: newTags,
     }))
   }
 
   const addTag = () => {
     setProductDetailsForm((prev) => ({
       ...prev,
-      tags: [...prev.tags, '']
+      tags: [...prev.tags, ''],
     }))
   }
 
@@ -24,7 +24,7 @@ const TagHandler = ({ productDetailsForm, setProductDetailsForm }) => {
     if (productDetailsForm.tags.length > 1) {
       setProductDetailsForm((prev) => ({
         ...prev,
-        tags: filteredTags
+        tags: filteredTags,
       }))
     }
   }

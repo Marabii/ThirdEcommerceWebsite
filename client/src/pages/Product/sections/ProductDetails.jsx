@@ -13,15 +13,15 @@ const ProductDetailsJSX = (props) => {
   const { productDetails } = props
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [currentImage, setCurrentImage] = useState('')
-  const [priceData, setPriceData] = useState({});
+  const [priceData, setPriceData] = useState({})
 
   useEffect(() => {
     const getCorrectPrice = async () => {
-      const result = await convertCurrency(productDetails.price);
-      setPriceData(result);
+      const result = await convertCurrency(productDetails.price)
+      setPriceData(result)
     }
     if (productDetails.price) getCorrectPrice()
-    else setPriceData({price: productDetails.price, currency: 'SAR'})
+    else setPriceData({ price: productDetails.price, currency: 'SAR' })
   }, [productDetails])
 
   const handleAddToCart = async () => {
@@ -95,11 +95,7 @@ const ProductDetailsJSX = (props) => {
               loading="lazy"
             />
             {productDetails.additionalImages.map((image) => (
-              <img
-                key={image}
-                src={image}
-                alt="additional Image"
-              />
+              <img key={image} src={image} alt="additional Image" />
             ))}
           </Carousel>
         ) : (
@@ -107,11 +103,7 @@ const ProductDetailsJSX = (props) => {
             src={productDetails.productThumbnail}
             alt="product image"
             loading="lazy"
-            onClick={() =>
-              handleImageClick(
-                productDetails.productThumbnail
-              )
-            }
+            onClick={() => handleImageClick(productDetails.productThumbnail)}
           />
         )}
         {modalIsOpen && (
@@ -149,7 +141,7 @@ const ProductDetailsJSX = (props) => {
         <div className="mt-10 flex items-center gap-5">
           <h4 className="font-playfair text-3xl">Price: </h4>
           <p className="relative top-[2px] text-xl">
-          {priceData.price?.toFixed(2)} {priceData.currency}{' '}
+            {priceData.price?.toFixed(2)} {priceData.currency}{' '}
           </p>
         </div>
         <div className="mt-10 flex items-center gap-5">
