@@ -205,6 +205,10 @@ For any inquiries or to obtain the necessary environment variable values, please
 - **Email**: minehamza97@gmail.com
 - **GitHub**: [Marabii](https://github.com/Marabii)
 
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+
 ---
 
 © 2024 E-Commerce Platform. All rights reserved.
