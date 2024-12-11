@@ -4,6 +4,7 @@ import { globalContext } from '../App'
 import { useNavigate } from 'react-router-dom'
 import axiosInstance from '../utils/verifyJWT'
 import convertCurrency from '../utils/convertCurrency'
+import log from '../utils/logger'
 
 const CardItem = (props) => {
   const { data, display, width } = props
@@ -17,22 +18,29 @@ const CardItem = (props) => {
   const [oldPrice, setOldPrice] = useState(0)
 
   const handleAddToCart = async () => {
+    log.info('handleAddToCart initiated')
+
     if (!isLoggedIn) {
+      log.warn('User not logged in. Redirecting to login page.')
       alert('You must log in before you can buy items')
       navigate('/login')
       return
     }
 
     if (data.stock === 0) {
-      return alert('Sorry, we are out of stock')
+      log.warn('Attempted to add out-of-stock item to cart')
+      alert('Sorry, we are out of stock')
+      return
     }
 
     setCartItems((prev) => {
       const itemExists = prev.find((item) => item.productId === data._id)
       if (itemExists) {
+        log.info('Item already exists in cart')
         alert('Item already exists in your cart')
         return prev
       } else {
+        log.info('Adding new item to cart')
         return [...prev, { productId: data._id, quantity: 1 }]
       }
     })
@@ -42,11 +50,13 @@ const CardItem = (props) => {
         `${serverURL}/api/updateCart?isNewItem=true`,
         { productId: data._id, quantity: 1 }
       )
-      if (response.status !== 200) {
+      if (response.status === 200) {
+        log.info('Cart updated successfully')
+      } else {
         throw new Error('Failed to update cart')
       }
     } catch (e) {
-      console.error(e)
+      log.error('Error updating cart:', e)
       setCartItems((prev) => prev.filter((item) => item.productId !== data._id))
       alert('Failed to update cart. Please try again.')
     }
