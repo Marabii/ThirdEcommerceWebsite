@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState, useContext, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { globalContext } from '../App'

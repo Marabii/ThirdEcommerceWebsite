@@ -1,3 +1,4 @@
+import React from 'react'
 import { lazy, Suspense, useState, useEffect, createContext } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import UseAuthCheck from './utils/verifyUser'
