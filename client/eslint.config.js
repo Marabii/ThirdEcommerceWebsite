@@ -46,5 +46,3 @@ export default [
     },
   },
 ]
-
-// test lint
