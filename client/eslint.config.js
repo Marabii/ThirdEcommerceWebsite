@@ -46,3 +46,5 @@ export default [
     },
   },
 ]
+
+//Testing npx lint-staged
