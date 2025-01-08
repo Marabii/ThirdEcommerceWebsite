@@ -16,5 +16,6 @@ COPY . .
 # Expose the backend port (ensure it matches the PORT in your .env)
 EXPOSE 3001
 
-# Start the backend server
-CMD ["npm", "run", "dev"]
+# Instruct Docker to run your key generation script,
+# then start your backend server.
+CMD ["sh", "-c", "node generateKeypair.js && npm run dev"]
