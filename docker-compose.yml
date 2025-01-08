@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: ecommerce_backend
+    restart: always
+    env_file:
+      - ./server/.env
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - ecommerce-network
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: ecommerce_frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - ecommerce-network
+
+networks:
+  ecommerce-network:
+    driver: bridge
