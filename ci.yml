@@ -14,12 +14,12 @@ on:
       - master
 
 jobs:
-  build-and-test:
+  build-test-analyze:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [18.x] # Specify Node.js versions to test against
+        node-version: [14.x, 16.x, 18.x]
 
     steps:
       - name: Checkout Repository
@@ -46,3 +46,19 @@ jobs:
       - name: Run Frontend Unit Tests
         working-directory: ./client
         run: npm test
+
+      - name: Run ESLint (Backend)
+        working-directory: ./server
+        run: npx eslint . --ext .js,.jsx,.ts,.tsx
+
+      - name: Run ESLint (Frontend)
+        working-directory: ./client
+        run: npx eslint . --ext .js,.jsx,.ts,.tsx
+
+      - name: Secret Scanning with CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: javascript
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
