@@ -1,0 +1,48 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - "feature/**"
+      - "bugfix/**"
+      - "hotfix/**"
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x] # Specify Node.js versions to test against
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Install Dependencies (Backend)
+        working-directory: ./server
+        run: npm install
+
+      - name: Install Dependencies (Frontend)
+        working-directory: ./client
+        run: npm install
+
+      - name: Run Backend Unit Tests
+        working-directory: ./server
+        run: npm test
+
+      - name: Run Frontend Unit Tests
+        working-directory: ./client
+        run: npm test
